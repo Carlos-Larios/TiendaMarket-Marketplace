@@ -1,0 +1,5 @@
+.has-site-logo{background:transparent!important;box-shadow:none!important;overflow:hidden}
+.has-site-logo::before,.has-site-logo::after{display:none!important}
+.has-site-logo>.site-branding-image{display:block!important;width:100%!important;height:100%!important;max-width:100%;object-fit:contain;padding:0!important;border-radius:0!important;background:transparent!important}
+.sidebar>.logo.has-site-logo{display:flex;align-items:center;gap:10px}
+.sidebar>.logo.has-site-logo>.site-branding-image{width:40px!important;height:40px!important;flex:0 0 40px}

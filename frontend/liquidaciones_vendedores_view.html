@@ -1,0 +1,191 @@
+<section class="liquidaciones-vendedores-pro">
+  <style>
+    .liquidaciones-vendedores-pro{display:grid;gap:18px;width:100%;max-width:100%;overflow-x:hidden}.liquidaciones-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#374aa0,#11213f);border:1px solid rgba(125,211,252,.22);border-radius:22px;padding:28px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.liquidaciones-hero::after{content:"";position:absolute;right:-90px;bottom:-120px;width:300px;height:300px;border-radius:999px;background:rgba(80,165,241,.12)}.liquidaciones-hero .eyebrow{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:#dbeafe;margin-bottom:12px}.liquidaciones-hero h2{font-size:clamp(26px,3vw,36px);line-height:1.1;margin-bottom:10px}.liquidaciones-hero p{color:#dbeafe;max-width:820px;line-height:1.55}.liquidaciones-filtros{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:rgba(42,48,66,.86);border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:14px}.liquidaciones-left,.liquidaciones-center,.liquidaciones-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.liq-btn,.liq-select,.liq-input{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#fff;padding:10px 14px;border-radius:12px;font-weight:900;outline:none}.liq-btn{cursor:pointer}.liq-btn.active,.liq-btn:hover{background:#556ee6}.liq-input{min-width:220px}.liq-select{color-scheme:dark}.liq-date-field{display:flex;align-items:center;gap:8px;background:rgba(15,23,42,.35);border:1px solid rgba(166,176,207,.14);border-radius:12px;padding:8px 11px;color:#a6b0cf;font-size:12px;font-weight:900;text-transform:uppercase}.liq-date-field input{border:0;outline:0;background:transparent;color:#fff;font-weight:900;color-scheme:dark}.liq-pill{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(166,176,207,.12);color:#dbeafe;font-size:12px;font-weight:900;text-transform:uppercase}.liq-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.liq-kpi{position:relative;overflow:hidden;min-height:118px;background:rgba(42,48,66,.88);border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:18px;box-shadow:0 12px 28px rgba(0,0,0,.18)}.liq-kpi::after{content:"";position:absolute;right:-34px;bottom:-42px;width:115px;height:115px;border-radius:999px;background:rgba(85,110,230,.16)}.liq-kpi.destacado{background:linear-gradient(135deg,#34c38f,#2a3042)}.liq-kpi.warn{background:linear-gradient(135deg,#f1b44c,#2a3042)}.liq-kpi span{display:block;color:#c7d2fe;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}.liq-kpi strong{display:block;margin-top:9px;font-size:28px;color:#fff}.liq-kpi small{display:block;margin-top:8px;color:#a6b0cf;font-weight:800}.liquidaciones-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(330px,.75fr);gap:18px}.liq-panel{background:rgba(42,48,66,.86);border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:18px;min-width:0;box-shadow:0 12px 28px rgba(0,0,0,.18)}.liq-panel h3{font-size:20px;margin-bottom:5px}.liq-panel p{color:#a6b0cf;font-size:13px;margin-bottom:14px}.liq-table-wrap{width:100%;overflow-x:auto}.liq-table{width:100%;border-collapse:separate;border-spacing:0;min-width:980px}.liq-table th,.liq-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap}.liq-table th{background:rgba(15,23,42,.42);color:#8da0ff;font-size:12px;text-transform:uppercase;letter-spacing:.04em}.liq-row{cursor:pointer;transition:.18s ease}.liq-row:hover td{background:rgba(85,110,230,.10)}.liq-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:900;text-transform:uppercase;border:1px solid rgba(255,255,255,.10);background:rgba(80,165,241,.14);color:#bfdbfe}.liq-badge.pagado{background:rgba(52,195,143,.13);color:#86efac}.liq-badge.pendiente{background:rgba(241,180,76,.15);color:#fde68a}.liq-badge.retenido{background:rgba(244,106,106,.15);color:#fecaca}.liq-detalle{display:grid;gap:14px}.liq-detalle-card{background:rgba(15,23,42,.28);border:1px solid rgba(166,176,207,.12);border-radius:16px;padding:14px}.liq-detalle-card h4{font-size:14px;margin-bottom:10px;color:#fff}.liq-info-list{display:grid;gap:8px}.liq-info-item{display:flex;justify-content:space-between;gap:12px;color:#e5e7eb;font-size:13px}.liq-info-item span{color:#a6b0cf}.liq-info-item b{text-align:right}.liq-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.liq-action{border:1px solid rgba(166,176,207,.14);border-radius:13px;background:rgba(15,23,42,.35);color:#fff;padding:11px 12px;font-weight:900;cursor:pointer}.liq-action.primary{background:#556ee6}.liq-action.success{background:rgba(52,195,143,.2);color:#86efac}.liq-action.warn{background:rgba(241,180,76,.16);color:#fde68a}.liq-timeline{display:grid;gap:10px}.liq-time{display:grid;grid-template-columns:10px 1fr;gap:10px;align-items:start}.liq-dot{width:9px;height:9px;border-radius:999px;background:#34c38f;margin-top:5px}.liq-time strong{display:block;font-size:13px}.liq-time span{display:block;color:#a6b0cf;font-size:12px;margin-top:2px}@media(max-width:1250px){.liq-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.liquidaciones-layout{grid-template-columns:1fr}}@media(max-width:760px){.liq-kpis{grid-template-columns:1fr}.liquidaciones-hero{padding:20px}.liquidaciones-left,.liquidaciones-center,.liquidaciones-right,.liq-input,.liq-select{width:100%}.liq-btn,.liq-date-field,.liq-select,.liq-input{flex:1 1 auto;justify-content:center}.liq-actions{grid-template-columns:1fr}}
+  </style>
+
+  <div class="liquidaciones-hero">
+    <span class="eyebrow">Marketplace / Vendedores</span>
+    <h2>Liquidaciones</h2>
+    <p>Control visual de pagos a vendedores comerciales y emprendedores. Aquí se revisarán ventas, comisiones, saldos retenidos, pagos pendientes y el historial de cada corte.</p>
+  </div>
+
+  <div class="liquidaciones-filtros">
+    <div class="liquidaciones-left">
+      <button class="liq-btn active" data-periodo="dia">Día</button>
+      <button class="liq-btn" data-periodo="mes">Mes</button>
+      <button class="liq-btn" data-periodo="anio">Año</button>
+    </div>
+    <div class="liquidaciones-center">
+      <label class="liq-date-field">Desde <input id="liqDesde" type="date"></label>
+      <label class="liq-date-field">Hasta <input id="liqHasta" type="date"></label>
+      <button class="liq-btn active" id="liqAplicar">Aplicar</button>
+      <button class="liq-btn" id="liqLimpiar">Limpiar</button>
+    </div>
+    <div class="liquidaciones-right">
+      <span class="liq-pill" id="liqFiltroActivo">Filtro activo: Día</span>
+    </div>
+  </div>
+
+  <div class="liq-kpis">
+    <div class="liq-kpi destacado"><span>Total a liquidar</span><strong>$8,430.00</strong><small>Disponible para pago</small></div>
+    <div class="liq-kpi"><span>Comisión plataforma</span><strong>$421.50</strong><small>Estimado del período</small></div>
+    <div class="liq-kpi warn"><span>Saldo retenido</span><strong>$1,240.00</strong><small>Por reclamos o revisión</small></div>
+    <div class="liq-kpi"><span>Liquidaciones</span><strong>18</strong><small>Registros del período</small></div>
+  </div>
+
+  <div class="liquidaciones-filtros">
+    <div class="liquidaciones-left">
+      <input class="liq-input" id="buscarLiquidacion" placeholder="Buscar vendedor, banco o ID de liquidación...">
+    </div>
+    <div class="liquidaciones-center">
+      <select class="liq-select" id="filtroEstadoLiq">
+        <option value="todos">Todos los estados</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Pagado">Pagado</option>
+        <option value="Retenido">Retenido</option>
+      </select>
+      <select class="liq-select" id="filtroTipoLiq">
+        <option value="todos">Todos los tipos</option>
+        <option value="Comercial">Comercial</option>
+        <option value="Emprendedor">Emprendedor</option>
+      </select>
+    </div>
+    <div class="liquidaciones-right"><span class="liq-pill" id="liqConteo">Mostrando 0 liquidaciones</span></div>
+  </div>
+
+  <div class="liquidaciones-layout">
+    <div class="liq-panel">
+      <h3>Liquidaciones de vendedores</h3>
+      <p>Lista visual preparada para conectarse después con ventas reales, comisiones, reembolsos y pagos bancarios.</p>
+      <div class="liq-table-wrap">
+        <table class="liq-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Vendedor</th><th>Tipo</th><th>Ventas</th><th>Comisión</th><th>Retenido</th><th>Total a pagar</th><th>Estado</th><th>Corte</th>
+            </tr>
+          </thead>
+          <tbody id="tablaLiquidaciones"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="liq-panel">
+      <h3>Detalle de liquidación</h3>
+      <p id="liqDetalleSub">Selecciona una liquidación para ver el resumen.</p>
+      <div class="liq-detalle" id="detalleLiquidacion"></div>
+    </aside>
+  </div>
+</section>
+
+<script>
+(() => {
+  const liquidaciones = [
+    {id:'LIQ-2026-0001', vendedor:'TecnoMarket SV', tipo:'Comercial', ventas:3250, comision:162.50, retenido:0, pagar:3087.50, estado:'Pendiente', corte:'02/07/2026', pago:'Pendiente', banco:'Banco Agrícola', titular:'TecnoMarket SV S.A. de C.V.', cuenta:'**** 8291'},
+    {id:'LIQ-2026-0002', vendedor:'Artesanías Luna', tipo:'Emprendedor', ventas:840, comision:42, retenido:120, pagar:678, estado:'Retenido', corte:'02/07/2026', pago:'En revisión', banco:'BAC', titular:'María López', cuenta:'**** 1045'},
+    {id:'LIQ-2026-0003', vendedor:'Style Store', tipo:'Comercial', ventas:2180, comision:109, retenido:0, pagar:2071, estado:'Pagado', corte:'01/07/2026', pago:'02/07/2026', banco:'Davivienda', titular:'Style Store', cuenta:'**** 5590'},
+    {id:'LIQ-2026-0004', vendedor:'Manos Creativas', tipo:'Emprendedor', ventas:510, comision:25.50, retenido:0, pagar:484.50, estado:'Pendiente', corte:'02/07/2026', pago:'Pendiente', banco:'Banco Cuscatlán', titular:'Carlos Méndez', cuenta:'**** 7732'},
+    {id:'LIQ-2026-0005', vendedor:'Hogar Express', tipo:'Comercial', ventas:1650, comision:82.50, retenido:300, pagar:1267.50, estado:'Retenido', corte:'30/06/2026', pago:'En revisión', banco:'Promerica', titular:'Hogar Express', cuenta:'**** 6601'}
+  ];
+
+  const money = n => `$${Number(n || 0).toFixed(2)}`;
+  const tbody = document.getElementById('tablaLiquidaciones');
+  const detalle = document.getElementById('detalleLiquidacion');
+  const sub = document.getElementById('liqDetalleSub');
+  const buscar = document.getElementById('buscarLiquidacion');
+  const estado = document.getElementById('filtroEstadoLiq');
+  const tipo = document.getElementById('filtroTipoLiq');
+  const conteo = document.getElementById('liqConteo');
+  const filtroActivo = document.getElementById('liqFiltroActivo');
+  const desde = document.getElementById('liqDesde');
+  const hasta = document.getElementById('liqHasta');
+
+  function hoyLocal(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+  desde.value = hoyLocal();
+  hasta.value = hoyLocal();
+
+  function estadoClass(e){return e.toLowerCase().replaceAll(' ', '-');}
+
+  function renderTabla(){
+    const q = (buscar.value || '').toLowerCase();
+    const est = estado.value;
+    const tip = tipo.value;
+    const filtradas = liquidaciones.filter(l => {
+      const matchQ = `${l.id} ${l.vendedor} ${l.banco}`.toLowerCase().includes(q);
+      const matchE = est === 'todos' || l.estado === est;
+      const matchT = tip === 'todos' || l.tipo === tip;
+      return matchQ && matchE && matchT;
+    });
+    conteo.textContent = `Mostrando ${filtradas.length} liquidaciones`;
+    tbody.innerHTML = filtradas.map((l, i) => `
+      <tr class="liq-row" data-index="${liquidaciones.indexOf(l)}">
+        <td>${l.id}</td><td><strong>${l.vendedor}</strong></td><td>${l.tipo}</td><td>${money(l.ventas)}</td><td>${money(l.comision)}</td><td>${money(l.retenido)}</td><td><strong>${money(l.pagar)}</strong></td><td><span class="liq-badge ${estadoClass(l.estado)}">${l.estado}</span></td><td>${l.corte}</td>
+      </tr>`).join('');
+    tbody.querySelectorAll('.liq-row').forEach(row => row.addEventListener('click', () => renderDetalle(liquidaciones[Number(row.dataset.index)])));
+    if (filtradas[0]) renderDetalle(filtradas[0]);
+    else detalle.innerHTML = '<div class="liq-detalle-card">No hay liquidaciones con estos filtros.</div>';
+  }
+
+  function renderDetalle(l){
+    sub.textContent = `${l.id} · ${l.vendedor}`;
+    detalle.innerHTML = `
+      <div class="liq-detalle-card">
+        <h4>Información general</h4>
+        <div class="liq-info-list">
+          <div class="liq-info-item"><span>ID</span><b>${l.id}</b></div>
+          <div class="liq-info-item"><span>Vendedor</span><b>${l.vendedor}</b></div>
+          <div class="liq-info-item"><span>Tipo</span><b>${l.tipo}</b></div>
+          <div class="liq-info-item"><span>Estado</span><b><span class="liq-badge ${estadoClass(l.estado)}">${l.estado}</span></b></div>
+          <div class="liq-info-item"><span>Fecha de corte</span><b>${l.corte}</b></div>
+          <div class="liq-info-item"><span>Fecha de pago</span><b>${l.pago}</b></div>
+        </div>
+      </div>
+      <div class="liq-detalle-card">
+        <h4>Resumen financiero</h4>
+        <div class="liq-info-list">
+          <div class="liq-info-item"><span>Ventas del período</span><b>${money(l.ventas)}</b></div>
+          <div class="liq-info-item"><span>Comisión plataforma</span><b>${money(l.comision)}</b></div>
+          <div class="liq-info-item"><span>Reembolsos / ajustes</span><b>$0.00</b></div>
+          <div class="liq-info-item"><span>Saldo retenido</span><b>${money(l.retenido)}</b></div>
+          <div class="liq-info-item"><span>Total a pagar</span><b>${money(l.pagar)}</b></div>
+        </div>
+      </div>
+      <div class="liq-detalle-card">
+        <h4>Cuenta bancaria</h4>
+        <div class="liq-info-list">
+          <div class="liq-info-item"><span>Banco</span><b>${l.banco}</b></div>
+          <div class="liq-info-item"><span>Titular</span><b>${l.titular}</b></div>
+          <div class="liq-info-item"><span>Cuenta</span><b>${l.cuenta}</b></div>
+        </div>
+      </div>
+      <div class="liq-detalle-card">
+        <h4>Historial</h4>
+        <div class="liq-timeline">
+          <div class="liq-time"><i class="liq-dot"></i><div><strong>Liquidación generada</strong><span>${l.corte}</span></div></div>
+          <div class="liq-time"><i class="liq-dot"></i><div><strong>Revisión financiera pendiente</strong><span>Sistema de pagos preparado para implementación.</span></div></div>
+          <div class="liq-time"><i class="liq-dot"></i><div><strong>Bitácora</strong><span>Últimos 5 cambios y descarga completa se conectarán después.</span></div></div>
+        </div>
+      </div>
+      <div class="liq-actions">
+        <button class="liq-action primary">Aprobar pago</button>
+        <button class="liq-action success">Marcar pagado</button>
+        <button class="liq-action warn">Retener saldo</button>
+        <button class="liq-action">Descargar historial</button>
+      </div>
+    `;
+  }
+
+  document.querySelectorAll('.liq-btn[data-periodo]').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.liq-btn[data-periodo]').forEach(b => b.classList.toggle('active', b === btn));
+    filtroActivo.textContent = `Filtro activo: ${btn.textContent} · ${desde.value || 'sin fecha'} a ${hasta.value || 'sin fecha'}`;
+  }));
+  document.getElementById('liqAplicar').addEventListener('click', () => {
+    const activo = document.querySelector('.liq-btn[data-periodo].active')?.textContent || 'Día';
+    filtroActivo.textContent = `Filtro activo: ${activo} · ${desde.value || 'sin fecha'} a ${hasta.value || 'sin fecha'}`;
+  });
+  document.getElementById('liqLimpiar').addEventListener('click', () => { buscar.value=''; estado.value='todos'; tipo.value='todos'; desde.value=hoyLocal(); hasta.value=hoyLocal(); renderTabla(); });
+  [buscar, estado, tipo].forEach(el => el.addEventListener('input', renderTabla));
+  [estado, tipo].forEach(el => el.addEventListener('change', renderTabla));
+  filtroActivo.textContent = `Filtro activo: Día · ${desde.value} a ${hasta.value}`;
+  renderTabla();
+})();
+</script>

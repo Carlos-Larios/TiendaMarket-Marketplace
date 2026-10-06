@@ -1,0 +1,271 @@
+<section class="usuarios-vendedores-page">
+  <style>
+    .usuarios-vendedores-page{display:grid;gap:18px;}
+    .usuarios-vendedores-hero{position:relative;overflow:hidden;padding:28px;border-radius:24px;border:1px solid rgba(166,176,207,.12);background:linear-gradient(135deg,#2f3a67,#2a3042);box-shadow:var(--shadow);}
+    .usuarios-vendedores-hero::after{content:"";position:absolute;right:-90px;bottom:-120px;width:280px;height:280px;border-radius:999px;background:rgba(85,110,230,.18);}
+    .usuarios-vendedores-hero .eyebrow{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(85,110,230,.16);border:1px solid rgba(125,211,252,.20);color:#dbeafe;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+    .usuarios-vendedores-hero h1{position:relative;z-index:1;font-size:clamp(28px,4vw,42px);letter-spacing:-1px;margin-bottom:8px;}
+    .usuarios-vendedores-hero p{position:relative;z-index:1;max-width:850px;color:#c9d1f4;line-height:1.65;}
+    .usuarios-vendedores-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+    .usuarios-vendedores-kpi{position:relative;overflow:hidden;min-height:116px;padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow);}
+    .usuarios-vendedores-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042);}
+    .usuarios-vendedores-kpi::after{content:"";position:absolute;right:-34px;bottom:-44px;width:112px;height:112px;border-radius:999px;background:rgba(85,110,230,.14);}
+    .usuarios-vendedores-kpi span{display:block;color:#dbeafe;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+    .usuarios-vendedores-kpi strong{display:block;margin-top:10px;color:#fff;font-size:28px;letter-spacing:-.5px;}
+    .usuarios-vendedores-kpi small{display:block;margin-top:8px;color:#a6b0cf;font-weight:800;}
+    .usuarios-vendedores-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);}
+    .usuarios-vendedores-filtros,.usuarios-vendedores-busqueda{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .usuarios-vendedores-btn,.usuarios-vendedores-select,.usuarios-vendedores-input{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#cbd5e1;padding:10px 13px;border-radius:12px;font-weight:900;outline:none;}
+    .usuarios-vendedores-btn{cursor:pointer;transition:.2s ease;}
+    .usuarios-vendedores-btn:hover,.usuarios-vendedores-btn.active{color:#fff;background:var(--primary);border-color:rgba(125,211,252,.24);}
+    .usuarios-vendedores-input{min-width:260px;font-weight:800;}
+    .usuarios-vendedores-main{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;}
+    .usuarios-vendedores-panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);min-width:0;}
+    .usuarios-vendedores-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:15px;}
+    .usuarios-vendedores-title h2{font-size:20px;color:#fff;letter-spacing:-.4px;}
+    .usuarios-vendedores-title p{color:var(--muted);font-size:13px;margin-top:5px;line-height:1.5;}
+    .usuarios-vendedores-table-wrap{width:100%;overflow-x:auto;}
+    .usuarios-vendedores-table{width:100%;min-width:940px;border-collapse:separate;border-spacing:0;}
+    .usuarios-vendedores-table th,.usuarios-vendedores-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap;}
+    .usuarios-vendedores-table th{color:#8da0ff;font-size:12px;text-transform:uppercase;letter-spacing:.04em;background:rgba(15,23,42,.38);}
+    .usuarios-vendedores-table td{color:#e5e7eb;font-size:13px;font-weight:700;}
+    .usuario-vendedor-row{cursor:pointer;transition:.18s ease;}
+    .usuario-vendedor-row:hover td,.usuario-vendedor-row.active td{background:rgba(85,110,230,.12);}
+    .usuario-avatar{width:36px;height:36px;display:inline-grid;place-items:center;border-radius:12px;background:rgba(85,110,230,.18);color:#dbeafe;font-weight:900;margin-right:8px;vertical-align:middle;border:1px solid rgba(125,211,252,.15);}
+    .pill{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;border-radius:999px;border:1px solid rgba(148,163,184,.18);background:rgba(15,23,42,.35);color:#dbeafe;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;}
+    .pill.ok{background:rgba(52,195,143,.12);color:#86efac;border-color:rgba(52,195,143,.25);}
+    .pill.warn{background:rgba(241,180,76,.12);color:#fde68a;border-color:rgba(241,180,76,.25);}
+    .pill.bad{background:rgba(244,106,106,.12);color:#fecaca;border-color:rgba(244,106,106,.25);}
+    .pill.info{background:rgba(80,165,241,.12);color:#bfdbfe;border-color:rgba(80,165,241,.25);}
+    .usuarios-vendedores-detail{display:grid;gap:14px;}
+    .usuarios-vendedores-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(3,7,18,.72);backdrop-filter:blur(4px);}
+    .usuarios-vendedores-modal.show{display:flex;}
+    .usuarios-vendedores-modal-dialog{width:min(760px,96vw);max-height:90vh;overflow:hidden;background:var(--panel);border:1px solid rgba(166,176,207,.18);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.48);display:flex;flex-direction:column;}
+    .usuarios-vendedores-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid rgba(166,176,207,.12);}
+    .usuarios-vendedores-modal-head h2{margin:0;color:#fff;font-size:20px;}
+    .usuarios-vendedores-modal-head p{margin:5px 0 0;color:var(--muted);font-size:13px;}
+    .usuarios-vendedores-modal-close{width:38px;height:38px;border:1px solid rgba(166,176,207,.16);border-radius:12px;background:rgba(15,23,42,.42);color:#fff;font-size:22px;cursor:pointer;line-height:1;}
+    .usuarios-vendedores-modal-close:hover{background:rgba(85,110,230,.22);}
+    .usuarios-vendedores-modal-body{padding:18px 20px;overflow-y:auto;display:grid;gap:14px;}
+    .usuarios-vendedores-modal-foot{display:flex;justify-content:center;padding:14px 20px 18px;border-top:1px solid rgba(166,176,207,.10);}
+    body.usuarios-vendedores-modal-open{overflow:hidden;}
+    .detalle-card{padding:16px;border-radius:16px;border:1px solid rgba(166,176,207,.12);background:rgba(15,23,42,.28);}
+    .detalle-card h3{font-size:15px;margin-bottom:12px;color:#fff;}
+    .detalle-list{display:grid;gap:9px;}
+    .detalle-item{display:flex;justify-content:space-between;gap:12px;color:#cbd5e1;font-size:13px;padding-bottom:8px;border-bottom:1px solid rgba(166,176,207,.08);}
+    .detalle-item:last-child{border-bottom:0;padding-bottom:0;}
+    .detalle-item span{color:var(--muted);font-weight:800;}
+    .permiso-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+    .permiso{padding:9px;border-radius:12px;background:rgba(15,23,42,.36);border:1px solid rgba(166,176,207,.10);color:#cbd5e1;font-size:12px;font-weight:900;}
+    .alertas-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+    .alerta-card{min-height:120px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:18px;box-shadow:var(--shadow);}
+    .alerta-card span{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:rgba(85,110,230,.18);margin-bottom:12px;font-size:20px;}
+    .alerta-card strong{display:block;color:#fff;margin-bottom:6px;}
+    .alerta-card small{color:var(--muted);line-height:1.5;font-weight:800;}
+    .uv-action-modal{position:fixed;inset:0;z-index:10020;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(3,7,18,.78);backdrop-filter:blur(4px);}
+    .uv-action-modal.show{display:flex;}
+    .uv-action-dialog{width:min(560px,96vw);max-height:88vh;overflow:auto;background:#20283b;border:1px solid rgba(166,176,207,.18);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.5);padding:20px;}
+    .uv-action-dialog h3{margin:0 0 6px;color:#fff;font-size:20px;}
+    .uv-action-dialog p{margin:0 0 16px;color:#a6b0cf;font-size:13px;line-height:1.5;}
+    .uv-form{display:grid;gap:12px;}
+    .uv-field{display:grid;gap:6px;color:#cbd5e1;font-size:12px;font-weight:900;}
+    .uv-field input,.uv-field select,.uv-field textarea{width:100%;border:1px solid rgba(166,176,207,.16);background:#111827;color:#fff;border-radius:11px;padding:11px 12px;outline:none;}
+    .uv-field textarea{min-height:92px;resize:vertical;}
+    .uv-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
+    .uv-primary{background:#556ee6!important;color:#fff!important;}
+    .uv-danger{background:rgba(244,106,106,.16)!important;color:#fecaca!important;border-color:rgba(244,106,106,.28)!important;}
+    .uv-log{display:grid;gap:9px;}
+    .uv-log-item{padding:11px 12px;border-radius:12px;background:#111827;border:1px solid rgba(166,176,207,.1);}
+    .uv-log-item strong{display:block;color:#fff;font-size:13px;margin-bottom:4px;}
+    .uv-log-item small{color:#94a3b8;}
+
+    .solicitudes-btn{position:relative;background:rgba(85,110,230,.18);border-color:rgba(125,211,252,.28);color:#fff;}
+    .solicitudes-badge{display:inline-flex;min-width:22px;height:22px;align-items:center;justify-content:center;margin-left:7px;padding:0 6px;border-radius:999px;background:#556ee6;color:#fff;font-size:11px;font-weight:900;}
+    .sol-list{display:grid;gap:9px;max-height:58vh;overflow:auto;} .sol-row{padding:13px;border:1px solid rgba(166,176,207,.13);border-radius:13px;background:rgba(15,23,42,.30);cursor:pointer}.sol-row:hover{background:rgba(85,110,230,.12)}
+    .sol-row strong{display:block;color:#fff}.sol-row small{display:block;color:var(--muted);margin-top:5px}.sol-doc{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid rgba(166,176,207,.12);border-radius:12px;margin-top:8px}.sol-doc small{display:block;color:var(--muted);margin-top:4px}.sol-actions-inline{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.sol-status{font-size:11px;font-weight:900;text-transform:uppercase}.sol-back{margin-bottom:8px}.sol-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.sol-info{padding:10px;border-radius:11px;background:rgba(15,23,42,.30)}.sol-info span{display:block;color:var(--muted);font-size:11px}.sol-info strong{display:block;color:#fff;margin-top:4px}.sol-section{margin-top:15px}.sol-section h4{margin:0 0 8px;color:#fff}.sol-footer-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:15px}
+    @media(max-width:1200px){.usuarios-vendedores-kpis{grid-template-columns:repeat(2,minmax(0,1fr));}.usuarios-vendedores-main,.alertas-grid{grid-template-columns:1fr;}.usuarios-vendedores-detail{position:static;}}
+    @media(max-width:680px){.usuarios-vendedores-kpis{grid-template-columns:1fr;}.usuarios-vendedores-toolbar{align-items:stretch;}.usuarios-vendedores-filtros,.usuarios-vendedores-busqueda{width:100%;}.usuarios-vendedores-btn,.usuarios-vendedores-select,.usuarios-vendedores-input{flex:1 1 auto;}.usuarios-vendedores-input{min-width:0;width:100%;}.permiso-grid{grid-template-columns:1fr;}}
+  </style>
+
+  <header class="usuarios-vendedores-hero">
+    <span class="eyebrow">Usuarios / Vendedores</span>
+    <h1>Cuentas de acceso de vendedores</h1>
+    <p>Controla las cuentas que usan los vendedores para entrar a la plataforma. Esta vista es diferente a la lista de tiendas: aquí se revisa seguridad, accesos, estado de cuenta, verificación, tienda asociada y permisos.</p>
+  </header>
+
+  <section class="usuarios-vendedores-kpis" aria-label="Indicadores de usuarios vendedores">
+    <article class="usuarios-vendedores-kpi destacado"><span>Total usuarios vendedores</span><strong>348</strong><small>+18 nuevas cuentas este mes</small></article>
+    <article class="usuarios-vendedores-kpi"><span>Activos</span><strong>312</strong><small>89.6% con tienda vinculada</small></article>
+    <article class="usuarios-vendedores-kpi"><span>Pendientes de seguridad</span><strong>21</strong><small>Verificación, 2FA o documentos</small></article>
+    <article class="usuarios-vendedores-kpi"><span>Cuentas bloqueadas</span><strong>7</strong><small>Por intentos fallidos o revisión</small></article>
+  </section>
+
+  <section class="dashboard-filtros-panel" aria-label="Filtros de fechas">
+    <div class="dashboard-periodos">
+      <button class="dashboard-filter-btn active" type="button">Día</button>
+      <button class="dashboard-filter-btn" type="button">Mes</button>
+      <button class="dashboard-filter-btn" type="button">Año</button>
+    </div>
+    <div class="dashboard-alcance">
+      <label class="dashboard-date-field">Desde <input type="date" value="2026-07-01"></label>
+      <label class="dashboard-date-field">Hasta <input type="date" value="2026-07-02"></label>
+      <button class="dashboard-scope-btn active" type="button">Filtro activo: Hoy</button>
+    </div>
+  </section>
+
+  <section class="usuarios-vendedores-toolbar">
+    <div class="usuarios-vendedores-filtros">
+      <button class="usuarios-vendedores-btn solicitudes-btn" type="button" id="btnNuevasSolicitudes">📥 Nuevas solicitudes <span class="solicitudes-badge" id="contadorSolicitudes">0</span></button>
+      <button class="usuarios-vendedores-btn active" type="button" data-filter="todos">Todos</button>
+      <button class="usuarios-vendedores-btn" type="button" data-filter="activo">Activos</button>
+      <button class="usuarios-vendedores-btn" type="button" data-filter="advertencia">Advertencia</button>
+      <button class="usuarios-vendedores-btn" type="button" data-filter="suspendido">Suspendidos</button>
+      <select class="usuarios-vendedores-select" id="filtroNivelVendedor">
+        <option value="todos">Todos los niveles</option><option value="basico">Nivel básico</option><option value="verificado">Verificado</option><option value="premium">Alto volumen</option>
+      </select>
+    </div>
+    <div class="usuarios-vendedores-busqueda">
+      <input class="usuarios-vendedores-input" id="buscarUsuarioVendedor" type="search" placeholder="Buscar usuario, tienda, correo o DUI">
+      <button class="usuarios-vendedores-btn" type="button" id="limpiarBusquedaUsuariosVendedores">Limpiar</button>
+    </div>
+  </section>
+
+  <section class="usuarios-vendedores-main">
+    <article class="usuarios-vendedores-panel">
+      <div class="usuarios-vendedores-title">
+        <div><h2>Lista de usuarios vendedores</h2><p>Selecciona un usuario para revisar su cuenta, seguridad, tienda vinculada y permisos.</p></div>
+        <span class="pill info" id="contadorUsuariosVendedores">6 registros</span>
+      </div>
+      <div class="usuarios-vendedores-table-wrap">
+        <table class="usuarios-vendedores-table">
+          <thead><tr><th>Usuario</th><th>Tienda asociada</th><th>Correo</th><th>Estado</th><th>Seguridad</th><th>Último acceso</th><th>Nivel</th></tr></thead>
+          <tbody id="usuariosVendedoresBody"></tbody>
+        </table>
+      </div>
+    </article>
+
+  </section>
+
+  <div class="usuarios-vendedores-modal" id="modalDetalleUsuarioVendedor" aria-hidden="true">
+    <div class="usuarios-vendedores-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="tituloModalUsuarioVendedor">
+      <div class="usuarios-vendedores-modal-head">
+        <div><h2 id="tituloModalUsuarioVendedor">Detalle del usuario</h2><p id="subtituloModalUsuarioVendedor">Información, seguridad, permisos y movimientos.</p></div>
+        <button class="usuarios-vendedores-modal-close" type="button" id="cerrarModalUsuarioVendedor" aria-label="Cerrar">×</button>
+      </div>
+      <div class="usuarios-vendedores-modal-body usuarios-vendedores-detail" id="detalleUsuarioVendedor">
+      <div class="detalle-card"><h3>Información principal</h3><div class="detalle-list" id="detallePrincipalVendedor"></div></div>
+      <div class="detalle-card"><h3>Seguridad y acceso</h3><div class="detalle-list" id="detalleSeguridadVendedor"></div></div>
+      <div class="detalle-card"><h3>Información de la cuenta</h3><div class="detalle-list" id="detalleCuentaVendedor"></div></div>
+      <div class="detalle-card"><h3>Administración de la cuenta</h3>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
+          <button class="usuarios-vendedores-btn" type="button" id="btnEditarVendedor">✏️ Editar</button>
+          <button class="usuarios-vendedores-btn" type="button" id="btnRestablecerVendedor">🔑 Restablecer</button>
+          <button class="usuarios-vendedores-btn" type="button" id="btnCambiarEstadoVendedor">🔄 Cambiar estado</button>
+          <button class="usuarios-vendedores-btn" type="button" id="btnBitacoraVendedor">📜 Bitácora</button>
+        </div>
+        <div class="detalle-list" style="margin-top:10px;">
+          <div class="detalle-item"><span>Estados</span><strong>Activo · Advertencia · Suspendido · Cerró tienda · Expulsado · Archivado</strong></div>
+          <div class="detalle-item"><span>Regla</span><strong>No eliminar ni reutilizar cuenta</strong></div>
+        </div>
+      </div>
+      <div class="detalle-card"><h3>Permisos disponibles</h3><div class="permiso-grid" id="detallePermisosVendedor"></div></div>
+      <div class="detalle-card"><h3>Últimos movimientos</h3><div class="detalle-list" id="detalleBitacoraVendedor"></div></div>
+      </div>
+      <div class="usuarios-vendedores-modal-foot">
+        <button class="usuarios-vendedores-btn" type="button" id="cerrarModalUsuarioVendedorPie">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="usuarios-vendedores-modal" id="modalSolicitudesVendedor" aria-hidden="true">
+    <div class="usuarios-vendedores-modal-dialog" role="dialog" aria-modal="true" style="width:min(920px,96vw)">
+      <div class="usuarios-vendedores-modal-head"><div><h2>Nuevas solicitudes de vendedores</h2><p>Revisa datos, documentos y valida la cuenta antes de aprobarla.</p></div><button class="usuarios-vendedores-modal-close" type="button" id="cerrarSolicitudesVendedor">×</button></div>
+      <div class="usuarios-vendedores-modal-body" id="contenidoSolicitudesVendedor"></div>
+      <div class="usuarios-vendedores-modal-foot"><button class="usuarios-vendedores-btn" type="button" id="cerrarSolicitudesVendedorPie">Cerrar</button></div>
+    </div>
+  </div>
+
+  <div class="uv-action-modal" id="modalAccionVendedor" aria-hidden="true">
+    <div class="uv-action-dialog" role="dialog" aria-modal="true">
+      <h3 id="tituloAccionVendedor">Acción</h3>
+      <p id="textoAccionVendedor"></p>
+      <div id="contenidoAccionVendedor"></div>
+      <div class="uv-actions" id="accionesAccionVendedor"></div>
+    </div>
+  </div>
+
+  <section class="alertas-grid">
+    <article class="alerta-card"><span>🔐</span><strong>12 cuentas sin 2FA</strong><small>Después podremos dirigir esta alerta al filtro de seguridad correspondiente.</small></article>
+    <article class="alerta-card"><span>⚠️</span><strong>5 accesos sospechosos</strong><small>Intentos desde dispositivos nuevos o ubicaciones no habituales.</small></article>
+    <article class="alerta-card"><span>🏪</span><strong>9 cuentas sin tienda activa</strong><small>Cuentas creadas pero sin tienda aprobada o vinculada correctamente.</small></article>
+  </section>
+
+  <script>
+    (() => {
+      const API='http://localhost:3000/api/vendedores';
+      const token=localStorage.getItem('token')||'';
+      const headers=()=>({'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})});
+      let usuarios=[], usuarioActual=null, filtroEstado='todos';
+      const tbody=document.getElementById('usuariosVendedoresBody'), buscador=document.getElementById('buscarUsuarioVendedor'), filtroNivel=document.getElementById('filtroNivelVendedor'), contador=document.getElementById('contadorUsuariosVendedores');
+      const modalDetalle=document.getElementById('modalDetalleUsuarioVendedor'), modalAccion=document.getElementById('modalAccionVendedor');
+      const modalSolicitudes=document.getElementById('modalSolicitudesVendedor'), contenidoSolicitudes=document.getElementById('contenidoSolicitudesVendedor'), contadorSolicitudes=document.getElementById('contadorSolicitudes');
+      const estadoTexto={activo:'Activo',advertencia:'Advertencia',suspendido:'Suspendido',cerro:'Cerró tienda',expulsado:'Expulsado',archivado:'Archivado'};
+      const nivelTexto={basico:'Básico',verificado:'Verificado',premium:'Alto volumen'};
+      const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const iniciales=n=>String(n||'').split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
+      const fecha=v=>v?new Date(v).toLocaleString('es-SV'):'Sin registro';
+      const claseEstado=e=>e==='activo'?'ok':(['suspendido','expulsado','cerro'].includes(e)?'bad':'warn');
+      const item=(l,v)=>`<div class="detalle-item"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`;
+      async function api(url,opt={}){const r=await fetch(API+url,{...opt,headers:{...headers(),...(opt.headers||{})}});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.mensaje||'Error del servidor');return d;}
+      function normalizar(r){return {...r,idVisual:r.codigo||`UV-${String(r.id).padStart(3,'0')}`,estadoTexto:estadoTexto[r.estado]||r.estado,nivelTexto:nivelTexto[r.nivel]||r.nivel,iniciales:iniciales(r.nombre),ultimo:fecha(r.ultimo_acceso),seguridadTipo:r.seguridad_tipo||'info',permisos:Array.isArray(r.permisos)?r.permisos:[]};}
+      async function cargar(){try{const d=await api('/');usuarios=(d.vendedores||[]).map(normalizar);renderTabla();}catch(e){tbody.innerHTML=`<tr><td colspan="7">No se pudieron cargar vendedores: ${esc(e.message)}. Importa ACTUALIZACION_VENDEDORES_DEMO.sql y reinicia el servidor.</td></tr>`;contador.textContent='0 registros';}}
+      function renderDetalle(u){
+        if(!u)return;
+        document.getElementById('detallePrincipalVendedor').innerHTML=item('ID',u.idVisual)+item('Nombre',u.nombre)+item('DUI',u.dui||'—')+item('Teléfono',u.telefono||'—');
+        document.getElementById('detalleSeguridadVendedor').innerHTML=item('Correo',u.correo)+item('Seguridad',u.seguridad||'—')+item('2FA',u.dos_factores?'Activo':'No activo')+item('Último acceso',u.ultimo);
+        document.getElementById('detalleCuentaVendedor').innerHTML=item('Tienda',u.tienda)+item('Estado',u.estadoTexto)+item('Nivel',u.nivelTexto)+item('Cuenta',u.cuenta||'—');
+        document.getElementById('detallePermisosVendedor').innerHTML=(u.permisos.length?u.permisos:['Sin permisos registrados']).map(x=>`<div class="permiso">${esc(x)}</div>`).join('');
+        cargarBitacoraResumen(u.id);
+      }
+      async function cargarBitacoraResumen(id){const box=document.getElementById('detalleBitacoraVendedor');box.innerHTML='<div class="detalle-item"><span>Cargando...</span></div>';try{const d=await api(`/${id}/bitacora`);box.innerHTML=(d.bitacora||[]).slice(0,5).map(x=>item(fecha(x.fecha),x.detalle)).join('')||item('Movimientos','Sin movimientos');}catch(e){box.innerHTML=item('Bitácora',e.message);}}
+      function abrirModalDetalle(u){usuarioActual=u;renderDetalle(u);document.getElementById('tituloModalUsuarioVendedor').textContent=u.nombre;document.getElementById('subtituloModalUsuarioVendedor').textContent=`${u.tienda} · ${u.idVisual}`;modalDetalle.classList.add('show');modalDetalle.setAttribute('aria-hidden','false');document.body.classList.add('usuarios-vendedores-modal-open');}
+      function cerrarModalDetalle(){modalDetalle.classList.remove('show');modalDetalle.setAttribute('aria-hidden','true');document.body.classList.remove('usuarios-vendedores-modal-open');}
+      const tituloAccion=document.getElementById('tituloAccionVendedor'),textoAccion=document.getElementById('textoAccionVendedor'),contenidoAccion=document.getElementById('contenidoAccionVendedor'),accionesAccion=document.getElementById('accionesAccionVendedor');
+      function cerrarAccion(){modalAccion.classList.remove('show');modalAccion.setAttribute('aria-hidden','true');}
+      function abrirAccion(t,t2,h,a){tituloAccion.textContent=t;textoAccion.textContent=t2||'';contenidoAccion.innerHTML=h||'';accionesAccion.innerHTML=a||'';modalAccion.classList.add('show');modalAccion.setAttribute('aria-hidden','false');accionesAccion.querySelector('[data-cancelar]')?.addEventListener('click',cerrarAccion);}
+      async function recargarActual(){const id=usuarioActual?.id;await cargar();usuarioActual=usuarios.find(x=>x.id===id)||null;if(usuarioActual)renderDetalle(usuarioActual);}
+      function editarVendedor(){if(!usuarioActual)return;abrirAccion('Editar vendedor',`Actualiza los datos permitidos de ${usuarioActual.nombre}.`,`<div class="uv-form"><label class="uv-field">Nombre<input id="uvEditNombre" value="${esc(usuarioActual.nombre)}"></label><label class="uv-field">Tienda<input id="uvEditTienda" value="${esc(usuarioActual.tienda)}"></label><label class="uv-field">Correo<input id="uvEditCorreo" type="email" value="${esc(usuarioActual.correo)}"></label><label class="uv-field">Teléfono<input id="uvEditTelefono" value="${esc(usuarioActual.telefono||'')}"></label></div>`,`<button class="usuarios-vendedores-btn" data-cancelar>Cancelar</button><button class="usuarios-vendedores-btn uv-primary" id="uvGuardarEdicion">Guardar cambios</button>`);document.getElementById('uvGuardarEdicion').onclick=async()=>{try{await api(`/${usuarioActual.id}`,{method:'PUT',body:JSON.stringify({nombre:document.getElementById('uvEditNombre').value.trim(),tienda:document.getElementById('uvEditTienda').value.trim(),correo:document.getElementById('uvEditCorreo').value.trim(),telefono:document.getElementById('uvEditTelefono').value.trim()})});cerrarAccion();await recargarActual();}catch(e){alert(e.message)}};}
+      function restablecerVendedor(){if(!usuarioActual)return;abrirAccion('Restablecer acceso',`Genera una contraseña temporal para ${usuarioActual.nombre}.`,`<div class="uv-form"><label class="uv-field">Motivo<textarea id="uvMotivoReset" placeholder="Motivo obligatorio"></textarea></label><label class="uv-field"><span><input id="uvReset2fa" type="checkbox"> Restablecer también 2FA</span></label></div>`,`<button class="usuarios-vendedores-btn" data-cancelar>Cancelar</button><button class="usuarios-vendedores-btn uv-primary" id="uvConfirmarReset">Confirmar</button>`);document.getElementById('uvConfirmarReset').onclick=async()=>{try{const d=await api(`/${usuarioActual.id}/restablecer`,{method:'POST',body:JSON.stringify({motivo:document.getElementById('uvMotivoReset').value.trim(),reset2fa:document.getElementById('uvReset2fa').checked})});cerrarAccion();await recargarActual();alert(`Acceso restablecido. Contraseña temporal (mostrar solo una vez): ${d.passwordTemporal}`);}catch(e){alert(e.message)}};}
+      function cambiarEstadoVendedor(){if(!usuarioActual)return;const estados=Object.entries(estadoTexto);abrirAccion('Cambiar estado',`El cambio de ${usuarioActual.nombre} quedará en la bitácora.`,`<div class="uv-form"><label class="uv-field">Nuevo estado<select id="uvNuevoEstado">${estados.map(([v,t])=>`<option value="${v}" ${usuarioActual.estado===v?'selected':''}>${t}</option>`).join('')}</select></label><label class="uv-field">Motivo<textarea id="uvMotivoEstado" placeholder="Motivo obligatorio"></textarea></label></div>`,`<button class="usuarios-vendedores-btn" data-cancelar>Cancelar</button><button class="usuarios-vendedores-btn uv-primary" id="uvGuardarEstado">Aplicar estado</button>`);document.getElementById('uvGuardarEstado').onclick=async()=>{try{await api(`/${usuarioActual.id}/estado`,{method:'PATCH',body:JSON.stringify({estado:document.getElementById('uvNuevoEstado').value,motivo:document.getElementById('uvMotivoEstado').value.trim()})});cerrarAccion();await recargarActual();}catch(e){alert(e.message)}};}
+      async function verBitacoraVendedor(){if(!usuarioActual)return;try{const d=await api(`/${usuarioActual.id}/bitacora`);abrirAccion('Bitácora de la cuenta',`${usuarioActual.nombre} · ${usuarioActual.idVisual}`,`<div class="uv-log">${(d.bitacora||[]).map(x=>`<div class="uv-log-item"><strong>${esc(x.accion)} · ${esc(x.actor_nombre)}</strong><small>${esc(x.detalle)}${x.motivo?` · Motivo: ${esc(x.motivo)}`:''} · ${esc(fecha(x.fecha))}</small></div>`).join('')||'<div class="uv-log-item"><small>Sin movimientos.</small></div>'}</div>`,`<button class="usuarios-vendedores-btn uv-primary" data-cancelar>Cerrar</button>`);}catch(e){alert(e.message)}}
+      const estadoSolicitudTexto={pendiente:'Pendiente',revision:'En revisión',correccion:'Requiere información',aprobada:'Aprobada',rechazada:'Rechazada'};
+      const estadoDocTexto={pendiente:'Pendiente',verificado:'Verificado',rechazado:'Rechazado',correccion:'Corregir'};
+      async function cargarContadorSolicitudes(){try{const d=await api('/solicitudes/contador/pendientes');contadorSolicitudes.textContent=d.total||0;}catch{contadorSolicitudes.textContent='!';}}
+      function abrirSolicitudes(){modalSolicitudes.classList.add('show');modalSolicitudes.setAttribute('aria-hidden','false');document.body.classList.add('usuarios-vendedores-modal-open');listarSolicitudes();}
+      function cerrarSolicitudes(){modalSolicitudes.classList.remove('show');modalSolicitudes.setAttribute('aria-hidden','true');if(!modalDetalle.classList.contains('show'))document.body.classList.remove('usuarios-vendedores-modal-open');}
+      async function listarSolicitudes(){contenidoSolicitudes.innerHTML='<div class="detalle-item"><span>Cargando solicitudes...</span></div>';try{const d=await api('/solicitudes/listado');const abiertas=(d.solicitudes||[]).filter(x=>!['aprobada','rechazada'].includes(x.estado));contenidoSolicitudes.innerHTML=`<div class="sol-list">${abiertas.map(x=>`<div class="sol-row" data-sol-id="${x.id}"><strong>${esc(x.nombre)} · ${esc(x.tienda)}</strong><small>${esc(x.codigo)} · ${esc(x.correo)} · ${esc(estadoSolicitudTexto[x.estado]||x.estado)} · Documentos ${x.documentos_verificados}/${x.documentos_total}</small></div>`).join('')||'<div class="detalle-item"><span>No hay solicitudes pendientes.</span></div>'}</div>`;contenidoSolicitudes.querySelectorAll('[data-sol-id]').forEach(el=>el.onclick=()=>verSolicitud(el.dataset.solId));}catch(e){contenidoSolicitudes.innerHTML=item('Error',e.message);}}
+      async function verSolicitud(id){contenidoSolicitudes.innerHTML='<div class="detalle-item"><span>Cargando expediente...</span></div>';try{const d=await api(`/solicitudes/${id}`),s=d.solicitud,docs=d.documentos||[];const cerrada=['aprobada','rechazada'].includes(s.estado);contenidoSolicitudes.innerHTML=`<button class="usuarios-vendedores-btn sol-back" id="volverSolicitudes">← Volver</button><div class="sol-info-grid">${[['Solicitud',s.codigo],['Solicitante',s.nombre],['Tienda',s.tienda],['Correo',s.correo],['Teléfono',s.telefono||'—'],['DUI',s.dui||'—'],['NIT',s.nit||'—'],['NRC',s.nrc||'—'],['Tipo de vendedor',s.tipo_vendedor||s.tipo_negocio||'—'],['Contribuyente IVA',s.contribuyente_iva==='si'?'Sí':(s.contribuyente_iva==='no'?'No':'—')],['Actividad económica',s.actividad_economica||'—'],['Estado',estadoSolicitudTexto[s.estado]||s.estado]].map(([a,b])=>`<div class="sol-info"><span>${esc(a)}</span><strong>${esc(b)}</strong></div>`).join('')}</div><div class="sol-section"><h4>Datos para liquidaciones</h4><div class="sol-info-grid">${[['Banco',s.banco||'—'],['Titular de la cuenta',s.titular_cuenta||'—'],['Cuenta bancaria',s.cuenta_bancaria||'—']].map(([a,b])=>`<div class="sol-info"><span>${esc(a)}</span><strong>${esc(b)}</strong></div>`).join('')}</div></div><div class="sol-section"><h4>Documentos enviados</h4>${docs.map(doc=>`<div class="sol-doc"><div><strong>${esc(doc.tipo||doc.tipo_documento||'Documento')} ${doc.obligatorio?'*':''}</strong><small>${esc(doc.nombre_archivo)} · <span class="sol-status">${esc(estadoDocTexto[doc.estado]||doc.estado)}</span>${doc.observacion?' · '+esc(doc.observacion):''}</small></div><div class="sol-actions-inline">${doc.ruta_archivo?`<button class="usuarios-vendedores-btn" data-doc-ver="${doc.id}">Ver archivo</button>`:'<button class="usuarios-vendedores-btn" disabled title="Archivo DEMO sin adjunto físico">Demo sin archivo</button>'}${!cerrada?`<button class="usuarios-vendedores-btn" data-doc-ok="${doc.id}">✓ Verificar</button><button class="usuarios-vendedores-btn" data-doc-fail="${doc.id}">⚠ Corregir</button>`:''}</div></div>`).join('')||'<div class="detalle-item"><span>Sin documentos.</span></div>'}</div>${s.motivo_revision?`<div class="sol-section">${item('Última observación',s.motivo_revision)}</div>`:''}${!cerrada?`<div class="sol-footer-actions"><button class="usuarios-vendedores-btn" id="solCorreccion">Solicitar corrección</button><button class="usuarios-vendedores-btn" id="solRechazar">Rechazar</button><button class="usuarios-vendedores-btn uv-primary" id="solAprobar">Aprobar vendedor</button></div>`:''}`;
+        document.getElementById('volverSolicitudes').onclick=listarSolicitudes;
+        contenidoSolicitudes.querySelectorAll('[data-doc-ver]').forEach(b=>b.onclick=()=>verArchivoSolicitud(id,b.dataset.docVer));
+        contenidoSolicitudes.querySelectorAll('[data-doc-ok]').forEach(b=>b.onclick=()=>revisarDocumento(id,b.dataset.docOk,'verificado'));
+        contenidoSolicitudes.querySelectorAll('[data-doc-fail]').forEach(b=>b.onclick=()=>revisarDocumento(id,b.dataset.docFail,'correccion'));
+        document.getElementById('solCorreccion')?.addEventListener('click',()=>accionSolicitudTexto(id,'correccion'));
+        document.getElementById('solRechazar')?.addEventListener('click',()=>accionSolicitudTexto(id,'rechazar'));
+        document.getElementById('solAprobar')?.addEventListener('click',()=>aprobarSolicitud(id));
+      }catch(e){contenidoSolicitudes.innerHTML=item('Error',e.message)+'<button class="usuarios-vendedores-btn" id="volverSolicitudes">← Volver</button>';document.getElementById('volverSolicitudes').onclick=listarSolicitudes;}}
+      async function verArchivoSolicitud(solId,docId){try{const r=await fetch(`${API}/solicitudes/${solId}/documentos/${docId}/archivo`,{headers:token?{Authorization:`Bearer ${token}`}:{}});if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.mensaje||'No se pudo abrir el archivo');}const blob=await r.blob();const url=URL.createObjectURL(blob);window.open(url,'_blank');setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(e){alert(e.message)}}
+      async function revisarDocumento(solId,docId,estado){let observacion='';if(estado!=='verificado'){observacion=prompt('Indica qué debe corregirse en este documento:')||'';if(!observacion.trim())return;}try{await api(`/solicitudes/${solId}/documentos/${docId}`,{method:'PATCH',body:JSON.stringify({estado,observacion})});await verSolicitud(solId);}catch(e){alert(e.message)}}
+      async function accionSolicitudTexto(id,accion){const titulo=accion==='rechazar'?'Motivo del rechazo':'Información que debe corregir';const motivo=prompt(titulo+':')||'';if(!motivo.trim())return;try{await api(`/solicitudes/${id}/${accion}`,{method:'PATCH',body:JSON.stringify({motivo})});await cargarContadorSolicitudes();await listarSolicitudes();}catch(e){alert(e.message)}}
+      async function aprobarSolicitud(id){if(!confirm('¿Aprobar esta solicitud y crear la cuenta de vendedor?'))return;try{const d=await api(`/solicitudes/${id}/aprobar`,{method:'POST',body:'{}'});await cargarContadorSolicitudes();await cargar();await listarSolicitudes();alert(`Vendedor aprobado. Contraseña temporal (mostrar solo una vez): ${d.passwordTemporal}`);}catch(e){alert(e.message)}}
+      function renderTabla(){const texto=(buscador?.value||'').toLowerCase().trim(),nivel=filtroNivel?.value||'todos';const f=usuarios.filter(u=>(filtroEstado==='todos'||u.estado===filtroEstado)&&(nivel==='todos'||u.nivel===nivel)&&(!texto||`${u.nombre} ${u.tienda} ${u.correo} ${u.dui}`.toLowerCase().includes(texto)));contador.textContent=`${f.length} registros`;tbody.innerHTML=f.map(u=>`<tr class="usuario-vendedor-row" data-id="${u.id}"><td><span class="usuario-avatar">${u.iniciales}</span>${esc(u.nombre)}</td><td>${esc(u.tienda)}</td><td>${esc(u.correo)}</td><td><span class="pill ${claseEstado(u.estado)}">${esc(u.estadoTexto)}</span></td><td><span class="pill ${esc(u.seguridadTipo)}">${esc(u.seguridad||'—')}</span></td><td>${esc(u.ultimo)}</td><td><span class="pill info">${esc(u.nivelTexto)}</span></td></tr>`).join('');tbody.querySelectorAll('.usuario-vendedor-row').forEach(r=>r.onclick=()=>abrirModalDetalle(usuarios.find(u=>String(u.id)===r.dataset.id)));}
+      document.querySelectorAll('.usuarios-vendedores-btn[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.usuarios-vendedores-btn[data-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');filtroEstado=b.dataset.filter;renderTabla();});
+      buscador?.addEventListener('input',renderTabla);filtroNivel?.addEventListener('change',renderTabla);
+      document.getElementById('limpiarBusquedaUsuariosVendedores')?.addEventListener('click',()=>{buscador.value='';filtroNivel.value='todos';filtroEstado='todos';renderTabla();});
+      document.getElementById('btnEditarVendedor')?.addEventListener('click',editarVendedor);document.getElementById('btnRestablecerVendedor')?.addEventListener('click',restablecerVendedor);document.getElementById('btnCambiarEstadoVendedor')?.addEventListener('click',cambiarEstadoVendedor);document.getElementById('btnBitacoraVendedor')?.addEventListener('click',verBitacoraVendedor);
+      document.getElementById('btnNuevasSolicitudes')?.addEventListener('click',abrirSolicitudes);document.getElementById('cerrarSolicitudesVendedor')?.addEventListener('click',cerrarSolicitudes);document.getElementById('cerrarSolicitudesVendedorPie')?.addEventListener('click',cerrarSolicitudes);modalSolicitudes?.addEventListener('click',e=>{if(e.target===modalSolicitudes)cerrarSolicitudes()});
+      document.getElementById('cerrarModalUsuarioVendedor')?.addEventListener('click',cerrarModalDetalle);document.getElementById('cerrarModalUsuarioVendedorPie')?.addEventListener('click',cerrarModalDetalle);modalDetalle?.addEventListener('click',e=>{if(e.target===modalDetalle)cerrarModalDetalle()});modalAccion?.addEventListener('click',e=>{if(e.target===modalAccion)cerrarAccion()});
+      cargar();cargarContadorSolicitudes();
+    })();
+  </script>
+</section>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ajustes | TiendaPro</title>
+<link rel="stylesheet" href="css/vendor-shell.css?v=fase68">
+<link rel="stylesheet" href="css/vendor-theme.css?v=fase69">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--tp-bg);color:var(--tp-text)}button{font:inherit}.settings-top{height:68px;background:var(--tp-surface);border-bottom:1px solid var(--tp-line);display:flex;align-items:center;justify-content:flex-end;padding:0 26px;position:sticky;top:0;z-index:20}.settings-top-badge{font-size:12px;color:var(--tp-muted)}.settings-wrap{max-width:1280px;margin:0 auto;padding:30px 28px 50px}.settings-heading{margin-bottom:24px}.settings-heading h1{margin:0 0 7px;font-size:30px;letter-spacing:-.7px}.settings-heading p{margin:0;color:var(--tp-muted);max-width:760px}.settings-layout{display:grid;grid-template-columns:265px minmax(0,1fr);gap:20px}.settings-nav,.settings-card{background:var(--tp-surface);border:1px solid var(--tp-line);border-radius:16px;box-shadow:var(--tp-shadow)}.settings-nav{padding:10px;height:max-content;position:sticky;top:88px}.settings-nav button{width:100%;border:0;background:transparent;color:var(--tp-text);display:flex;align-items:center;gap:11px;text-align:left;padding:11px 12px;border-radius:10px;cursor:pointer;margin:2px 0}.settings-nav button:hover:not(:disabled){background:var(--tp-surface-2)}.settings-nav button.active{background:rgba(var(--tp-accent-rgb),.12);color:var(--tp-accent);font-weight:850}.settings-nav button:disabled{opacity:.48;cursor:not-allowed}.settings-nav .nav-ico{width:24px;text-align:center}.settings-nav small{margin-left:auto;font-size:9px;background:var(--tp-surface-2);border:1px solid var(--tp-line);padding:3px 6px;border-radius:999px;color:var(--tp-muted)}.settings-content{display:grid;gap:16px}.settings-content[hidden]{display:none!important}.settings-card{padding:22px}.settings-card h2{font-size:18px;margin:0 0 5px}.settings-card>p{color:var(--tp-muted);margin:0 0 20px;font-size:13px}.theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.theme-option{position:relative;border:2px solid var(--tp-line);background:var(--tp-surface);border-radius:15px;padding:14px;text-align:left;cursor:pointer;color:var(--tp-text);transition:.16s ease}.theme-option:hover{border-color:rgba(var(--tp-accent-rgb),.5);transform:translateY(-1px)}.theme-option.selected{border-color:var(--tp-accent);box-shadow:0 0 0 3px rgba(var(--tp-accent-rgb),.11)}.theme-check{position:absolute;right:12px;top:12px;width:23px;height:23px;border-radius:50%;border:1px solid var(--tp-line);display:grid;place-items:center;font-size:12px}.theme-option.selected .theme-check{background:var(--tp-accent);color:#fff;border-color:var(--tp-accent)}.preview{height:142px;border:1px solid var(--tp-line);border-radius:11px;overflow:hidden;margin-bottom:12px;background:#eef2f7}.preview-dark{background:#0f172a}.preview-top{height:25px;background:#fff;border-bottom:1px solid #dfe5ed}.preview-dark .preview-top{background:#111c2e;border-color:#28364a}.preview-body{display:grid;grid-template-columns:45px 1fr;height:117px}.preview-side{background:#fff;border-right:1px solid #dfe5ed;padding:9px 7px}.preview-dark .preview-side{background:#111c2e;border-color:#28364a}.preview-side i,.preview-main i{display:block;border-radius:4px;background:#d9e1ec;height:7px;margin-bottom:7px}.preview-side i:first-child{background:var(--tp-accent);height:18px}.preview-dark .preview-side i,.preview-dark .preview-main i{background:#334155}.preview-dark .preview-side i:first-child{background:var(--tp-accent)}.preview-main{padding:12px}.preview-main i:first-child{width:42%;height:9px;background:#8897aa}.preview-main .preview-card{height:54px;background:#fff;border:1px solid #dfe5ed;border-radius:7px;margin-top:11px;position:relative}.preview-dark .preview-main .preview-card{background:#111c2e;border-color:#28364a}.preview-card:after{content:"";position:absolute;left:9px;bottom:9px;width:48%;height:7px;border-radius:4px;background:var(--tp-accent)}.theme-option strong{display:block;font-size:14px}.theme-option span{display:block;color:var(--tp-muted);font-size:11px;margin-top:3px}.brand-row{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px;border:1px solid var(--tp-line);border-radius:13px;background:var(--tp-surface-2)}.accent-swatch{width:56px;height:56px;border-radius:14px;background:var(--tp-accent);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 5px 14px rgba(var(--tp-accent-rgb),.22)}.brand-row strong{display:block;font-size:14px}.brand-row p{margin:5px 0 0;color:var(--tp-muted);font-size:11px;line-height:1.5}.accent-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;border:1px solid var(--tp-line);border-radius:8px;padding:7px 9px;background:var(--tp-surface)}.info-note{display:flex;gap:10px;margin-top:12px;padding:11px 12px;border-radius:10px;background:rgba(var(--tp-accent-rgb),.08);color:var(--tp-muted);font-size:11px;line-height:1.5}.future-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.future-item{border:1px dashed var(--tp-line);border-radius:12px;padding:15px;opacity:.7}.future-item strong{display:block;font-size:13px}.future-item span{display:block;color:var(--tp-muted);font-size:10px;margin-top:4px}.save-state{font-size:11px;color:var(--tp-muted);margin-top:14px;min-height:17px}.save-state.ok{color:#16a34a;font-weight:750}@media(max-width:900px){.settings-layout{grid-template-columns:1fr}.settings-nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.theme-grid,.future-grid{grid-template-columns:1fr}}@media(max-width:560px){.settings-wrap{padding:20px 14px 36px}.settings-nav{grid-template-columns:1fr}.brand-row{grid-template-columns:56px 1fr}.accent-code{grid-column:1/-1;width:max-content}}
+
+.shipping-form{display:grid;gap:18px}.shipping-form label>span,.shipping-form legend{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.shipping-form input,.shipping-form textarea{width:100%;border:1px solid var(--tp-line);background:var(--tp-surface-2);color:var(--tp-text);border-radius:10px;padding:10px 12px;outline:none}.shipping-form input:focus,.shipping-form textarea:focus{border-color:var(--tp-accent);box-shadow:0 0 0 3px rgba(var(--tp-accent-rgb),.10)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.shipping-form fieldset{border:1px solid var(--tp-line);border-radius:12px;padding:14px}.shipping-form legend{padding:0 6px}.days-grid{display:flex;flex-wrap:wrap;gap:8px}.day-chip{display:flex!important;align-items:center;gap:6px;border:1px solid var(--tp-line);border-radius:999px;padding:7px 10px;background:var(--tp-surface-2);font-size:11px;font-weight:750}.day-chip input{width:auto}.zones-head{display:flex;justify-content:space-between;gap:12px;align-items:end}.zones-head p{margin:4px 0 0;color:var(--tp-muted);font-size:11px}.zones-list{display:grid;gap:8px}.zone-row{display:grid;grid-template-columns:minmax(170px,1.3fr) minmax(120px,.7fr) minmax(105px,.55fr) minmax(105px,.55fr);gap:10px;align-items:end;border:1px solid var(--tp-line);border-radius:12px;padding:11px 12px;background:var(--tp-surface-2)}.zone-check{display:flex!important;align-items:center;gap:9px;margin-bottom:9px!important}.zone-check input{width:auto}.zone-row .zone-field span{font-size:10px;color:var(--tp-muted);font-weight:700}.zone-row:not(.enabled) .zone-field{opacity:.45;pointer-events:none}.primary-btn,.secondary-btn{border-radius:10px;padding:10px 14px;font-weight:850;cursor:pointer}.primary-btn{border:1px solid var(--tp-accent);background:var(--tp-accent);color:var(--tp-accent-contrast,#fff)}.secondary-btn{border:1px solid var(--tp-line);background:var(--tp-surface);color:var(--tp-text)}.shipping-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--tp-line);padding-top:17px}.active-method{display:flex!important;align-items:center;gap:8px;font-size:12px;font-weight:800}.active-method input{width:auto}@media(max-width:760px){.form-grid,.zone-row{grid-template-columns:1fr}.zones-head,.shipping-actions{align-items:stretch;flex-direction:column}.primary-btn{width:100%}}
+.shipping-empty{min-height:300px;display:grid;place-items:center;text-align:center;padding:38px 20px}.shipping-empty-inner{max-width:430px}.shipping-empty-icon{width:72px;height:72px;border-radius:22px;margin:0 auto 18px;display:grid;place-items:center;font-size:30px;background:rgba(var(--tp-accent-rgb),.10);border:1px solid rgba(var(--tp-accent-rgb),.22)}.shipping-empty h2{margin:0 0 8px}.shipping-empty p{margin:0 auto 20px!important;line-height:1.55}.shipping-summary{display:grid;gap:14px}.shipping-method-card{border:1px solid var(--tp-line);border-radius:16px;padding:20px;background:var(--tp-surface-2)}.shipping-method-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.shipping-method-title{display:flex;align-items:center;gap:10px;min-width:0}.shipping-method-title h3{margin:0;font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:850;border:1px solid var(--tp-line)}.status-pill.active{color:#16a34a;background:rgba(22,163,74,.10);border-color:rgba(22,163,74,.25)}.status-pill.inactive{color:var(--tp-muted);background:var(--tp-surface)}.shipping-method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}.method-stat{border:1px solid var(--tp-line);border-radius:12px;padding:13px;background:var(--tp-surface)}.method-stat span{display:block;color:var(--tp-muted);font-size:10px;font-weight:750;margin-bottom:4px}.method-stat strong{font-size:14px}.shipping-card-actions{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end;margin-top:17px;padding-top:15px;border-top:1px solid var(--tp-line)}.danger-btn{border:1px solid rgba(220,38,38,.32);background:rgba(220,38,38,.08);color:#ef4444;border-radius:10px;padding:10px 14px;font-weight:850;cursor:pointer}.status-btn{border:1px solid var(--tp-line);background:var(--tp-surface);color:var(--tp-text);border-radius:10px;padding:10px 14px;font-weight:850;cursor:pointer}.shipping-form-wrap[hidden],.shipping-empty[hidden],.shipping-summary[hidden]{display:none!important}.form-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}.form-title-row h2{margin:0 0 5px}.form-title-row p{margin:0!important}.icon-close-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--tp-line);background:var(--tp-surface-2);color:var(--tp-text);cursor:pointer;font-size:18px}.shipping-actions .left-actions{display:flex;align-items:center;gap:8px}.modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,.64);display:grid;place-items:center;padding:20px;z-index:1000}.modal-backdrop[hidden]{display:none}.confirm-modal{width:min(430px,100%);background:var(--tp-surface);border:1px solid var(--tp-line);border-radius:17px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.35)}.confirm-modal h3{margin:0 0 8px;font-size:19px}.confirm-modal p{margin:0;color:var(--tp-muted);font-size:13px;line-height:1.55}.confirm-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}@media(max-width:620px){.shipping-method-grid{grid-template-columns:1fr}.shipping-method-head{flex-direction:column}.shipping-card-actions>*{flex:1}.form-title-row{align-items:center}}
+</style>
+<link rel="stylesheet" href="css/vendor-polish.css?v=fase80">
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+<body data-vendor-section="ajustes">
+<header class="settings-top"><span class="settings-top-badge">Panel de Vendedor · Ajustes</span></header>
+<main class="settings-wrap">
+  <div class="settings-heading"><h1>Ajustes</h1><p>Administra las preferencias de tu cuenta y de tu tienda. Actualmente puedes configurar la apariencia del panel y tu método de envío propio.</p></div>
+  <div class="settings-layout">
+    <aside class="settings-nav" aria-label="Secciones de ajustes">
+      <button class="active" type="button" data-settings-tab="apariencia"><span class="nav-ico">◐</span>Apariencia</button>
+      <button type="button" disabled><span class="nav-ico">▣</span>Información de tienda<small>Próximamente</small></button>
+      <button type="button" disabled><span class="nav-ico">♢</span>Notificaciones<small>Próximamente</small></button>
+      <button type="button" data-settings-tab="envios"><span class="nav-ico">🚚</span>Envíos</button>
+      <button type="button" disabled><span class="nav-ico">＄</span>Pagos y liquidaciones<small>Próximamente</small></button>
+      <button type="button" disabled><span class="nav-ico">▤</span>Documentos y fiscal<small>Próximamente</small></button>
+      <button type="button" disabled><span class="nav-ico">⌾</span>Seguridad<small>Próximamente</small></button>
+    </aside>
+    <section class="settings-content" id="appearanceSettings">
+      <article class="settings-card">
+        <h2>Tema del panel</h2><p>Elige cómo quieres visualizar tu panel de vendedor. La preferencia queda guardada en este navegador.</p>
+        <div class="theme-grid">
+          <button class="theme-option" type="button" data-theme-choice="light" aria-pressed="false">
+            <span class="theme-check">✓</span><div class="preview"><div class="preview-top"></div><div class="preview-body"><div class="preview-side"><i></i><i></i><i></i><i></i></div><div class="preview-main"><i></i><div class="preview-card"></div></div></div></div><strong>Tema claro</strong><span>Fondos claros y alto contraste para uso durante el día.</span>
+          </button>
+          <button class="theme-option" type="button" data-theme-choice="dark" aria-pressed="false">
+            <span class="theme-check">✓</span><div class="preview preview-dark"><div class="preview-top"></div><div class="preview-body"><div class="preview-side"><i></i><i></i><i></i><i></i></div><div class="preview-main"><i></i><div class="preview-card"></div></div></div></div><strong>Tema oscuro</strong><span>Interfaz oscura para ambientes con poca iluminación.</span>
+          </button>
+        </div><div class="save-state" id="themeSaveState"></div>
+      </article>
+      <article class="settings-card">
+        <h2>Color de marca automático</h2><p>TiendaPro analiza el logo de tu tienda y utiliza su color más representativo como acento visual.</p>
+        <div class="brand-row"><div class="accent-swatch" id="accentSwatch"></div><div><strong>Color detectado del logo</strong><p>Se aplica a botones principales, opciones activas y detalles visuales. El sistema evita colores que dificulten la lectura.</p></div><code class="accent-code" id="accentCode">#2563EB</code></div>
+        <div class="info-note"><span>ⓘ</span><span>El color de marca es automático. Cambiar entre Claro y Oscuro no modifica tu identidad visual; solo cambia las superficies y el contraste del panel.</span></div>
+      </article>
+      <article class="settings-card">
+        <h2>Estructura preparada</h2><p>Estas áreas formarán parte de Ajustes en próximas fases. Por ahora permanecen desactivadas para no alterar funciones existentes.</p>
+        <div class="future-grid"><div class="future-item"><strong>Información de tienda</strong><span>Datos públicos, identidad y configuración comercial.</span></div><div class="future-item"><strong>Notificaciones</strong><span>Preferencias de alertas y avisos del vendedor.</span></div><div class="future-item"><strong>Envíos</strong><span>Métodos de entrega y configuración logística.</span></div><div class="future-item"><strong>Pagos y liquidaciones</strong><span>Cuenta de cobro y preferencias financieras.</span></div><div class="future-item"><strong>Documentos y fiscal</strong><span>Información tributaria y documentos comerciales.</span></div><div class="future-item"><strong>Seguridad</strong><span>Acceso, contraseña y protección de la cuenta.</span></div></div>
+      </article>
+    </section>
+    <section class="settings-content" id="shippingSettings" hidden>
+      <article class="settings-card shipping-empty" id="shippingEmpty">
+        <div class="shipping-empty-inner">
+          <div class="shipping-empty-icon">🚚</div>
+          <h2>Método de envío propio</h2>
+          <p>Aún no has configurado un método de envío para tu tienda. Puedes registrar uno y definir los departamentos donde realizas entregas.</p>
+          <button class="primary-btn" type="button" id="addShippingMethod">+ Agregar método de envío</button>
+        </div>
+      </article>
+
+      <div class="shipping-summary" id="shippingSummary" hidden>
+        <article class="settings-card">
+          <h2>Tu método de envío</h2><p>Administra el único método de envío propio de tu tienda.</p>
+          <div class="shipping-method-card">
+            <div class="shipping-method-head">
+              <div class="shipping-method-title"><h3 id="methodCardName">Método de envío</h3><span class="status-pill active" id="methodCardStatus">● Activo</span></div>
+            </div>
+            <div class="shipping-method-grid">
+              <div class="method-stat"><span>Entrega estimada</span><strong id="methodCardEta">—</strong></div>
+              <div class="method-stat"><span>Cobertura</span><strong id="methodCardCoverage">—</strong></div>
+            </div>
+            <div class="shipping-card-actions">
+              <button class="secondary-btn" type="button" id="editShippingMethod">Editar</button>
+              <button class="status-btn" type="button" id="toggleShippingStatus">Desactivar</button>
+              <button class="danger-btn" type="button" id="deleteShippingMethod">Eliminar</button>
+            </div>
+          </div>
+        </article>
+        <article class="settings-card"><h2>Cómo se mostrará al cliente</h2><p>Tu método solo aparecerá cuando la dirección del cliente pertenezca a uno de los departamentos que cubres. TiendaPro podrá ofrecer además sus propias opciones logísticas.</p><div class="info-note"><span>ⓘ</span><span>El precio se calcula según el departamento del cliente. En esta tarjeta de administración solo mostramos el nombre, tiempo estimado y cantidad de departamentos cubiertos.</span></div></article>
+      </div>
+
+      <article class="settings-card shipping-form-wrap" id="shippingFormWrap" hidden>
+        <div class="form-title-row"><div><h2 id="shippingFormTitle">Agregar método de envío</h2><p>Configura la logística de tu tienda y las zonas donde realizas entregas.</p></div><button class="icon-close-btn" type="button" id="closeShippingForm" aria-label="Cerrar formulario">×</button></div>
+        <form id="shippingForm" class="shipping-form">
+          <div class="form-grid"><label><span>Nombre del método *</span><input id="shipName" maxlength="100" required placeholder="Ej. FEDEX, DHL, C807 Express o Reparto propio"></label><label class="active-method"><span>Seguimiento</span><span><input id="shipTracking" type="checkbox" checked> Seguimiento disponible para el cliente</span></label></div>
+          <div class="info-note"><span>ⓘ</span><span>Escribe libremente el nombre del servicio que utiliza tu tienda. Define directamente el plazo que prometes al cliente en cada departamento.</span></div>
+          <div class="zones-head"><div><strong>Zonas de cobertura</strong><p>Selecciona los departamentos donde haces entregas y define el precio y el rango estimado de entrega para cada uno.</p></div><button class="secondary-btn" type="button" id="toggleAllZones">Seleccionar todos</button></div>
+          <div class="zones-list" id="zonesList"></div>
+          <div class="shipping-actions"><div class="left-actions"><button class="secondary-btn" type="button" id="cancelShippingForm">Cancelar</button></div><button class="primary-btn" type="submit" id="saveShipping">Guardar método de envío</button></div>
+          <div class="save-state" id="shippingState"></div>
+        </form>
+      </article>
+    </section>
+  </div>
+</main>
+
+<div class="modal-backdrop" id="deleteShippingModal" hidden><div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="deleteShippingTitle"><h3 id="deleteShippingTitle">¿Eliminar método de envío?</h3><p>Se eliminarán también las zonas, precios y tiempos configurados. Esta acción no se puede deshacer.</p><div class="confirm-actions"><button class="secondary-btn" type="button" id="cancelDeleteShipping">Cancelar</button><button class="danger-btn" type="button" id="confirmDeleteShipping">Eliminar</button></div></div></div>
+<script src="js/vendor-theme.js?v=fase69"></script>
+<script src="js/ajustes-vendedor.js?v=fase79"></script>
+<script src="js/vendor-shell.js?v=fase70"></script>
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+.public-shared-header{position:sticky;top:0;z-index:500;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid #e5e7eb;color:#111827;overflow:visible}.public-shared-header .header-main{min-height:74px;width:min(1520px,calc(100% - 48px));margin:auto;display:flex;align-items:center;gap:26px}.public-shared-header .brand{display:flex;align-items:center;gap:10px;color:#111827;text-decoration:none;font-size:25px;font-weight:900;letter-spacing:-.6px;white-space:nowrap}.public-shared-header .brand .brand-bag{display:grid;place-items:center;width:34px;height:34px;background:#22b455;color:#fff;border-radius:9px;font-size:18px;box-shadow:0 8px 18px rgba(34,180,85,.2)}.public-shared-header .brand .brand-name{width:auto;height:auto;background:none;border-radius:0;color:inherit;display:inline;font-size:inherit}.public-shared-header .header-search{flex:1;max-width:670px;margin-left:22px;display:flex;align-items:center;background:#f8fafc;border:1px solid #e5e7eb;border-radius:999px;padding:0 8px 0 20px}.public-shared-header .header-search input{flex:1;height:44px;border:0;outline:0;background:transparent;font-size:14px;color:#111827}.public-shared-header .header-search button{width:38px;height:38px;border:0;background:transparent;color:inherit;border-radius:50%;font-size:22px;cursor:pointer}.public-shared-header .account-actions{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:13px;font-weight:700;white-space:nowrap}.public-shared-header .account-actions a{text-decoration:none}.public-shared-header .seller-link{color:#16a34a}.public-shared-header .text-link{color:#111827}.public-shared-header .btn-signup{background:#22b455;color:#fff!important;padding:11px 17px;border-radius:8px}.public-shared-header .user-greeting{color:#4b5563}.public-shared-header .cart-icon{position:relative;border:0;background:transparent;color:inherit;font-size:23px;cursor:pointer;padding:5px}.public-shared-header .cart-icon span{position:absolute;right:-4px;top:-5px;display:grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#22b455;color:#fff;font-size:10px;font-weight:800}.public-shared-header .category-bar{height:52px;width:min(1520px,calc(100% - 48px));margin:auto;display:flex;align-items:center;gap:30px;overflow:auto}.public-shared-header .category-bar button{border:0;background:none;color:#111827;font-size:13px;cursor:pointer;white-space:nowrap}.public-shared-header .category-trigger{display:flex;align-items:center;gap:12px;min-width:230px;border:1px solid #e5e7eb!important;border-radius:10px!important;padding:10px 14px!important;font-weight:800}.public-shared-header .category-trigger .category-chevron{margin-left:auto}.public-shared-header .category-links{display:flex;align-items:center;gap:30px}.public-shared-header .offers-link{color:#16a34a!important}.public-shared-header .account-menu-wrap{position:relative}.public-shared-header .account-menu-trigger{border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}.public-shared-header .account-dropdown{position:absolute;right:0;top:calc(100% + 12px);width:190px;padding:8px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 18px 45px rgba(15,23,42,.14);z-index:700}.public-shared-header .account-dropdown a,.public-shared-header .account-dropdown button{display:block;width:100%;padding:10px 11px;border:0;border-radius:8px;background:none;color:#111827;text-align:left;font:inherit;cursor:pointer}.public-shared-header .account-dropdown a:hover,.public-shared-header .account-dropdown button:hover{background:#f3f4f6}.public-shared-header .mobile-menu-trigger{display:none}
+html[data-public-theme="dark"] .public-shared-header{background:rgba(6,18,33,.97);border-color:#21364d;color:#f4f7fb}html[data-public-theme="dark"] .public-shared-header .brand,html[data-public-theme="dark"] .public-shared-header .category-bar button,html[data-public-theme="dark"] .public-shared-header .text-link{color:#f4f7fb}html[data-public-theme="dark"] .public-shared-header .header-search{background:#0d1c2f;border-color:#263b52}html[data-public-theme="dark"] .public-shared-header .header-search input{color:#f4f7fb}html[data-public-theme="dark"] .public-shared-header .user-greeting{color:#d5deea}html[data-public-theme="dark"] .public-shared-header .category-trigger{border-color:#263b52!important}html[data-public-theme="dark"] .public-shared-header .account-dropdown{background:#0d1c2f;border-color:#263b52}html[data-public-theme="dark"] .public-shared-header .account-dropdown a,html[data-public-theme="dark"] .public-shared-header .account-dropdown button{color:#f4f7fb}html[data-public-theme="dark"] .public-shared-header .account-dropdown a:hover,html[data-public-theme="dark"] .public-shared-header .account-dropdown button:hover{background:#14263b}
+@media(max-width:900px){.public-shared-header .header-main{width:calc(100% - 24px);gap:10px;min-height:62px}.public-shared-header .mobile-menu-trigger{display:block;border:0;background:transparent;color:inherit;font-size:22px}.public-shared-header .brand{font-size:20px}.public-shared-header .brand .brand-bag{width:30px;height:30px}.public-shared-header .header-search{margin-left:0;min-width:0}.public-shared-header .account-actions .user-greeting,.public-shared-header .account-menu-wrap,.public-shared-header .seller-link,.public-shared-header .text-link,.public-shared-header .btn-signup{display:none}.public-shared-header .category-bar{width:calc(100% - 24px);height:46px;gap:18px}.public-shared-header .category-trigger{min-width:max-content}.public-shared-header .category-links{gap:18px}}
+
+/* FASE95 — El encabezado compartido debe conservar exactamente la geometría del encabezado principal. */
+.public-shared-header,
+.public-shared-header *{box-sizing:border-box}
+.public-shared-header{width:100%;max-width:100%;overflow:visible!important}
+.public-shared-header .header-main{
+  width:min(1520px,calc(100% - 48px))!important;
+  min-height:74px!important;
+  margin-inline:auto!important;
+  padding:0!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:26px!important;
+}
+.public-shared-header .brand{
+  flex:0 0 auto!important;
+  font-size:25px!important;
+}
+.public-shared-header .header-search{
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-width:260px!important;
+  max-width:670px!important;
+  margin-left:22px!important;
+}
+.public-shared-header .account-actions{
+  flex:0 0 auto!important;
+  margin-left:auto!important;
+}
+.public-shared-header .category-bar{
+  width:min(1520px,calc(100% - 48px))!important;
+  height:52px!important;
+  margin-inline:auto!important;
+  padding:0!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:30px!important;
+  overflow:hidden!important;
+}
+.public-shared-header .category-trigger{
+  width:230px!important;
+  min-width:230px!important;
+  max-width:230px!important;
+  flex:0 0 230px!important;
+  height:auto!important;
+  margin:0!important;
+}
+.public-shared-header .category-links{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  width:auto!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:30px!important;
+  overflow:hidden!important;
+}
+.public-shared-header .category-links button{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  padding:0!important;
+}
+
+@media(max-width:1150px){
+  .public-shared-header .header-main{gap:18px!important}
+  .public-shared-header .header-search{margin-left:0!important}
+  .public-shared-header .category-bar{gap:18px!important;overflow-x:auto!important;scrollbar-width:none}
+  .public-shared-header .category-bar::-webkit-scrollbar{display:none}
+  .public-shared-header .category-links{overflow:visible!important;gap:24px!important}
+}
+@media(max-width:900px){
+  .public-shared-header .header-main{
+    width:calc(100% - 24px)!important;
+    min-height:62px!important;
+    gap:10px!important;
+  }
+  .public-shared-header .brand{font-size:20px!important}
+  .public-shared-header .header-search{min-width:0!important;margin-left:0!important}
+  .public-shared-header .category-bar{
+    width:calc(100% - 24px)!important;
+    height:46px!important;
+    gap:18px!important;
+    overflow-x:auto!important;
+  }
+  .public-shared-header .category-trigger{
+    width:auto!important;
+    min-width:max-content!important;
+    max-width:none!important;
+    flex:0 0 auto!important;
+  }
+  .public-shared-header .category-links{gap:18px!important;overflow:visible!important}
+}
+
+
+/* FASE97: acceso horizontal Todo = portada principal de la tienda */
+.category-links .store-home-link{white-space:nowrap;}
+
+/* FASE99 — evita el pequeño desplazamiento del encabezado al cambiar de categoría. */
+html{
+  scrollbar-gutter:stable;
+}
+.public-shared-header .category-bar,
+.public-shared-header .category-links,
+.public-shared-header .category-links button{
+  transition:none!important;
+}
+
+/* FASE100 — geometría idéntica de categorías horizontales en todas las páginas públicas.
+   La cabecera compartida debe conservar exactamente las mismas separaciones de tienda_publica.html. */
+@media (min-width:1280px){
+  .public-shared-header .category-bar{
+    gap:12px!important;
+  }
+  .public-shared-header .category-trigger{
+    width:230px!important;
+    min-width:230px!important;
+    max-width:230px!important;
+    flex:0 0 230px!important;
+  }
+  .public-shared-header .category-links{
+    gap:clamp(16px,1.65vw,28px)!important;
+    justify-content:flex-start!important;
+    overflow:visible!important;
+  }
+  .public-shared-header .category-links button{
+    padding:8px 6px!important;
+    margin:0!important;
+    border-radius:0!important;
+    font-weight:inherit!important;
+  }
+  /* El estado activo no puede cambiar ancho, padding ni separación. */
+  .public-shared-header .category-links button.active{
+    padding:8px 6px!important;
+    margin:0!important;
+  }
+}
+
+/* FASE106 · Respeta el atributo hidden en las acciones de sesión del encabezado compartido.
+   Evita que las reglas display:flex del header hagan visibles simultáneamente
+   los controles de invitado y cliente autenticado. */
+.public-shared-header .account-actions[hidden]{
+  display:none!important;
+}
+
+
+/* FASE110 · Estado activo discreto en encabezado compartido.
+   Solo cambia el color del texto; conserva tipografía, fondo y geometría. */
+.public-shared-header .category-links button.active{
+  color:#15803d!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  font-weight:inherit!important;
+}
+html[data-public-theme="dark"] .public-shared-header .category-links button.active{
+  color:#52dc7d!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.public-shared-header .category-links .offers-link.active{
+  color:#dc2626!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+html[data-public-theme="dark"] .public-shared-header .category-links .offers-link.active{
+  color:#f87171!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+/* FASE111 — Ofertas siempre identificada con cuadro rojo */
+.category-links .offers-link,
+.public-shared-header .category-links .offers-link{
+  color:#dc2626!important;background:#fff5f5!important;border:1px solid #ef4444!important;
+  border-radius:8px!important;padding:7px 12px!important;font-weight:700!important;
+  box-shadow:none!important;transition:background .18s ease,color .18s ease,border-color .18s ease!important;
+}
+.category-links .offers-link:hover,.category-links .offers-link.active,
+.public-shared-header .category-links .offers-link:hover,.public-shared-header .category-links .offers-link.active{
+  color:#b91c1c!important;background:#fee2e2!important;border-color:#dc2626!important;box-shadow:none!important;
+}
+html[data-public-theme="dark"] .category-links .offers-link,
+html[data-public-theme="dark"] .public-shared-header .category-links .offers-link{
+  color:#fca5a5!important;background:rgba(127,29,29,.22)!important;border-color:#ef4444!important;
+}
+html[data-public-theme="dark"] .category-links .offers-link:hover,html[data-public-theme="dark"] .category-links .offers-link.active,
+html[data-public-theme="dark"] .public-shared-header .category-links .offers-link:hover,html[data-public-theme="dark"] .public-shared-header .category-links .offers-link.active{
+  color:#fecaca!important;background:rgba(153,27,27,.38)!important;border-color:#f87171!important;
+}
+
+
+/* FASE114 V11 — navegación compartida coherente con tienda principal */
+.public-shared-header .category-trigger>span:not(.category-trigger-icon){
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip-path:inset(50%)!important;
+  white-space:nowrap!important;
+}
+.public-shared-header .category-trigger .category-chevron{display:none!important}
+@media (min-width:821px){
+  .public-shared-header .category-bar{
+    display:grid!important;
+    grid-template-columns:52px minmax(0,1fr) 52px!important;
+    align-items:center!important;
+    gap:0!important;
+    overflow:visible!important;
+  }
+  .public-shared-header .category-trigger{
+    grid-column:1!important;
+    width:42px!important;
+    min-width:42px!important;
+    max-width:42px!important;
+    flex-basis:42px!important;
+    height:42px!important;
+    padding:0!important;
+    display:grid!important;
+    place-items:center!important;
+    justify-self:start!important;
+    gap:0!important;
+  }
+  .public-shared-header .category-trigger .category-trigger-icon{font-size:19px!important;line-height:1!important}
+  .public-shared-header .category-links{
+    grid-column:2!important;
+    width:100%!important;
+    display:flex!important;
+    justify-content:center!important;
+    align-items:center!important;
+    gap:clamp(18px,2.15vw,38px)!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+}

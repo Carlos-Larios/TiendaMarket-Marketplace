@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin</title>
+
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script>
+    const token = localStorage.getItem("token");
+    let usuarioPanel = null;
+    try { usuarioPanel = JSON.parse(localStorage.getItem("usuario") || "null"); } catch (_) {}
+    const portalSesion = localStorage.getItem("portalSesion");
+    const rolesPanel = ["admin", "dueño", "empleado"];
+    if (!token || portalSesion !== "panel" || !rolesPanel.includes(String(usuarioPanel?.rol || "").toLowerCase())) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("usuario");
+      localStorage.removeItem("portalSesion");
+      window.location.replace("login-Panel.html");
+    }
+  </script>
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+
+<body>
+  <button class="mobile-menu-btn" id="btnMenuMobile" aria-label="Abrir menú">
+    ☰
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar">
+    <div class="logo">Market</div>
+
+    <nav class="menu" id="menuPrincipal">
+      <a href="#" class="menu-dashboard-link active" data-vista="analiticas_view.html" data-titulo="Dashboard">
+        <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
+        <span>Dashboard</span>
+      </a>
+
+      <div class="menu-group open" data-menu-group="ventas">
+        <button type="button" class="menu-group-toggle" aria-expanded="true">
+          <span class="menu-group-title">
+            <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L23 6H6"></path></svg></span>
+            <span>Ventas</span>
+          </span>
+          <span class="menu-chevron">›</span>
+        </button>
+        <div class="submenu">
+          <div class="submenu-inner">
+            <a href="#" class="submenu-link" data-vista="pedidos_view.html" data-titulo="Pedidos">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></span>
+              <span>Pedidos</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="facturacion_view.html" data-titulo="Facturación">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg></span>
+              <span>Facturación</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-group open" data-menu-group="catalogo">
+        <button type="button" class="menu-group-toggle" aria-expanded="true">
+          <span class="menu-group-title">
+            <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.3 7L12 12l8.7-5"></path><path d="M12 22V12"></path></svg></span>
+            <span>Catálogo</span>
+          </span>
+          <span class="menu-chevron">›</span>
+        </button>
+        <div class="submenu">
+          <div class="submenu-inner">
+            <a href="#" class="submenu-link" data-vista="productos_view.html" data-titulo="Productos">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><circle cx="7" cy="7" r="1"></circle></svg></span>
+              <span>Productos</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-group" data-menu-group="mi-tienda">
+        <button type="button" class="menu-group-toggle" aria-expanded="false">
+          <span class="menu-group-title">
+            <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"></path><path d="M4 9h16v11H4z"></path><path d="M9 20v-6h6v6"></path></svg></span>
+            <span>Mi Tienda</span>
+          </span>
+          <span class="menu-chevron">›</span>
+        </button>
+        <div class="submenu">
+          <div class="submenu-inner">
+            <a href="#" class="submenu-link" data-vista="pedidos_view.html" data-titulo="Mis pedidos">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></span>
+              <span>Mis pedidos</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="inventario_fisico_view.html" data-titulo="Inventario físico">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"></path><path d="M3 7v10l9 4 9-4V7"></path><path d="M12 11v10"></path></svg></span>
+              <span>Inventario físico</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="importacion_view.html" data-titulo="Importaciones">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 16h18"></path><path d="M7 16l1.5-8h7L17 16"></path><path d="M6 20h12"></path><path d="M9 8V5h6v3"></path></svg></span>
+              <span>Importaciones</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="emprendedores_view.html" data-titulo="Emprendedores">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+              <span>Emprendedores</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-group" data-menu-group="vendedores">
+        <button type="button" class="menu-group-toggle" aria-expanded="false">
+          <span class="menu-group-title">
+            <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+            <span>Vendedores</span>
+          </span>
+          <span class="menu-chevron">›</span>
+        </button>
+        <div class="submenu">
+          <div class="submenu-inner">
+            <a href="#" class="submenu-link" data-vista="vendedores_dashboard_view.html" data-titulo="Dashboard vendedores">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
+              <span>Dashboard</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="vendedores_view.html" data-titulo="Vendedores">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+              <span>Vendedores</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="solicitudes_vendedores_view.html" data-titulo="Solicitudes de vendedores">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg></span>
+              <span>Solicitudes</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="liquidaciones_vendedores_view.html" data-titulo="Liquidaciones">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path></svg></span>
+              <span>Liquidaciones</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="disputas_vendedores_view.html" data-titulo="Disputas">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span>
+              <span>Disputas</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-group" data-menu-group="postventa">
+        <button type="button" class="menu-group-toggle" aria-expanded="false">
+          <span class="menu-group-title">
+            <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15.3-6.3L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-15.3 6.3L3 16"></path><path d="M3 21v-5h5"></path></svg></span>
+            <span>Postventa</span>
+          </span>
+          <span class="menu-chevron">›</span>
+        </button>
+        <div class="submenu">
+          <div class="submenu-inner">
+            <a href="#" class="submenu-link" data-vista="postventa_dashboard_view.html" data-titulo="Dashboard postventa">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
+              <span>Dashboard</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="devoluciones_view.html" data-titulo="Casos">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4"></path><path d="M5 10h11a4 4 0 0 1 0 8h-1"></path></svg></span>
+              <span>Casos</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-group" data-menu-group="usuarios">
+        <button type="button" class="menu-group-toggle" aria-expanded="false">
+          <span class="menu-group-title">
+            <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+            <span>Usuarios</span>
+          </span>
+          <span class="menu-chevron">›</span>
+        </button>
+        <div class="submenu">
+          <div class="submenu-inner">
+            <a href="#" class="submenu-link" data-vista="empleados_view.html" data-titulo="Empleados">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+              <span>Empleados</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="usuarios_vendedores_view.html" data-titulo="Usuarios vendedores">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+              <span>Vendedores</span>
+            </a>
+            <a href="#" class="submenu-link" data-vista="clientes_view.html" data-titulo="Clientes">
+              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+              <span>Clientes</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a href="#" class="menu-dashboard-link" data-vista="notificaciones_view.html" data-titulo="Centro de Notificaciones">
+        <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span>
+        <span>Notificaciones</span>
+      </a>
+
+      <a href="#" class="menu-dashboard-link" data-vista="bitacora_global_view.html" data-titulo="Bitácora Global">
+        <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg></span>
+        <span>Bitácora Global</span>
+      </a>
+
+      <a href="#" class="menu-dashboard-link" data-vista="configuracion_view.html" data-titulo="Configuración">
+        <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 .6 1.65 1.65 0 0 0-.33 1V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-.33-1 1.65 1.65 0 0 0-1-.6 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-.6-1 1.65 1.65 0 0 0-1-.33H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1-.33 1.65 1.65 0 0 0 .6-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-.6 1.65 1.65 0 0 0 .33-1V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 .33 1 1.65 1.65 0 0 0 1 .6 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.32.34.61.6 1 .26.26.58.4 1 .4H21a2 2 0 1 1 0 4h-.09c-.38 0-.74.13-1 .4-.26.26-.46.56-.6 1z"></path></svg></span>
+        <span>Configuración</span>
+      </a>
+      <a href="#" class="menu-dashboard-link" data-vista="apariencia_inicio_view.html" data-titulo="Apariencia del inicio"><span class="menu-icon" aria-hidden="true">▧</span><span>Apariencia del inicio</span></a>
+      <a href="#" class="menu-dashboard-link" data-vista="editor_visual_view.html" data-titulo="Editor visual de prueba">
+        <span class="menu-icon" aria-hidden="true">▦</span><span>Editor visual de prueba</span>
+      </a>
+    </nav>
+
+    <button class="logout-sidebar" onclick="cerrarSesion()" title="Cerrar sesión">
+      <span class="logout-icon">⎋</span>
+      <span>Cerrar sesión</span>
+    </button>
+  </aside>
+
+  <main class="main">
+
+    <section class="global-search-shell" id="globalSearchShell">
+      <div class="global-search-box">
+        <div class="global-search-main">
+          <span class="global-search-icon">🔍</span>
+          <input id="globalSearchInput" type="search" autocomplete="off" placeholder="Buscar pedidos, productos, clientes, vendedores, facturas...">
+          <button type="button" id="globalSearchBtn">Buscar</button>
+          <div class="global-search-actions" aria-label="Herramientas rápidas">
+            <button type="button" class="global-tool-button" id="openGlobalFilters" title="Filtros avanzados" aria-label="Abrir filtros avanzados"><span>⚙️</span></button>
+            <button type="button" class="global-tool-button command-tool-button" id="openCommandCenter" title="Centro de comandos (Ctrl + F)" aria-label="Abrir centro de comandos"><span>⌘</span></button>
+            <button type="button" class="global-tool-button" id="openQuickDrawer" title="Acciones rápidas" aria-label="Abrir acciones rápidas"><span>⚡</span></button>
+            <button type="button" class="global-tool-button" id="openExportDrawer" title="Centro de exportaciones" aria-label="Abrir centro de exportaciones"><span>📄</span></button>
+            <button type="button" class="global-tool-button" id="openNotificationsDrawer" title="Notificaciones" aria-label="Abrir notificaciones"><span>🔔</span><b>4</b></button>
+            <button type="button" class="global-tool-button" id="openHistoryDrawer" title="Historial reciente" aria-label="Abrir historial reciente"><span>🕘</span></button>
+            <button type="button" class="global-tool-button" id="openRealtimeDrawer" title="Actividad en tiempo real" aria-label="Abrir actividad en tiempo real"><span>📡</span><b>Live</b></button>
+            <button type="button" class="global-tool-button" id="openHelpDrawer" title="Ayuda y soporte" aria-label="Abrir ayuda y soporte"><span>❓</span></button>
+          </div>
+        </div>
+
+        <div class="global-search-filters" id="globalSearchFilters" aria-label="Filtros avanzados de búsqueda">
+          <div class="global-filters-popover-head">
+            <div>
+              <strong>Filtros de búsqueda</strong>
+              <span>Elige dónde buscar. Puedes seleccionar varios módulos.</span>
+            </div>
+            <button type="button" class="global-filters-close" id="closeGlobalFilters" aria-label="Cerrar filtros">×</button>
+          </div>
+          <div class="global-filters-popover-body">
+          <button type="button" class="global-filter active" data-tipo="todos">Todos</button>
+          <button type="button" class="global-filter" data-tipo="clientes">Clientes</button>
+          <button type="button" class="global-filter" data-tipo="vendedores">Vendedores</button>
+          <button type="button" class="global-filter" data-tipo="empleados">Empleados</button>
+          <button type="button" class="global-filter" data-tipo="productos">Productos</button>
+          <button type="button" class="global-filter" data-tipo="pedidos">Pedidos</button>
+          <button type="button" class="global-filter" data-tipo="facturas">Facturas</button>
+          <button type="button" class="global-filter" data-tipo="inventario">Inventario</button>
+          <button type="button" class="global-filter" data-tipo="importaciones">Importaciones</button>
+          <button type="button" class="global-filter" data-tipo="devoluciones">Devoluciones</button>
+          <button type="button" class="global-filter" data-tipo="disputas">Disputas</button>
+          <button type="button" class="global-filter" data-tipo="liquidaciones">Liquidaciones</button>
+          <button type="button" class="global-filter" data-tipo="bitacora">Bitácora</button>
+          <button type="button" class="global-filter" data-tipo="notificaciones">Notificaciones</button>
+          </div>
+          <div class="global-filters-popover-actions">
+            <span id="globalFiltersSummary">Buscando en todo</span>
+            <button type="button" id="applyGlobalFilters" class="global-filters-apply">Aplicar</button>
+          </div>
+        </div>
+
+        <div class="global-search-help">
+          Busca en toda la plataforma o usa ⚙️ para limitar por módulo. Atajos: <b>cliente:Carlos</b>, <b>pedido:458</b>, <b>producto:RTX</b>, <b>factura:125</b>.
+        </div>
+      </div>
+
+      <div class="global-results-panel" id="globalResultsPanel" aria-live="polite">
+        <div class="global-results-head">
+          <div>
+            <h3 id="globalResultsTitle">Buscador global</h3>
+            <p id="globalResultsSubtitle">Busca en toda la plataforma desde un solo lugar.</p>
+          </div>
+          <button type="button" id="globalCloseResults" class="global-close-btn">×</button>
+        </div>
+
+        <div class="global-empty-state" id="globalSearchEmpty">
+          <div class="global-suggest-grid">
+            <div>
+              <h4>Búsquedas recientes</h4>
+              <div id="globalRecentList" class="global-chip-list"></div>
+            </div>
+            <div>
+              <h4>Más buscados</h4>
+              <div class="global-chip-list">
+                <button type="button" data-quick="pedidos">Pedidos</button>
+                <button type="button" data-quick="productos">Productos</button>
+                <button type="button" data-quick="clientes">Clientes</button>
+                <button type="button" data-quick="vendedores">Vendedores</button>
+                <button type="button" data-quick="facturas">Facturas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="globalResultsContent" class="global-results-content"></div>
+      </div>
+    </section>
+
+
+    <section class="quick-actions-shell" id="quickActionsShell">
+      <div class="quick-actions-head">
+        <div>
+          <span class="quick-eyebrow">Accesos inteligentes</span>
+          <h2>Acciones rápidas</h2>
+          <p>Atajos preparados para abrir módulos, continuar tareas recientes y revisar pendientes del día.</p>
+        </div>
+        <div class="quick-actions-tools">
+          <button type="button" id="quickToggleFavoritos" class="quick-tool-btn">⭐ Favoritos</button>
+          <button type="button" id="quickTogglePanel" class="quick-tool-btn">Cerrar</button>
+        </div>
+      </div>
+
+      <div class="quick-actions-body" id="quickActionsBody">
+        <div class="quick-favorites-row" id="quickFavoritesRow">
+          <div class="quick-mini-title">
+            <strong>⭐ Mis favoritos</strong>
+            <span>Fija las acciones que más uses.</span>
+          </div>
+          <div class="quick-favorites-list" id="quickFavoritesList"></div>
+        </div>
+
+        <div class="quick-actions-grid" id="quickActionsGrid">
+          <button type="button" class="quick-action-card" data-quick-action="nuevoPedido">
+            <span class="quick-icon">📦</span>
+            <strong>Nuevo pedido</strong>
+            <small>Crear o revisar pedidos recientes.</small>
+            <b class="quick-badge">15 nuevos</b>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="nuevaFactura">
+            <span class="quick-icon">🧾</span>
+            <strong>Nueva factura</strong>
+            <small>Entrar a facturación y generar documentos.</small>
+            <b class="quick-badge soft">3 pendientes</b>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="nuevoProducto">
+            <span class="quick-icon">🛒</span>
+            <strong>Nuevo producto</strong>
+            <small>Agregar productos al catálogo.</small>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="nuevaImportacion">
+            <span class="quick-icon">📥</span>
+            <strong>Nueva importación</strong>
+            <small>Registrar productos bajo pedido.</small>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="aprobarVendedor">
+            <span class="quick-icon">🏪</span>
+            <strong>Aprobar vendedor</strong>
+            <small>Revisar solicitudes documentales.</small>
+            <b class="quick-badge warn">5 solicitudes</b>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="crearEmpleado">
+            <span class="quick-icon">👤</span>
+            <strong>Crear empleado</strong>
+            <small>Administrar accesos internos.</small>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="crearAdministrador">
+            <span class="quick-icon">👥</span>
+            <strong>Crear administrador</strong>
+            <small>Gestionar usuarios con privilegios.</small>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="verInventario">
+            <span class="quick-icon">📦</span>
+            <strong>Ver inventario</strong>
+            <small>Unidades físicas, códigos y estados.</small>
+            <b class="quick-badge soft">Bajo stock</b>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="nuevaDevolucion">
+            <span class="quick-icon">🔄</span>
+            <strong>Nueva devolución</strong>
+            <small>Revisar casos y resoluciones.</small>
+            <b class="quick-badge warn">8 casos</b>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="revisarLiquidaciones">
+            <span class="quick-icon">💰</span>
+            <strong>Revisar liquidaciones</strong>
+            <small>Pagos, retenciones y estados.</small>
+            <b class="quick-badge warn">4 retenidas</b>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="resolverDisputas">
+            <span class="quick-icon">⚖️</span>
+            <strong>Resolver disputas</strong>
+            <small>Casos críticos entre cliente y vendedor.</small>
+            <b class="quick-badge danger">2 críticas</b>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="verNotificaciones">
+            <span class="quick-icon">🔔</span>
+            <strong>Ver notificaciones</strong>
+            <small>Centro de alertas del sistema.</small>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="verBitacora">
+            <span class="quick-icon">📜</span>
+            <strong>Bitácora Global</strong>
+            <small>Auditoría completa del sistema.</small>
+          </button>
+          <button type="button" class="quick-action-card" data-quick-action="configuracion">
+            <span class="quick-icon">⚙️</span>
+            <strong>Configuración</strong>
+            <small>Reglas, permisos y parámetros.</small>
+          </button>
+        </div>
+
+        <div class="quick-secondary-grid">
+          <div class="quick-side-panel">
+            <div class="quick-mini-title">
+              <strong>Continuar trabajando</strong>
+              <span>Últimos registros abiertos por el administrador.</span>
+            </div>
+            <div class="quick-list">
+              <button type="button" data-quick-action="ultimoPedido"><span>📦 Pedido PED-000458</span><b>Abrir</b></button>
+              <button type="button" data-quick-action="ultimoProducto"><span>🛒 Producto RTX 4080</span><b>Abrir</b></button>
+              <button type="button" data-quick-action="ultimaDisputa"><span>⚖️ Disputa DIS-000023</span><b>Abrir</b></button>
+              <button type="button" data-quick-action="ultimaDevolucion"><span>🔄 Devolución DEV-000018</span><b>Abrir</b></button>
+            </div>
+          </div>
+
+          <div class="quick-side-panel">
+            <div class="quick-mini-title">
+              <strong>Pendientes de hoy</strong>
+              <span>Resumen visual preparado para conectarse con la base de datos.</span>
+            </div>
+            <div class="quick-pending-list">
+              <button type="button" data-quick-action="aprobarVendedor"><i class="warn"></i><span>5 solicitudes de vendedores</span><b>Revisar</b></button>
+              <button type="button" data-quick-action="resolverDisputas"><i class="danger"></i><span>2 disputas críticas</span><b>Resolver</b></button>
+              <button type="button" data-quick-action="nuevaDevolucion"><i class="mid"></i><span>8 devoluciones abiertas</span><b>Ver</b></button>
+              <button type="button" data-quick-action="nuevoPedido"><i></i><span>15 pedidos nuevos</span><b>Abrir</b></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="export-center-shell" id="exportCenterShell">
+      <div class="export-center-head">
+        <div>
+          <span class="export-eyebrow">Reportes y descargas</span>
+          <h2>Centro de Exportaciones</h2>
+          <p>Prepara reportes por módulo, formato, rango de fechas y filtros antes de descargar.</p>
+        </div>
+        <div class="export-head-actions">
+          <button type="button" class="export-tool-btn" id="exportTogglePanel">Cerrar</button>
+        </div>
+      </div>
+
+      <div class="export-center-body" id="exportCenterBody">
+        <div class="export-config-grid">
+          <div class="export-config-panel">
+            <div class="export-mini-title">
+              <strong>1. Selecciona el módulo</strong>
+              <span>Define de dónde saldrá la información.</span>
+            </div>
+            <div class="export-module-grid" id="exportModuleGrid">
+              <button type="button" class="export-module-card active" data-export-module="pedidos"><span>📦</span><strong>Pedidos</strong><small>Ventas, estados y clientes</small></button>
+              <button type="button" class="export-module-card" data-export-module="facturas"><span>🧾</span><strong>Facturas</strong><small>Pagadas, pendientes y anuladas</small></button>
+              <button type="button" class="export-module-card" data-export-module="productos"><span>🛒</span><strong>Productos</strong><small>Catálogo, precios y estado</small></button>
+              <button type="button" class="export-module-card" data-export-module="inventario"><span>📦</span><strong>Inventario</strong><small>Unidades, códigos y stock</small></button>
+              <button type="button" class="export-module-card" data-export-module="vendedores"><span>🏪</span><strong>Vendedores</strong><small>Tiendas, estados y métricas</small></button>
+              <button type="button" class="export-module-card" data-export-module="clientes"><span>👤</span><strong>Clientes</strong><small>Cuentas, compras y estados</small></button>
+              <button type="button" class="export-module-card" data-export-module="devoluciones"><span>🔄</span><strong>Devoluciones</strong><small>Casos, motivos y resolución</small></button>
+              <button type="button" class="export-module-card" data-export-module="notificaciones"><span>🔔</span><strong>Notificaciones</strong><small>Alertas, prioridad y estado</small></button>
+              <button type="button" class="export-module-card" data-export-module="bitacora"><span>📜</span><strong>Bitácora</strong><small>Auditoría y movimientos</small></button>
+            </div>
+          </div>
+
+          <div class="export-side-config">
+            <div class="export-config-panel">
+              <div class="export-mini-title">
+                <strong>2. Formato</strong>
+                <span>Elige cómo quieres descargarlo.</span>
+              </div>
+              <div class="export-format-list" id="exportFormatList">
+                <button type="button" class="export-format-card active" data-export-format="pdf"><span>📄</span><strong>PDF</strong><small>Reporte listo para imprimir</small></button>
+                <button type="button" class="export-format-card" data-export-format="excel"><span>📊</span><strong>Excel</strong><small>Ideal para análisis</small></button>
+                <button type="button" class="export-format-card" data-export-format="csv"><span>🧮</span><strong>CSV</strong><small>Compatible con sistemas</small></button>
+              </div>
+            </div>
+
+            <div class="export-config-panel">
+              <div class="export-mini-title">
+                <strong>3. Rango y filtros</strong>
+                <span>Prepara los criterios del reporte.</span>
+              </div>
+              <div class="export-date-row">
+                <label><span>Desde</span><input type="date" id="exportFechaDesde"></label>
+                <label><span>Hasta</span><input type="date" id="exportFechaHasta"></label>
+              </div>
+              <div class="export-filter-row" id="exportFilterRow">
+                <button type="button" class="export-filter-chip active" data-export-filter="todos">Todos</button>
+                <button type="button" class="export-filter-chip" data-export-filter="pendientes">Pendientes</button>
+                <button type="button" class="export-filter-chip" data-export-filter="criticos">Críticos</button>
+                <button type="button" class="export-filter-chip" data-export-filter="resueltos">Resueltos</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="export-preview-grid">
+          <div class="export-preview-panel">
+            <div class="export-mini-title">
+              <strong>Vista previa del reporte</strong>
+              <span>Resumen visual antes de descargar.</span>
+            </div>
+            <div class="export-preview-card">
+              <div class="export-preview-icon" id="exportPreviewIcon">📦</div>
+              <div>
+                <h3 id="exportPreviewTitle">Reporte de Pedidos</h3>
+                <p id="exportPreviewDesc">Incluye pedidos por estado, cliente, vendedor, total, fecha y método de pago.</p>
+                <div class="export-preview-tags">
+                  <span id="exportPreviewFormat">PDF</span>
+                  <span id="exportPreviewFilter">Todos</span>
+                  <span id="exportPreviewDate">Rango no definido</span>
+                </div>
+              </div>
+            </div>
+            <div class="export-preview-table">
+              <table>
+                <thead><tr><th>Campo</th><th>Incluido</th><th>Estado</th></tr></thead>
+                <tbody id="exportPreviewFields">
+                  <tr><td>ID / Código</td><td>Sí</td><td>Preparado</td></tr>
+                  <tr><td>Fecha</td><td>Sí</td><td>Preparado</td></tr>
+                  <tr><td>Estado</td><td>Sí</td><td>Preparado</td></tr>
+                  <tr><td>Total</td><td>Sí</td><td>Preparado</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="export-download-panel">
+            <div class="export-mini-title">
+              <strong>Descarga preparada</strong>
+              <span>Por ahora es visual; luego se conectará con la base de datos.</span>
+            </div>
+            <button type="button" class="export-main-btn" id="exportPrepareBtn">Preparar exportación</button>
+            <button type="button" class="export-secondary-btn" id="exportDownloadBtn">Descargar reporte</button>
+            <button type="button" class="export-secondary-btn" id="exportScheduleBtn">Programar envío</button>
+            <div class="export-status-box" id="exportStatusBox">
+              <strong>Estado</strong>
+              <span>Listo para configurar.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-drawer-shell notifications-drawer-shell" id="notificationsDrawerShell">
+      <div class="tool-drawer-head">
+        <div>
+          <span class="tool-eyebrow">Centro de alertas</span>
+          <h2>Notificaciones</h2>
+          <p>Alertas recientes preparadas para abrir el módulo correspondiente.</p>
+        </div>
+        <button type="button" class="tool-close-btn" data-close-tools>Cerrar</button>
+      </div>
+      <div class="tool-drawer-body">
+        <div class="tool-list">
+          <button type="button" class="tool-list-item danger" data-tool-action="disputas_vendedores_view.html">
+            <i>🔴</i><span><strong>Disputa crítica</strong><small>DIS-000023 · Hace 2 minutos · Acción inmediata</small></span><b>Abrir</b>
+          </button>
+          <button type="button" class="tool-list-item warn" data-tool-action="solicitudes_vendedores_view.html">
+            <i>🟠</i><span><strong>Solicitud de vendedor</strong><small>VEN-0007 · Documentación pendiente · Hace 10 minutos</small></span><b>Revisar</b>
+          </button>
+          <button type="button" class="tool-list-item" data-tool-action="liquidaciones_vendedores_view.html">
+            <i>🟡</i><span><strong>Liquidación retenida</strong><small>LIQ-000025 · $842.50 · Hace 20 minutos</small></span><b>Ver</b>
+          </button>
+          <button type="button" class="tool-list-item soft" data-tool-action="inventario_fisico_view.html">
+            <i>🟢</i><span><strong>Inventario bajo</strong><small>RTX 4070 ASUS Dual · 1 unidad disponible</small></span><b>Abrir</b>
+          </button>
+        </div>
+        <button type="button" class="tool-main-action" data-tool-action="notificaciones_view.html">Ver todas las notificaciones</button>
+      </div>
+    </section>
+
+    <section class="tool-drawer-shell history-drawer-shell" id="historyDrawerShell">
+      <div class="tool-drawer-head">
+        <div>
+          <span class="tool-eyebrow">Actividad personal</span>
+          <h2>Historial reciente</h2>
+          <p>Últimos registros abiertos por este administrador.</p>
+        </div>
+        <button type="button" class="tool-close-btn" data-close-tools>Cerrar</button>
+      </div>
+      <div class="tool-drawer-body">
+        <div class="tool-list">
+          <button type="button" class="tool-list-item" data-tool-action="pedidos_view.html"><i>📦</i><span><strong>PED-000458</strong><small>Pedido revisado hace 5 minutos</small></span><b>Abrir</b></button>
+          <button type="button" class="tool-list-item" data-tool-action="productos_view.html"><i>🛒</i><span><strong>RTX 4080 MSI</strong><small>Producto editado hoy</small></span><b>Abrir</b></button>
+          <button type="button" class="tool-list-item" data-tool-action="clientes_view.html"><i>👤</i><span><strong>Carlos Pérez</strong><small>Cliente revisado recientemente</small></span><b>Abrir</b></button>
+          <button type="button" class="tool-list-item" data-tool-action="facturacion_view.html"><i>📄</i><span><strong>FAC-000458</strong><small>Factura consultada</small></span><b>Abrir</b></button>
+          <button type="button" class="tool-list-item" data-tool-action="devoluciones_view.html"><i>🔄</i><span><strong>DEV-000018</strong><small>Devolución pendiente</small></span><b>Abrir</b></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-drawer-shell realtime-drawer-shell" id="realtimeDrawerShell">
+      <div class="tool-drawer-head">
+        <div>
+          <span class="tool-eyebrow">Centro en vivo</span>
+          <h2>Actividad en tiempo real</h2>
+          <p>Eventos recientes, usuarios conectados y actividad preparada para abrir registros.</p>
+        </div>
+        <button type="button" class="tool-close-btn" data-close-tools>Cerrar</button>
+      </div>
+      <div class="tool-drawer-body realtime-body">
+        <div class="realtime-connected-grid" aria-label="Usuarios conectados">
+          <div class="realtime-connected-card"><span>👑</span><strong>2</strong><small>Administradores</small></div>
+          <div class="realtime-connected-card"><span>👨‍💼</span><strong>5</strong><small>Empleados</small></div>
+          <div class="realtime-connected-card"><span>🏪</span><strong>18</strong><small>Vendedores</small></div>
+          <div class="realtime-connected-card"><span>🛒</span><strong>124</strong><small>Clientes</small></div>
+        </div>
+
+        <div class="realtime-filter-row" id="realtimeFilterRow">
+          <button type="button" class="realtime-filter active" data-realtime-filter="todos">Todos</button>
+          <button type="button" class="realtime-filter" data-realtime-filter="pedidos">Pedidos</button>
+          <button type="button" class="realtime-filter" data-realtime-filter="ventas">Ventas</button>
+          <button type="button" class="realtime-filter" data-realtime-filter="inventario">Inventario</button>
+          <button type="button" class="realtime-filter" data-realtime-filter="usuarios">Usuarios</button>
+          <button type="button" class="realtime-filter" data-realtime-filter="vendedores">Vendedores</button>
+          <button type="button" class="realtime-filter" data-realtime-filter="sistema">Sistema</button>
+        </div>
+
+        <div class="realtime-section-title">
+          <strong>Flujo de actividad</strong>
+          <span>Actualización automática preparada</span>
+        </div>
+
+        <div class="tool-list realtime-event-list" id="realtimeEventList">
+          <button type="button" class="tool-list-item soft" data-realtime-type="pedidos" data-tool-action="pedidos_view.html" data-module="pedidos" data-action-name="abrirPedido" data-record="PED-000458">
+            <i>🟢</i><span><strong>Nuevo pedido recibido</strong><small>PED-000458 · Hace 3 segundos · Cliente Carlos Pérez</small></span><b>Abrir</b>
+          </button>
+          <button type="button" class="tool-list-item warn" data-realtime-type="vendedores" data-tool-action="solicitudes_vendedores_view.html" data-module="vendedores" data-action-name="revisarSolicitud" data-record="VEN-0007">
+            <i>🟠</i><span><strong>Nueva solicitud de vendedor</strong><small>VEN-0007 · Hace 18 segundos · Documentación pendiente</small></span><b>Revisar</b>
+          </button>
+          <button type="button" class="tool-list-item danger" data-realtime-type="vendedores" data-tool-action="disputas_vendedores_view.html" data-module="disputas" data-action-name="abrirDisputa" data-record="DIS-000023">
+            <i>🔴</i><span><strong>Disputa abierta</strong><small>DIS-000023 · Hace 35 segundos · Acción inmediata</small></span><b>Abrir</b>
+          </button>
+          <button type="button" class="tool-list-item soft" data-realtime-type="ventas" data-tool-action="facturacion_view.html" data-module="facturacion" data-action-name="abrirFactura" data-record="FAC-000458">
+            <i>🟢</i><span><strong>Pago confirmado</strong><small>FAC-000458 · Hace 1 minuto · Tarjeta aprobada</small></span><b>Ver</b>
+          </button>
+          <button type="button" class="tool-list-item warn" data-realtime-type="inventario" data-tool-action="inventario_fisico_view.html" data-module="inventario" data-action-name="abrirProducto" data-record="PRO-4070">
+            <i>🟡</i><span><strong>Inventario bajo</strong><small>RTX 4070 ASUS · Hace 2 minutos · 1 unidad disponible</small></span><b>Ver producto</b>
+          </button>
+          <button type="button" class="tool-list-item" data-realtime-type="usuarios" data-tool-action="clientes_view.html" data-module="clientes" data-action-name="abrirCliente" data-record="CLI-0002">
+            <i>🔵</i><span><strong>Cliente inició sesión</strong><small>CLI-0002 · Hace 4 minutos · Tonacatepeque</small></span><b>Abrir</b>
+          </button>
+          <button type="button" class="tool-list-item" data-realtime-type="sistema" data-tool-action="bitacora_global_view.html" data-module="bitacora" data-action-name="abrirEvento" data-record="LOG-000982">
+            <i>⚙️</i><span><strong>Respaldo programado listo</strong><small>Sistema · Hace 8 minutos · Estado correcto</small></span><b>Bitácora</b>
+          </button>
+        </div>
+
+        <div class="realtime-bottom-panel">
+          <div class="realtime-section-title compact">
+            <strong>Actividad reciente</strong>
+            <span>Filtros visuales preparados</span>
+          </div>
+          <div class="realtime-time-row">
+            <button type="button" class="realtime-time active">Últimos 30 minutos</button>
+            <button type="button" class="realtime-time">Última hora</button>
+            <button type="button" class="realtime-time">Hoy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-drawer-shell help-drawer-shell" id="helpDrawerShell">
+      <div class="tool-drawer-head">
+        <div>
+          <span class="tool-eyebrow">Ayuda interna</span>
+          <h2>Ayuda y soporte</h2>
+          <p>Centro visual preparado para manuales, soporte y reporte de errores.</p>
+        </div>
+        <button type="button" class="tool-close-btn" data-close-tools>Cerrar</button>
+      </div>
+      <div class="tool-drawer-body">
+        <div class="tool-help-grid">
+          <button type="button" class="tool-help-card"><span>📘</span><strong>Manual del sistema</strong><small>Guías por módulo y flujos de trabajo.</small></button>
+          <button type="button" class="tool-help-card"><span>🛠️</span><strong>Reportar error</strong><small>Enviar incidencia al equipo técnico.</small></button>
+          <button type="button" class="tool-help-card"><span>💬</span><strong>Contactar soporte</strong><small>Crear consulta para soporte interno.</small></button>
+          <button type="button" class="tool-help-card"><span>💡</span><strong>Sugerir mejora</strong><small>Guardar ideas para próximas fases.</small></button>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- =====================================================
+         VISOR UNIVERSAL PREMIUM / BUSCADOR GLOBAL
+    ====================================================== -->
+    <section class="universal-viewer-overlay" id="universalViewerOverlay" aria-hidden="true"></section>
+    <section class="universal-viewer-shell" id="universalViewerShell" aria-modal="true" role="dialog" aria-labelledby="universalViewerTitle">
+      <div class="universal-viewer-head">
+        <div class="universal-viewer-titlebox">
+          <span class="universal-viewer-eyebrow" id="universalViewerTipo">Registro</span>
+          <h2 id="universalViewerTitle">Visor Universal Premium</h2>
+          <p id="universalViewerSubtitle">Resumen del registro seleccionado.</p>
+        </div>
+        <div class="universal-viewer-actions">
+          <button type="button" class="universal-viewer-btn" id="universalViewerCopy">Copiar código</button>
+          <button type="button" class="universal-viewer-btn primary" id="universalViewerOpenModule">Abrir módulo</button>
+          <button type="button" class="universal-viewer-close" id="universalViewerClose" aria-label="Cerrar visor">×</button>
+        </div>
+      </div>
+
+      <div class="universal-viewer-tabs" id="universalViewerTabs">
+        <button type="button" class="active" data-tab="resumen">Resumen</button>
+        <button type="button" data-tab="historial">Historial</button>
+        <button type="button" data-tab="relacionados">Relacionados</button>
+        <button type="button" data-tab="archivos">Archivos</button>
+      </div>
+
+      <div class="universal-viewer-body" id="universalViewerBody"></div>
+    </section>
+
+    <!-- =====================================================
+         CENTRO DE COMANDOS / CTRL + F
+    ====================================================== -->
+    <section class="command-center-overlay" id="commandCenterOverlay" aria-hidden="true"></section>
+    <section class="command-center-shell" id="commandCenterShell" aria-modal="true" role="dialog" aria-labelledby="commandCenterTitle">
+      <div class="command-center-head">
+        <div>
+          <span class="command-eyebrow">Centro de comandos</span>
+          <h2 id="commandCenterTitle">¿Qué quieres hacer?</h2>
+          <p>Busca módulos, registros o ejecuta acciones rápidas sin salir del dashboard.</p>
+        </div>
+        <button type="button" class="command-close" id="commandCenterClose" aria-label="Cerrar centro de comandos">×</button>
+      </div>
+      <div class="command-input-row">
+        <span>⌘</span>
+        <input id="commandCenterInput" type="search" autocomplete="off" placeholder="Ejemplo: nuevo pedido, abrir facturas, buscar Carlos, inventario...">
+      </div>
+      <div class="command-center-list" id="commandCenterList"></div>
+      <div class="command-center-footer">
+        <span><b>Ctrl + F</b> abrir</span>
+        <span><b>Enter</b> ejecutar</span>
+        <span><b>Esc</b> cerrar</span>
+      </div>
+    </section>
+
+    <div class="tools-drawer-overlay" id="toolsDrawerOverlay"></div>
+
+    <div id="contenidoPrincipal"></div>
+  </main>
+
+  <script type="module" src="js/dashboard.js"></script>
+  <script>
+    (function () {
+      const menu = document.getElementById('menuPrincipal');
+      if (!menu) return;
+
+      const STORAGE_KEY = 'tiendapro_menu_grupos_abiertos';
+
+      function leerGruposGuardados() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function guardarGruposAbiertos() {
+        const abiertos = [...document.querySelectorAll('.menu-group.open')]
+          .map((grupo) => grupo.dataset.menuGroup)
+          .filter(Boolean);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(abiertos));
+      }
+
+      function aplicarGruposGuardados() {
+        const abiertos = leerGruposGuardados();
+        if (!Array.isArray(abiertos)) return;
+
+        document.querySelectorAll('.menu-group').forEach((grupo) => {
+          const activo = abiertos.includes(grupo.dataset.menuGroup);
+          grupo.classList.toggle('open', activo);
+          const boton = grupo.querySelector('.menu-group-toggle');
+          if (boton) boton.setAttribute('aria-expanded', activo ? 'true' : 'false');
+        });
+      }
+
+      aplicarGruposGuardados();
+
+      document.querySelectorAll('.menu-link-disabled').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+        });
+      });
+
+      document.querySelectorAll('.menu-group-toggle').forEach((boton) => {
+        boton.addEventListener('click', () => {
+          const grupo = boton.closest('.menu-group');
+          const abierto = !grupo.classList.contains('open');
+          grupo.classList.toggle('open', abierto);
+          boton.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+          guardarGruposAbiertos();
+        });
+      });
+
+      document.querySelectorAll('.menu a[data-vista]').forEach((link) => {
+        link.addEventListener('click', () => {
+          // La carga de vistas, el estado activo y el título los maneja dashboard.js.
+          // Aquí solo mantenemos abierto el grupo padre para que no se oculte la opción elegida.
+          const grupo = link.closest('.menu-group');
+          if (grupo) {
+            grupo.classList.add('open');
+            const boton = grupo.querySelector('.menu-group-toggle');
+            if (boton) boton.setAttribute('aria-expanded', 'true');
+            guardarGruposAbiertos();
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!-- =====================================================
+  USUARIOS → ADMINISTRADORES
+  Archivo: administradores_view.html
+  Vista visual preparada para conectar con base de datos más adelante.
+===================================================== -->
+
+<section class="admin-users-view">
+  <style>
+    .admin-users-view{display:grid;gap:18px;color:#f8fafc;}
+    .administradores-hero{position:relative;overflow:hidden;border-radius:24px;border:1px solid rgba(166,176,207,.14);background:linear-gradient(135deg,#3a4270,#2a3042);padding:28px;box-shadow:0 10px 24px rgba(0,0,0,.18);}
+    .administradores-hero::after{content:"";position:absolute;right:-110px;bottom:-140px;width:310px;height:310px;border-radius:999px;background:rgba(85,110,230,.16);}
+    .admin-eyebrow{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(85,110,230,.14);border:1px solid rgba(125,211,252,.20);color:#dbeafe;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+    .administradores-hero h2{font-size:clamp(28px,4vw,44px);line-height:1;margin-bottom:10px;letter-spacing:-.8px;}
+    .administradores-hero p{max-width:790px;color:#c9d1f4;line-height:1.65;}
+    .admin-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;}
+    .admin-kpi{position:relative;overflow:hidden;min-height:116px;padding:18px;border-radius:18px;background:#2a3042;border:1px solid rgba(166,176,207,.14);box-shadow:0 10px 24px rgba(0,0,0,.18);}
+    .admin-kpi::after{content:"";position:absolute;right:-34px;bottom:-44px;width:120px;height:120px;border-radius:999px;background:rgba(85,110,230,.14);}
+    .admin-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042);}
+    .admin-kpi span{display:block;color:#dbeafe;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+    .admin-kpi strong{display:block;margin-top:9px;font-size:28px;color:#fff;letter-spacing:-.5px;}
+    .admin-kpi small{display:block;margin-top:7px;color:#a6b0cf;font-weight:800;}
+    .admin-panel{background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.18);padding:18px;}
+    .admin-filtros{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+    .admin-periodos,.admin-rango,.admin-extra-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .admin-filter-btn,.admin-select,.admin-search,.admin-date{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#cbd5e1;border-radius:12px;font-weight:900;outline:none;}
+    .admin-filter-btn{padding:10px 14px;cursor:pointer;transition:.2s ease;}
+    .admin-filter-btn:hover,.admin-filter-btn.active{color:#fff;background:#556ee6;border-color:rgba(125,211,252,.24);}
+    .admin-date{display:flex;align-items:center;gap:8px;padding:8px 11px;font-size:12px;text-transform:uppercase;color:#a6b0cf;}
+    .admin-date input{border:none;outline:none;background:transparent;color:#fff;font-weight:900;color-scheme:dark;}
+    .admin-select,.admin-search{padding:11px 12px;min-height:42px;}
+    .admin-search{min-width:260px;}
+    .admin-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.65fr);gap:18px;align-items:start;}
+    .admin-panel-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;}
+    .admin-panel-title h3{font-size:19px;letter-spacing:-.3px;}
+    .admin-panel-title p{color:#a6b0cf;font-size:13px;margin-top:4px;line-height:1.45;}
+    .admin-table-wrap{width:100%;overflow-x:auto;}
+    .admin-table{width:100%;border-collapse:separate;border-spacing:0;min-width:980px;}
+    .admin-table th,.admin-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap;}
+    .admin-table th{background:rgba(15,23,42,.38);color:#8da0ff;font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
+    .admin-table td{font-size:13px;color:#e5e7eb;font-weight:750;}
+    .admin-row{cursor:pointer;transition:.18s ease;}
+    .admin-row:hover td{background:rgba(85,110,230,.10);}
+    .admin-row.selected td{background:rgba(85,110,230,.18);}
+    .admin-user-cell{display:flex;align-items:center;gap:10px;}
+    .admin-avatar{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:rgba(85,110,230,.22);border:1px solid rgba(125,211,252,.18);color:#fff;font-weight:900;}
+    .admin-user-cell small{display:block;color:#a6b0cf;margin-top:2px;}
+    .pill{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid rgba(148,163,184,.16);background:rgba(148,163,184,.12);color:#cbd5e1;}
+    .pill.green{background:rgba(52,195,143,.14);border-color:rgba(52,195,143,.25);color:#86efac;}
+    .pill.blue{background:rgba(80,165,241,.14);border-color:rgba(80,165,241,.25);color:#bfdbfe;}
+    .pill.yellow{background:rgba(241,180,76,.14);border-color:rgba(241,180,76,.28);color:#fde68a;}
+    .pill.red{background:rgba(244,106,106,.14);border-color:rgba(244,106,106,.28);color:#fecaca;}
+    .admin-detail{display:grid;gap:14px;position:sticky;top:22px;}
+    .detail-card{background:rgba(15,23,42,.25);border:1px solid rgba(166,176,207,.12);border-radius:16px;padding:16px;}
+    .detail-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+    .detail-avatar{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#556ee6,#50a5f1);font-weight:900;font-size:20px;}
+    .detail-head h4{font-size:18px;margin-bottom:4px;}
+    .detail-head span{color:#a6b0cf;font-size:13px;font-weight:800;}
+    .detail-list{display:grid;gap:10px;}
+    .detail-item{display:flex;justify-content:space-between;gap:12px;padding:10px;border-radius:12px;background:rgba(15,23,42,.32);border:1px solid rgba(166,176,207,.08);}
+    .detail-item span{color:#a6b0cf;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+    .detail-item strong{text-align:right;color:#fff;font-size:13px;}
+    .permissions{display:grid;gap:8px;}
+    .permission{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px;border-radius:12px;background:rgba(15,23,42,.32);border:1px solid rgba(166,176,207,.08);}
+    .permission span{font-weight:850;color:#e5e7eb;font-size:13px;}
+    .switch-dot{width:36px;height:20px;border-radius:999px;background:rgba(52,195,143,.22);border:1px solid rgba(52,195,143,.30);position:relative;}
+    .switch-dot::after{content:"";position:absolute;right:3px;top:3px;width:12px;height:12px;border-radius:999px;background:#86efac;}
+    .bitacora-list{display:grid;gap:8px;}
+    .bitacora-item{display:grid;grid-template-columns:10px 1fr auto;gap:10px;align-items:center;padding:10px;border-radius:12px;background:rgba(15,23,42,.32);border:1px solid rgba(166,176,207,.08);}
+    .bitacora-dot{width:8px;height:8px;border-radius:999px;background:#34c38f;box-shadow:0 0 16px rgba(52,195,143,.5);}
+    .bitacora-item strong{font-size:13px;display:block;}
+    .bitacora-item span{font-size:12px;color:#a6b0cf;display:block;margin-top:3px;}
+    .bitacora-item b{font-size:12px;color:#bfdbfe;}
+    .admin-alerts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+    .alert-card{min-height:126px;padding:16px;border-radius:18px;background:#2a3042;border:1px solid rgba(166,176,207,.14);box-shadow:0 10px 24px rgba(0,0,0,.18);cursor:pointer;transition:.2s ease;}
+    .alert-card:hover{transform:translateY(-3px);border-color:rgba(85,110,230,.48);background:rgba(85,110,230,.14);}
+    .alert-card span{font-size:24px;display:block;margin-bottom:10px;}
+    .alert-card strong{display:block;margin-bottom:6px;}
+    .alert-card small{color:#a6b0cf;font-weight:800;line-height:1.45;}
+    .admin-actions{display:flex;gap:10px;flex-wrap:wrap;}
+    .ghost-btn{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#cbd5e1;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer;}
+    .primary-btn{border:1px solid rgba(125,211,252,.24);background:#556ee6;color:#fff;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer;}
+    @media(max-width:1250px){.admin-kpis{grid-template-columns:repeat(2,minmax(0,1fr));}.admin-grid{grid-template-columns:1fr;}.admin-detail{position:static;}.admin-alerts{grid-template-columns:repeat(2,minmax(0,1fr));}}
+    @media(max-width:720px){.administradores-hero{padding:22px;}.admin-kpis,.admin-alerts{grid-template-columns:1fr;}.admin-filtros,.admin-periodos,.admin-rango,.admin-extra-filters{align-items:stretch;width:100%;}.admin-filter-btn,.admin-date,.admin-select,.admin-search{flex:1 1 auto;width:100%;}.admin-panel-title{flex-direction:column;}.admin-actions{width:100%;}.ghost-btn,.primary-btn{flex:1 1 auto;}.admin-table{min-width:880px;}}
+  </style>
+
+  <div class="administradores-hero">
+    <span class="admin-eyebrow">Usuarios / Administradores</span>
+    <h2>Control de administradores</h2>
+    <p>Gestiona los administradores de la plataforma, sus roles, permisos, actividad reciente, accesos y alertas de seguridad. Esta vista queda preparada para conectar con la base de datos y bitácoras reales.</p>
+  </div>
+
+  <div class="admin-kpis">
+    <div class="admin-kpi destacado"><span>Total administradores</span><strong>6</strong><small>2 administradores generales</small></div>
+    <div class="admin-kpi"><span>Activos</span><strong>5</strong><small>83% con acceso vigente</small></div>
+    <div class="admin-kpi"><span>Inactivos</span><strong>1</strong><small>Sin actividad reciente</small></div>
+    <div class="admin-kpi"><span>Sesiones activas</span><strong>3</strong><small>En los últimos 30 min</small></div>
+    <div class="admin-kpi"><span>Último acceso</span><strong>Hoy</strong><small>13:42 · Carlos</small></div>
+  </div>
+
+  <div class="admin-panel admin-filtros">
+    <div class="admin-periodos" aria-label="Filtros rápidos por periodo">
+      <button class="admin-filter-btn active" data-periodo="dia">Día</button>
+      <button class="admin-filter-btn" data-periodo="mes">Mes</button>
+      <button class="admin-filter-btn" data-periodo="anio">Año</button>
+    </div>
+    <div class="admin-rango">
+      <label class="admin-date">Desde <input type="date" value="2026-07-01"></label>
+      <label class="admin-date">Hasta <input type="date" value="2026-07-02"></label>
+      <button class="admin-filter-btn">Aplicar</button>
+      <button class="admin-filter-btn">Limpiar</button>
+    </div>
+    <div class="admin-extra-filters">
+      <select class="admin-select" id="filtroEstadoAdmin">
+        <option value="todos">Todos los estados</option>
+        <option value="activo">Activos</option>
+        <option value="inactivo">Inactivos</option>
+        <option value="bloqueado">Bloqueados</option>
+      </select>
+      <select class="admin-select" id="filtroRolAdmin">
+        <option value="todos">Todos los roles</option>
+        <option value="general">Administrador General</option>
+        <option value="operativo">Administrador Operativo</option>
+        <option value="financiero">Administrador Financiero</option>
+        <option value="soporte">Administrador de Soporte</option>
+      </select>
+      <input class="admin-search" id="buscadorAdmin" type="search" placeholder="Buscar administrador...">
+    </div>
+  </div>
+
+  <div class="admin-grid">
+    <div class="admin-panel">
+      <div class="admin-panel-title">
+        <div>
+          <h3>Lista de administradores</h3>
+          <p>Selecciona un administrador para ver sus permisos, accesos y actividad reciente.</p>
+        </div>
+        <div class="admin-actions">
+          <button class="ghost-btn">Exportar</button>
+          <button class="primary-btn">Nuevo administrador</button>
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Usuario</th>
+              <th>Cargo</th>
+              <th>Correo</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Último acceso</th>
+              <th>Creación</th>
+            </tr>
+          </thead>
+          <tbody id="tablaAdministradoresBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="admin-detail">
+      <div class="admin-panel">
+        <div class="admin-panel-title">
+          <div>
+            <h3>Detalle del administrador</h3>
+            <p>Información principal, contacto y nivel de permisos.</p>
+          </div>
+        </div>
+        <div class="detail-card" id="detalleAdministrador"></div>
+      </div>
+
+      <div class="admin-panel">
+        <div class="admin-panel-title">
+          <div>
+            <h3>Permisos</h3>
+            <p>Vista preparada para permisos reales por módulo.</p>
+          </div>
+        </div>
+        <div class="permissions" id="permisosAdministrador"></div>
+      </div>
+
+      <div class="admin-panel">
+        <div class="admin-panel-title">
+          <div>
+            <h3>Últimas acciones</h3>
+            <p>Últimos 5 movimientos registrados.</p>
+          </div>
+          <button class="ghost-btn">Descargar bitácora</button>
+        </div>
+        <div class="bitacora-list" id="bitacoraAdministrador"></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="admin-alerts">
+    <div class="alert-card"><span>⚠️</span><strong>1 cuenta inactiva</strong><small>Revisar administradores sin acceso reciente.</small></div>
+    <div class="alert-card"><span>🔐</span><strong>2 intentos fallidos</strong><small>Intentos recientes de acceso inválido.</small></div>
+    <div class="alert-card"><span>⛔</span><strong>0 cuentas bloqueadas</strong><small>No hay administradores bloqueados.</small></div>
+    <div class="alert-card"><span>🧾</span><strong>Permisos por revisar</strong><small>Validar permisos financieros y soporte.</small></div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const admins = [
+    {id:'ADM-001', nombre:'Carlos Parada', iniciales:'CP', usuario:'cparada', cargo:'Dueño de plataforma', correo:'carlos@tiendapro.com', rol:'Administrador General', rolKey:'general', estado:'Activo', estadoKey:'activo', ultimo:'Hoy · 13:42', creado:'02/07/2026', telefono:'+503 7000-0000', sesiones:'1 sesión activa', nivel:'Acceso completo', permisos:['Dashboard completo','Usuarios y roles','Vendedores','Finanzas y liquidaciones','Soporte y postventa'], bitacora:[['Actualizó configuración','Hace 18 min','Panel'],['Revisó liquidación retenida','Hace 1 h','Finanzas'],['Abrió disputa crítica','Hoy 10:25','Disputas'],['Editó permiso de empleado','Ayer','Usuarios'],['Descargó reporte','Ayer','Reportes']]},
+    {id:'ADM-002', nombre:'María López', iniciales:'ML', usuario:'mlopez', cargo:'Operaciones', correo:'maria@tiendapro.com', rol:'Administrador Operativo', rolKey:'operativo', estado:'Activo', estadoKey:'activo', ultimo:'Hoy · 11:10', creado:'02/07/2026', telefono:'+503 7000-1111', sesiones:'1 sesión activa', nivel:'Operativo', permisos:['Pedidos','Productos','Inventario','Postventa','Vendedores'], bitacora:[['Cambió estado de pedido','Hace 30 min','Pedidos'],['Revisó inventario','Hoy 09:40','Inventario'],['Atendió caso postventa','Ayer','Postventa'],['Validó producto','Ayer','Catálogo'],['Filtró pedidos pendientes','Lun','Pedidos']]},
+    {id:'ADM-003', nombre:'Kevin Ramos', iniciales:'KR', usuario:'kramos', cargo:'Finanzas', correo:'kevin@tiendapro.com', rol:'Administrador Financiero', rolKey:'financiero', estado:'Activo', estadoKey:'activo', ultimo:'Hoy · 08:15', creado:'02/07/2026', telefono:'+503 7000-2222', sesiones:'Sin sesión activa', nivel:'Finanzas', permisos:['Facturación','Liquidaciones','Reportes financieros','Reembolsos','Bitácoras'], bitacora:[['Generó liquidación','Hoy 08:10','Liquidaciones'],['Revisó factura anulada','Ayer','Facturación'],['Exportó reporte mensual','Ayer','Reportes'],['Marcó pago pendiente','Mar','Liquidaciones'],['Revisó reembolso','Mar','Postventa']]},
+    {id:'ADM-004', nombre:'Ana Torres', iniciales:'AT', usuario:'atorres', cargo:'Soporte', correo:'ana@tiendapro.com', rol:'Administrador de Soporte', rolKey:'soporte', estado:'Activo', estadoKey:'activo', ultimo:'Ayer · 17:30', creado:'02/07/2026', telefono:'+503 7000-3333', sesiones:'Sin sesión activa', nivel:'Soporte', permisos:['Postventa','Disputas','Tickets','Clientes','Vendedores'], bitacora:[['Respondió caso urgente','Ayer','Postventa'],['Agregó nota interna','Ayer','Soporte'],['Cerró reclamo','Lun','Casos'],['Escaló disputa','Lun','Disputas'],['Revisó evidencia','Dom','Postventa']]},
+    {id:'ADM-005', nombre:'Luis Hernández', iniciales:'LH', usuario:'lhernandez', cargo:'Catálogo', correo:'luis@tiendapro.com', rol:'Administrador Operativo', rolKey:'operativo', estado:'Inactivo', estadoKey:'inactivo', ultimo:'Hace 18 días', creado:'02/07/2026', telefono:'+503 7000-4444', sesiones:'Sin sesión activa', nivel:'Operativo limitado', permisos:['Productos','Categorías','Inventario','Publicaciones','Reportes básicos'], bitacora:[['Editó categoría','Hace 18 días','Catálogo'],['Revisó publicación','Hace 18 días','Productos'],['Actualizó imagen','Hace 19 días','Productos'],['Filtró inventario','Hace 20 días','Inventario'],['Inició sesión','Hace 20 días','Acceso']]},
+    {id:'ADM-006', nombre:'Sofía Mejía', iniciales:'SM', usuario:'smejia', cargo:'Auditoría', correo:'sofia@tiendapro.com', rol:'Administrador General', rolKey:'general', estado:'Activo', estadoKey:'activo', ultimo:'Hoy · 12:20', creado:'02/07/2026', telefono:'+503 7000-5555', sesiones:'1 sesión activa', nivel:'Acceso completo', permisos:['Auditoría','Bitácoras','Usuarios','Reportes','Configuración'], bitacora:[['Revisó bitácora','Hace 45 min','Auditoría'],['Consultó permisos','Hoy 11:00','Usuarios'],['Descargó historial','Ayer','Bitácoras'],['Revisó alerta','Ayer','Seguridad'],['Validó rol','Lun','Usuarios']]}
+  ];
+
+  const tbody = document.getElementById('tablaAdministradoresBody');
+  const detalle = document.getElementById('detalleAdministrador');
+  const permisosBox = document.getElementById('permisosAdministrador');
+  const bitacoraBox = document.getElementById('bitacoraAdministrador');
+  const filtroEstado = document.getElementById('filtroEstadoAdmin');
+  const filtroRol = document.getElementById('filtroRolAdmin');
+  const buscador = document.getElementById('buscadorAdmin');
+  let seleccionado = admins[0].id;
+
+  function estadoClass(estado){
+    if(estado === 'Activo') return 'green';
+    if(estado === 'Inactivo') return 'yellow';
+    return 'red';
+  }
+
+  function rolClass(rolKey){
+    if(rolKey === 'general') return 'blue';
+    if(rolKey === 'financiero') return 'yellow';
+    if(rolKey === 'soporte') return 'green';
+    return '';
+  }
+
+  function filtrar(){
+    const estado = filtroEstado.value;
+    const rol = filtroRol.value;
+    const q = buscador.value.trim().toLowerCase();
+    return admins.filter(a => {
+      const okEstado = estado === 'todos' || a.estadoKey === estado;
+      const okRol = rol === 'todos' || a.rolKey === rol;
+      const okQ = !q || [a.id,a.nombre,a.usuario,a.cargo,a.correo,a.rol].join(' ').toLowerCase().includes(q);
+      return okEstado && okRol && okQ;
+    });
+  }
+
+  function renderTabla(){
+    const data = filtrar();
+    tbody.innerHTML = data.map(a => `
+      <tr class="admin-row ${a.id === seleccionado ? 'selected' : ''}" data-id="${a.id}">
+        <td>${a.id}</td>
+        <td><div class="admin-user-cell"><div class="admin-avatar">${a.iniciales}</div><div>${a.nombre}<small>${a.cargo}</small></div></div></td>
+        <td>${a.usuario}</td>
+        <td>${a.cargo}</td>
+        <td>${a.correo}</td>
+        <td><span class="pill ${rolClass(a.rolKey)}">${a.rol}</span></td>
+        <td><span class="pill ${estadoClass(a.estado)}">${a.estado}</span></td>
+        <td>${a.ultimo}</td>
+        <td>${a.creado}</td>
+      </tr>
+    `).join('') || `<tr><td colspan="9">No hay administradores con esos filtros.</td></tr>`;
+
+    tbody.querySelectorAll('.admin-row').forEach(row => {
+      row.addEventListener('click', () => {
+        seleccionado = row.dataset.id;
+        renderTabla();
+        renderDetalle();
+      });
+    });
+  }
+
+  function renderDetalle(){
+    const a = admins.find(x => x.id === seleccionado) || admins[0];
+    detalle.innerHTML = `
+      <div class="detail-head">
+        <div class="detail-avatar">${a.iniciales}</div>
+        <div>
+          <h4>${a.nombre}</h4>
+          <span>${a.rol}</span>
+        </div>
+      </div>
+      <div class="detail-list">
+        <div class="detail-item"><span>ID</span><strong>${a.id}</strong></div>
+        <div class="detail-item"><span>Correo</span><strong>${a.correo}</strong></div>
+        <div class="detail-item"><span>Teléfono</span><strong>${a.telefono}</strong></div>
+        <div class="detail-item"><span>Estado</span><strong>${a.estado}</strong></div>
+        <div class="detail-item"><span>Último acceso</span><strong>${a.ultimo}</strong></div>
+        <div class="detail-item"><span>Sesiones</span><strong>${a.sesiones}</strong></div>
+        <div class="detail-item"><span>Nivel</span><strong>${a.nivel}</strong></div>
+      </div>
+      <div class="detail-card" style="margin-top:14px;">
+        <h3>Información de la cuenta</h3>
+        <div class="detail-list">
+          <div class="detail-item"><span>Estado actual</span><strong>${a.estado}</strong></div>
+          <div class="detail-item"><span>Fecha de creación</span><strong>${a.creado}</strong></div>
+          <div class="detail-item"><span>Último acceso</span><strong>${a.ultimo}</strong></div>
+          <div class="detail-item"><span>Última modificación</span><strong>Sincronización pendiente</strong></div>
+          <div class="detail-item"><span>Creado por</span><strong>Administrador General</strong></div>
+          <div class="detail-item"><span>Modificado por</span><strong>Auditoría del sistema</strong></div>
+        </div>
+      </div>
+      <div class="detail-card" style="margin-top:14px;">
+        <h3>Administración de la cuenta</h3>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;">
+          <button type="button" class="admin-filter-btn">✏️ Editar información</button>
+          <button type="button" class="admin-filter-btn">🔑 Restablecer contraseña</button>
+          <button type="button" class="admin-filter-btn">🔄 Cambiar estado</button>
+          <button type="button" class="admin-filter-btn">📜 Ver bitácora</button>
+        </div>
+        <div class="detail-list" style="margin-top:12px;">
+          <div class="detail-item"><span>Estados permitidos</span><strong>Activo · Suspendido · Archivado</strong></div>
+          <div class="detail-item"><span>Regla</span><strong>No eliminar ni reutilizar cuenta</strong></div>
+        </div>
+      </div>
+    `;
+
+    permisosBox.innerHTML = a.permisos.map(p => `
+      <div class="permission"><span>${p}</span><i class="switch-dot" aria-hidden="true"></i></div>
+    `).join('');
+
+    bitacoraBox.innerHTML = a.bitacora.slice(0,5).map(item => `
+      <div class="bitacora-item">
+        <i class="bitacora-dot"></i>
+        <div><strong>${item[0]}</strong><span>${item[2]}</span></div>
+        <b>${item[1]}</b>
+      </div>
+    `).join('');
+  }
+
+  [filtroEstado, filtroRol, buscador].forEach(el => el.addEventListener('input', () => { renderTabla(); }));
+  document.querySelectorAll('.admin-filter-btn[data-periodo]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.admin-filter-btn[data-periodo]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  renderTabla();
+  renderDetalle();
+})();
+</script>

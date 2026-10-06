@@ -1,0 +1,796 @@
+<section class="section inventario-section">
+  <div class="inv-header-card">
+    <div>
+      <h2>Inventario físico</h2>
+      <p>Vista agrupada por producto. Haz clic en un producto para ver sus unidades físicas, proveedor, orden, costo, garantía y pedido asociado.</p>
+    </div>
+    <button class="btn-primary" id="btnAbrirModalUnidad">+ Agregar unidad</button>
+  </div>
+
+  <div class="inv-stats-grid">
+    <div class="inv-stat-card">
+      <span>Total unidades</span>
+      <strong id="statTotal">0</strong>
+    </div>
+    <div class="inv-stat-card disponible">
+      <span>Disponibles</span>
+      <strong id="statDisponibles">0</strong>
+    </div>
+    <div class="inv-stat-card vendido">
+      <span>Vendidas</span>
+      <strong id="statVendidas">0</strong>
+    </div>
+    <div class="inv-stat-card alerta">
+      <span>Devueltas / dañadas</span>
+      <strong id="statProblemas">0</strong>
+    </div>
+  </div>
+
+  <div class="inv-toolbar">
+    <div class="search-box">
+      <span>🔎</span>
+      <input type="text" id="buscarInventario" placeholder="Buscar por producto, proveedor, orden, estado, código o pedido...">
+    </div>
+    <button class="btn-filter" id="btnAbrirFiltros">⚙ Filtros</button>
+  </div>
+
+  <div class="filtros-overlay" id="filtrosOverlay"></div>
+
+  <aside class="filtros-panel" id="filtrosPanel">
+    <div class="filtros-header">
+      <h3>Filtros</h3>
+      <button id="btnCerrarFiltros" class="btn-icon">×</button>
+    </div>
+
+    <label>Estado</label>
+    <select id="filtroEstado">
+      <option value="todos">Todos</option>
+      <option value="disponible">Disponible</option>
+      <option value="vendido">Vendido</option>
+      <option value="devuelto">Devuelto</option>
+      <option value="dañado">Dañado</option>
+      <option value="en_revision">En revisión</option>
+      <option value="reclamo_proveedor">Reclamo proveedor</option>
+    </select>
+
+    <label>Producto</label>
+    <select id="filtroProducto"><option value="todos">Todos</option></select>
+
+    <label>Proveedor</label>
+    <div class="autocomplete-wrap">
+      <input type="text" id="filtroProveedor" placeholder="Amazon, AliExpress, tienda local..." autocomplete="off">
+      <div class="autocomplete-list" id="sugerenciasFiltroProveedor"></div>
+    </div>
+
+    <label>Fecha ingreso desde</label>
+    <input type="date" id="filtroFechaDesde">
+
+    <label>Fecha ingreso hasta</label>
+    <input type="date" id="filtroFechaHasta">
+
+    <div class="filtros-actions">
+      <button class="btn-primary" id="btnAplicarFiltros">Aplicar</button>
+      <button class="btn-secondary" id="btnLimpiarFiltros">Limpiar</button>
+    </div>
+  </aside>
+
+  <div class="tabla-card">
+    <div class="tabla-scroll">
+      <table class="tabla-inventario">
+        <thead>
+          <tr>
+            <th data-sort="producto_id">ID ↕</th>
+            <th data-sort="producto_nombre">Producto ↕</th>
+            <th data-sort="estado_general">Estado ↕</th>
+            <th data-sort="disponibles">Disponibles ↕</th>
+            <th data-sort="vendidas">Vendidas ↕</th>
+            <th data-sort="problemas">Devueltas / dañadas ↕</th>
+            <th data-sort="costo_total">Costo total ↕</th>
+            <th data-sort="ultimo_ingreso">Último ingreso ↕</th>
+            <th>Publicación</th>
+          </tr>
+        </thead>
+        <tbody id="tablaInventarioBody">
+          <tr><td colspan="9" class="empty-table">Cargando inventario...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalUnidadOverlay"></div>
+  <div class="modal-unidad" id="modalUnidad">
+    <div class="modal-header">
+      <h3>Agregar unidad física</h3>
+      <button class="btn-icon" id="btnCerrarModalUnidad">×</button>
+    </div>
+
+    <label>Producto</label>
+    <div class="producto-select-row">
+      <select id="selectProductoUnidad"><option value="">Selecciona un producto</option></select>
+      <button type="button" class="btn-secondary btn-crear-producto" id="btnToggleProductoNuevo">+ Crear producto nuevo</button>
+    </div>
+
+    <div class="producto-nuevo-box" id="productoNuevoBox">
+      <div class="producto-nuevo-title">Nuevo producto para catálogo</div>
+      <div class="modal-grid-2">
+        <div>
+          <label>Nombre producto</label>
+          <input type="text" id="nuevoProductoNombre" placeholder="Ejemplo: Gabinete XPG Battlecruiser">
+        </div>
+        <div>
+          <label>Marca</label>
+          <input type="text" id="nuevoProductoMarca" placeholder="Ejemplo: XPG">
+        </div>
+        <div>
+          <label>Categoría</label>
+          <input type="text" id="nuevoProductoCategoria" placeholder="Ejemplo: Gabinetes">
+        </div>
+        <div>
+          <label>Precio venta</label>
+          <input type="number" id="nuevoProductoPrecio" placeholder="0.00" step="0.01" min="0">
+        </div>
+      </div>
+      <label>Imagen URL</label>
+      <input type="text" id="nuevoProductoImagen" placeholder="https://...">
+      <label>Descripción</label>
+      <textarea id="nuevoProductoDescripcion" placeholder="Descripción corta del producto..."></textarea>
+      <p class="nota-modal">Al guardar, se creará el producto en catálogo y se agregará esta unidad. No se publicará hasta que presiones Publicar.</p>
+    </div>
+
+    <label>Código de barras</label>
+    <input type="text" id="codigoBarraUnidad" placeholder="Escanea o escribe el código de barras">
+
+    <label>Código interno único</label>
+    <input type="text" id="codigoProductoUnidad" placeholder="Ejemplo: XPG-0001">
+
+    <div class="modal-grid-2">
+      <div>
+        <label>Proveedor</label>
+        <div class="autocomplete-wrap">
+          <input type="text" id="proveedorUnidad" placeholder="Amazon, AliExpress, tienda local..." autocomplete="off">
+          <div class="autocomplete-list" id="sugerenciasProveedorUnidad"></div>
+        </div>
+      </div>
+      <div>
+        <label>Número de orden</label>
+        <input type="text" id="numeroOrdenUnidad" placeholder="Ejemplo: ALX-541421615">
+      </div>
+      <div>
+        <label>Costo total unidad</label>
+        <input type="number" id="precioCompraUnidad" placeholder="0.00" step="0.01" min="0">
+      </div>
+      <div>
+        <label>Fecha compra</label>
+        <input type="date" id="fechaCompraUnidad">
+      </div>
+      <div>
+        <label>Garantía hasta</label>
+        <input type="date" id="garantiaHastaUnidad">
+      </div>
+      <div>
+        <label>URL proveedor</label>
+        <input type="text" id="proveedorUrlUnidad" placeholder="Link de compra o producto">
+      </div>
+    </div>
+
+    <label>Notas</label>
+    <textarea id="notasUnidad" placeholder="Caja sellada, condición, reclamos, detalles de garantía..."></textarea>
+
+    <p class="nota-modal">Costo total unidad = producto + envío + aduana ya repartidos. Ese valor se suma en la vista agrupada.</p>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" id="btnCancelarUnidad">Cancelar</button>
+      <button class="btn-primary" id="btnGuardarUnidad">Guardar unidad</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalDetalleOverlay"></div>
+  <div class="modal-detalle" id="modalDetalleProducto">
+    <div class="modal-header">
+      <h3 id="tituloDetalleProducto">Unidades del producto</h3>
+      <button class="btn-icon" id="btnCerrarDetalleProducto">×</button>
+    </div>
+    <div class="detalle-resumen" id="detalleResumenProducto"></div>
+    <div class="detalle-search-box">
+      <span>🔎</span>
+      <input type="text" id="buscarDetalleUnidades" placeholder="Buscar unidad por código, barra, estado, proveedor, orden, pedido o fecha...">
+    </div>
+    <div class="tabla-scroll detalle-scroll">
+      <table class="tabla-inventario tabla-detalle-unidades">
+        <thead>
+          <tr>
+            <th>ID unidad</th>
+            <th>Código producto</th>
+            <th>Código barra</th>
+            <th>Estado</th>
+            <th>Proveedor</th>
+            <th>Orden</th>
+            <th>Costo unidad</th>
+            <th>Garantía</th>
+            <th>Pedido cliente</th>
+            <th>Fecha ingreso</th>
+            <th>Fecha venta</th>
+            <th>Publicación</th>
+          </tr>
+        </thead>
+        <tbody id="detalleUnidadesBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .inventario-section { display: flex; flex-direction: column; gap: 22px; }
+  .inv-header-card, .tabla-card, .inv-toolbar, .inv-stat-card { background: rgba(30, 41, 59, 0.76); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 18px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22); }
+  .inv-header-card { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px; }
+  .inv-header-card h2 { margin: 0 0 6px; color: #f8fafc; font-size: 30px; }
+  .inv-header-card p { margin: 0; color: #cbd5e1; }
+  .inv-stats-grid { display: grid; grid-template-columns: repeat(4, minmax(160px, 1fr)); gap: 16px; }
+  .inv-stat-card { padding: 18px; }
+  .inv-stat-card span { display: block; color: #cbd5e1; font-size: 14px; margin-bottom: 10px; }
+  .inv-stat-card strong { color: #f8fafc; font-size: 28px; }
+  .inv-stat-card.disponible strong { color: #22c55e; }
+  .inv-stat-card.vendido strong { color: #38bdf8; }
+  .inv-stat-card.alerta strong { color: #fb7185; }
+  .inv-toolbar { display: flex; justify-content: space-between; gap: 14px; padding: 16px; }
+  .search-box { flex: 1; display: flex; align-items: center; gap: 10px; background: rgba(15, 23, 42, 0.78); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 14px; padding: 0 14px; }
+  .search-box input, .filtros-panel input, .filtros-panel select, .modal-unidad input, .modal-unidad select, .modal-unidad textarea { width: 100%; background: rgba(15, 23, 42, 0.9); color: #f8fafc; border: 1px solid rgba(148, 163, 184, 0.24); border-radius: 12px; padding: 12px 14px; outline: none; }
+  .search-box input { border: none; background: transparent; }
+  .producto-select-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: start; margin-bottom: 12px; }
+  .btn-crear-producto { white-space: nowrap; height: 45px; }
+  .producto-nuevo-box { display: none; border: 1px solid rgba(56, 189, 248, .22); background: rgba(14, 165, 233, .08); border-radius: 16px; padding: 14px; margin: 4px 0 16px; }
+  .producto-nuevo-box.activo { display: block; }
+  .producto-nuevo-title { color: #7dd3fc; font-weight: 900; margin-bottom: 10px; }
+  .detalle-search-box { display: flex; align-items: center; gap: 10px; background: rgba(15, 23, 42, 0.78); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 14px; padding: 0 14px; margin-bottom: 14px; }
+  .detalle-search-box input { width: 100%; border: none; background: transparent; color: #f8fafc; padding: 12px 0; outline: none; }
+  .btn-publicar, .btn-ocultar { border: none; border-radius: 10px; padding: 8px 10px; font-weight: 900; cursor: pointer; white-space: nowrap; }
+  .btn-publicar { color: #062f1a; background: linear-gradient(135deg, #22c55e, #86efac); }
+  .btn-ocultar { color: #fff; background: rgba(239, 68, 68, .85); }
+  .badge-publicado { background: rgba(34, 197, 94, .18); color: #86efac; }
+  .badge-oculto { background: rgba(100, 116, 139, .25); color: #cbd5e1; }
+  .acciones-publicacion { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .btn-primary, .btn-secondary, .btn-filter { border: none; border-radius: 13px; padding: 12px 18px; font-weight: 800; cursor: pointer; transition: transform .15s ease, opacity .15s ease; }
+  .btn-primary { color: #082f49; background: linear-gradient(135deg, #22d3ee, #60a5fa); }
+  .btn-secondary { color: #f8fafc; background: rgba(100, 116, 139, 0.5); }
+  .btn-filter { color: #e0f2fe; background: rgba(14, 165, 233, 0.22); border: 1px solid rgba(56, 189, 248, 0.35); }
+  .btn-primary:hover, .btn-secondary:hover, .btn-filter:hover { transform: translateY(-1px); opacity: .92; }
+  .tabla-card { overflow: hidden; }
+  .tabla-scroll { overflow-x: auto; }
+  .tabla-inventario { width: 100%; border-collapse: collapse; min-width: 1000px; }
+  .tabla-inventario th, .tabla-inventario td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(148, 163, 184, 0.12); color: #e2e8f0; }
+  .tabla-inventario th { background: rgba(15, 23, 42, 0.86); color: #f8fafc; cursor: pointer; user-select: none; white-space: nowrap; }
+  .tabla-inventario tbody tr { cursor: pointer; }
+  .tabla-inventario tbody tr:hover { background: rgba(59, 130, 246, 0.08); }
+  .badge-estado { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; text-transform: capitalize; }
+  .badge-disponible { background: rgba(34, 197, 94, .18); color: #86efac; }
+  .badge-vendido { background: rgba(56, 189, 248, .18); color: #7dd3fc; }
+  .badge-devuelto { background: rgba(250, 204, 21, .18); color: #fde68a; }
+  .badge-dañado { background: rgba(244, 63, 94, .18); color: #fda4af; }
+  .badge-en_revision, .badge-reclamo_proveedor { background: rgba(168, 85, 247, .18); color: #d8b4fe; }
+  .empty-table { text-align: center !important; color: #94a3b8 !important; padding: 34px !important; }
+  .filtros-overlay, .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.55); z-index: 90; }
+  .filtros-panel { position: fixed; top: 0; right: -380px; width: 360px; height: 100vh; background: #0f172a; border-left: 1px solid rgba(148, 163, 184, .2); box-shadow: -20px 0 50px rgba(0, 0, 0, .35); z-index: 100; padding: 22px; display: flex; flex-direction: column; gap: 12px; transition: right .25s ease; }
+  .filtros-panel.abierto { right: 0; }
+  .filtros-overlay.activo, .modal-overlay.activo { display: block; }
+  .filtros-header, .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .filtros-header h3, .modal-header h3 { color: #f8fafc; margin: 0; }
+  .filtros-panel label, .modal-unidad label { color: #cbd5e1; font-weight: 700; font-size: 14px; margin-top: 6px; }
+  .filtros-actions, .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+  .filtros-actions button, .modal-actions button { flex: 1; }
+  .btn-icon { width: 36px; height: 36px; border-radius: 10px; border: none; color: #f8fafc; background: rgba(148, 163, 184, .18); font-size: 22px; cursor: pointer; }
+  .modal-unidad, .modal-detalle { display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #0f172a; border: 1px solid rgba(148, 163, 184, .22); border-radius: 20px; box-shadow: 0 30px 70px rgba(0, 0, 0, .42); z-index: 110; padding: 24px; max-height: 92vh; overflow-y: auto; }
+  .modal-unidad { width: min(780px, calc(100vw - 30px)); }
+  .modal-detalle { width: min(1180px, calc(100vw - 30px)); }
+  .modal-unidad.activo, .modal-detalle.activo { display: block; }
+  .modal-unidad label { display: block; margin-bottom: 8px; }
+  .modal-unidad input, .modal-unidad select, .modal-unidad textarea { margin-bottom: 12px; }
+  .nota-modal { color: #94a3b8; font-size: 13px; line-height: 1.5; background: rgba(14, 165, 233, .10); border: 1px solid rgba(56, 189, 248, .18); border-radius: 12px; padding: 12px; }
+  .modal-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .modal-unidad textarea { min-height: 88px; resize: vertical; margin-bottom: 12px; }
+  .proveedor-link { color: #7dd3fc; font-weight: 800; text-decoration: none; }
+  .proveedor-link:hover { text-decoration: underline; }
+  .autocomplete-wrap { position: relative; width: 100%; }
+  .autocomplete-list { display: none; position: absolute; left: 0; right: 0; top: calc(100% - 8px); background: #0b1220; border: 1px solid rgba(56, 189, 248, .28); border-radius: 12px; box-shadow: 0 18px 45px rgba(0, 0, 0, .38); z-index: 160; max-height: 210px; overflow-y: auto; padding: 6px; }
+  .autocomplete-list.activo { display: block; }
+  .autocomplete-item { padding: 10px 12px; border-radius: 10px; color: #e2e8f0; cursor: pointer; font-weight: 700; }
+  .autocomplete-item:hover, .autocomplete-item.activo { background: rgba(14, 165, 233, .22); color: #f8fafc; }
+  .autocomplete-empty { padding: 10px 12px; color: #94a3b8; font-size: 13px; }
+  .detalle-resumen { display: grid; grid-template-columns: repeat(4, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .detalle-resumen-card { background: rgba(30, 41, 59, .8); border: 1px solid rgba(148, 163, 184, .18); border-radius: 14px; padding: 12px; }
+  .detalle-resumen-card small { color: #94a3b8; display: block; margin-bottom: 5px; font-weight: 700; }
+  .detalle-resumen-card strong { color: #f8fafc; font-size: 18px; }
+  .detalle-scroll { max-height: 55vh; }
+  @media (max-width: 900px) { .inv-header-card, .inv-toolbar { flex-direction: column; align-items: stretch; } .inv-stats-grid { grid-template-columns: repeat(2, 1fr); } .detalle-resumen { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .modal-grid-2, .inv-stats-grid, .detalle-resumen, .producto-select-row { grid-template-columns: 1fr; } .filtros-panel { width: 100%; right: -100%; } }
+
+  .publish-switch-wrap { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; white-space: nowrap; }
+  .publish-switch-wrap input { display: none; }
+  .publish-switch { width: 46px; height: 24px; border-radius: 999px; position: relative; background: rgba(100,116,139,.75); border: 1px solid rgba(148,163,184,.35); transition: .2s; display:inline-block; }
+  .publish-switch::after { content: ""; position: absolute; width: 18px; height: 18px; left: 3px; top: 2px; border-radius: 50%; background: #e2e8f0; transition: .2s; box-shadow: 0 3px 8px rgba(0,0,0,.35); }
+  .publish-switch-wrap input:checked + .publish-switch { background: linear-gradient(135deg, #16a34a, #22c55e); border-color: rgba(34,197,94,.75); }
+  .publish-switch-wrap input:checked + .publish-switch::after { transform: translateX(21px); background: #ecfdf5; }
+  .publish-switch-text { font-weight: 900; font-size: 12px; color: #cbd5e1; }
+  .publish-switch-wrap input:checked ~ .publish-switch-text { color: #86efac; }
+  .publish-switch-wrap.disabled { opacity: .45; cursor: not-allowed; }
+
+</style>
+
+<script>
+(() => {
+  const API_BASE = 'http://localhost:3000/api';
+  const token = localStorage.getItem('token') || localStorage.getItem('adminToken') || '';
+
+  let productos = [];
+  let inventario = [];
+  let grupos = [];
+  let gruposFiltrados = [];
+  let crearProductoNuevoActivo = false;
+  let grupoDetalleActivo = null;
+  let sortKey = 'producto_id';
+  let sortDir = 'asc';
+  let destinoPendienteInventarioProcesado = false;
+  let filtros = { estado: 'todos', producto: 'todos', proveedor: '', fechaDesde: '', fechaHasta: '' };
+
+  const proveedoresBase = ['Amazon', 'Amazon USA', 'Amazon Marketplace', 'Amazon Renewed', 'AliExpress', 'AliExpress Choice', 'Alibaba', 'eBay', 'Walmart', 'Best Buy', 'Newegg', 'Temu', 'Shein', 'Mercado Libre', 'Tienda local', 'Distribuidor local', 'Tech PC Store', 'Office Depot', 'Costco', 'Target', 'B&H Photo Video', 'Micro Center'];
+  const $ = (id) => document.getElementById(id);
+
+function obtenerDestinoPendienteVista(vista, acciones = []) {
+  let destino = window.TIENDAPRO_DESTINO_PENDIENTE || null;
+  if (!destino) {
+    try { destino = JSON.parse(localStorage.getItem('tiendapro_destino_pendiente') || 'null'); } catch { destino = null; }
+  }
+  if (!destino) return null;
+  if (vista && destino.vista && destino.vista !== vista) return null;
+  if (acciones.length && !acciones.includes(destino.accion)) return null;
+  return destino;
+}
+function limpiarDestinoPendienteVista() {
+  window.TIENDAPRO_DESTINO_PENDIENTE = null;
+  try { localStorage.removeItem('tiendapro_destino_pendiente'); } catch {}
+}
+function resaltarRegistroPendiente(selector) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.style.outline = '2px solid #38bdf8';
+  el.style.boxShadow = '0 0 0 6px rgba(56,189,248,.16)';
+  setTimeout(() => { el.style.outline = ''; el.style.boxShadow = ''; }, 2400);
+}
+
+  async function procesarDestinoPendienteInventario() {
+    if (destinoPendienteInventarioProcesado) return;
+    const destino = obtenerDestinoPendienteVista('inventario_fisico_view.html', ['abrirUnidad','verInventario']);
+    if (!destino) return;
+    destinoPendienteInventarioProcesado = true;
+    const registro = String(destino.registro || destino.idVisible || '').trim();
+    if (!registro || registro === 'stock-bajo') return limpiarDestinoPendienteVista();
+    const unidad = inventario.find(u => String(u.id) === registro || String(u.codigo_producto || '') === registro || String(u.codigo_barra || '') === registro);
+    if (unidad) {
+      limpiarDestinoPendienteVista();
+      setTimeout(() => {
+        window.abrirDetalleProductoInventario(Number(unidad.producto_id));
+        setTimeout(() => {
+          if ($('buscarDetalleUnidades')) {
+            $('buscarDetalleUnidades').value = unidad.codigo_producto || unidad.codigo_barra || unidad.id;
+            renderDetalleUnidades();
+          }
+        }, 180);
+      }, 260);
+    } else limpiarDestinoPendienteVista();
+  }
+
+  const headers = () => ({ 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) });
+
+  function normalizarRespuestaProductos(data) { if (Array.isArray(data)) return data; if (Array.isArray(data.productos)) return data.productos; return []; }
+
+  async function cargarProductos() {
+    const res = await fetch(`${API_BASE}/productos`, { headers: headers() });
+    const data = await res.json();
+    productos = normalizarRespuestaProductos(data);
+    llenarSelectsProductos();
+  }
+
+  async function cargarInventario() {
+    const filas = [];
+    for (const producto of productos) {
+      try {
+        const res = await fetch(`${API_BASE}/productos/${producto.id}/inventario-fisico`, { headers: headers() });
+        if (!res.ok) continue;
+        const unidades = await res.json();
+        if (!Array.isArray(unidades)) continue;
+        unidades.forEach((unidad) => filas.push({ ...unidad, producto_nombre: producto.nombre || `Producto #${producto.id}` }));
+      } catch (error) { console.error('Error cargando inventario del producto', producto.id, error); }
+    }
+    inventario = filas;
+    generarGrupos();
+    aplicarBusquedaFiltrosYOrden();
+    procesarDestinoPendienteInventario();
+  }
+
+  function generarGrupos() {
+    const mapa = new Map();
+    inventario.forEach((unidad) => {
+      const key = String(unidad.producto_id);
+      if (!mapa.has(key)) {
+        mapa.set(key, { producto_id: unidad.producto_id, producto_nombre: unidad.producto_nombre, unidades: [], disponibles: 0, vendidas: 0, problemas: 0, publicadas: 0, producto_publicado: 0, costo_total: 0, ultimo_ingreso: '', estado_general: 'agotado' });
+      }
+      const g = mapa.get(key);
+      g.unidades.push(unidad);
+      if (unidad.estado === 'disponible') g.disponibles += 1;
+      if (unidad.estado === 'disponible' && Number(unidad.publicado || 0) === 1) g.publicadas += 1;
+      if (unidad.estado === 'vendido') g.vendidas += 1;
+      if (['devuelto', 'dañado', 'en_revision', 'reclamo_proveedor'].includes(unidad.estado)) g.problemas += 1;
+      g.costo_total += Number(unidad.precio_compra || 0);
+      const fecha = unidad.fecha_ingreso ? unidad.fecha_ingreso.slice(0, 10) : '';
+      if (fecha && (!g.ultimo_ingreso || fecha > g.ultimo_ingreso)) g.ultimo_ingreso = fecha;
+    });
+    grupos = [...mapa.values()].map(g => {
+      const producto = productos.find(p => Number(p.id) === Number(g.producto_id));
+      return {
+        ...g,
+        producto_publicado: Number(producto?.publicado || 0),
+        estado_general: g.disponibles > 0 ? 'disponible' : (g.vendidas > 0 ? 'vendido' : (g.problemas > 0 ? 'devuelto' : 'agotado'))
+      };
+    });
+  }
+
+  function llenarSelectsProductos() {
+    const selectFiltro = $('filtroProducto');
+    const selectUnidad = $('selectProductoUnidad');
+    selectFiltro.innerHTML = '<option value="todos">Todos</option>';
+    selectUnidad.innerHTML = '<option value="">Selecciona un producto</option>';
+    productos.forEach((producto) => {
+      const nombre = producto.nombre || `Producto #${producto.id}`;
+      selectFiltro.insertAdjacentHTML('beforeend', `<option value="${producto.id}">${escapeHtml(nombre)}</option>`);
+      selectUnidad.insertAdjacentHTML('beforeend', `<option value="${producto.id}">${escapeHtml(nombre)}</option>`);
+    });
+  }
+
+  function aplicarBusquedaFiltrosYOrden() {
+    const busqueda = ($('buscarInventario')?.value || '').toLowerCase().trim();
+    gruposFiltrados = grupos.filter((grupo) => {
+      const unidadesTexto = grupo.unidades.map(u => [u.codigo_producto, u.codigo_barra, u.proveedor, u.numero_orden, u.estado, u.pedido_id].join(' ')).join(' ');
+      const texto = [grupo.producto_id, grupo.producto_nombre, grupo.estado_general, unidadesTexto].join(' ').toLowerCase();
+      const coincideBusqueda = !busqueda || texto.includes(busqueda);
+      const coincideProducto = filtros.producto === 'todos' || String(grupo.producto_id) === String(filtros.producto);
+      const coincideEstado = filtros.estado === 'todos' || grupo.unidades.some(u => u.estado === filtros.estado);
+      const coincideProveedor = !filtros.proveedor || grupo.unidades.some(u => String(u.proveedor || '').toLowerCase().includes(filtros.proveedor.toLowerCase()));
+      const coincideDesde = !filtros.fechaDesde || grupo.unidades.some(u => (u.fecha_ingreso ? u.fecha_ingreso.slice(0, 10) : '') >= filtros.fechaDesde);
+      const coincideHasta = !filtros.fechaHasta || grupo.unidades.some(u => (u.fecha_ingreso ? u.fecha_ingreso.slice(0, 10) : '') <= filtros.fechaHasta);
+      return coincideBusqueda && coincideProducto && coincideEstado && coincideProveedor && coincideDesde && coincideHasta;
+    });
+    gruposFiltrados.sort((a, b) => comparar(a, b, sortKey, sortDir));
+    renderTabla();
+    renderStats();
+  }
+
+  function comparar(a, b, key, dir) {
+    let valorA = a[key] ?? '';
+    let valorB = b[key] ?? '';
+    if (['producto_id', 'disponibles', 'vendidas', 'problemas', 'costo_total'].includes(key)) { valorA = Number(valorA || 0); valorB = Number(valorB || 0); }
+    else { valorA = String(valorA).toLowerCase(); valorB = String(valorB).toLowerCase(); }
+    if (valorA < valorB) return dir === 'asc' ? -1 : 1;
+    if (valorA > valorB) return dir === 'asc' ? 1 : -1;
+    return 0;
+  }
+
+  function renderTabla() {
+    const tbody = $('tablaInventarioBody');
+    if (!gruposFiltrados.length) {
+      tbody.innerHTML = '<tr><td colspan="9" class="empty-table">No hay productos que coincidan con la búsqueda o filtros.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = gruposFiltrados.map((grupo) => `
+      <tr onclick="window.abrirDetalleProductoInventario(${Number(grupo.producto_id)})">
+        <td>${grupo.producto_id ?? '-'}</td>
+        <td><strong>${escapeHtml(grupo.producto_nombre || '-')}</strong><br><small>${grupo.unidades.length} unidad(es) físicas</small></td>
+        <td>${estadoBadge(grupo.estado_general)}</td>
+        <td><strong style="color:#86efac">${grupo.disponibles}</strong></td>
+        <td><strong style="color:#7dd3fc">${grupo.vendidas}</strong></td>
+        <td><strong style="color:#fda4af">${grupo.problemas}</strong></td>
+        <td><strong>${formatearDinero(grupo.costo_total)}</strong></td>
+        <td>${formatearFecha(grupo.ultimo_ingreso)}</td>
+        <td onclick="event.stopPropagation()">${botonPublicacionGrupo(grupo)}</td>
+      </tr>
+    `).join('');
+  }
+
+  window.abrirDetalleProductoInventario = function(productoId) {
+    const grupo = grupos.find(g => Number(g.producto_id) === Number(productoId));
+    if (!grupo) return;
+    grupoDetalleActivo = grupo;
+    $('tituloDetalleProducto').textContent = grupo.producto_nombre || 'Unidades del producto';
+    $('detalleResumenProducto').innerHTML = `
+      <div class="detalle-resumen-card"><small>Total unidades</small><strong>${grupo.unidades.length}</strong></div>
+      <div class="detalle-resumen-card"><small>Disponibles</small><strong>${grupo.disponibles}</strong></div>
+      <div class="detalle-resumen-card"><small>Vendidas</small><strong>${grupo.vendidas}</strong></div>
+      <div class="detalle-resumen-card"><small>Costo total</small><strong>${formatearDinero(grupo.costo_total)}</strong></div>
+      <div class="detalle-resumen-card"><small>Publicadas</small><strong>${grupo.publicadas}</strong></div>
+    `;
+    if ($('buscarDetalleUnidades')) $('buscarDetalleUnidades').value = '';
+    renderDetalleUnidades();
+    $('modalDetalleOverlay').classList.add('activo');
+    $('modalDetalleProducto').classList.add('activo');
+  };
+
+  function renderDetalleUnidades() {
+    if (!grupoDetalleActivo) return;
+    const busqueda = ($('buscarDetalleUnidades')?.value || '').toLowerCase().trim();
+    const unidades = grupoDetalleActivo.unidades.filter((item) => {
+      const texto = [
+        item.id, item.codigo_producto, item.codigo_barra, item.estado, item.proveedor,
+        item.numero_orden, item.precio_compra, item.garantia_hasta, item.pedido_id,
+        item.fecha_ingreso, item.fecha_venta
+      ].join(' ').toLowerCase();
+      return !busqueda || texto.includes(busqueda);
+    });
+
+    if (!unidades.length) {
+      $('detalleUnidadesBody').innerHTML = '<tr><td colspan="12" class="empty-table">No hay unidades que coincidan con la búsqueda.</td></tr>';
+      return;
+    }
+
+    $('detalleUnidadesBody').innerHTML = unidades.map((item) => `
+      <tr>
+        <td>${item.id ?? '-'}</td>
+        <td><strong>${escapeHtml(item.codigo_producto || '-')}</strong></td>
+        <td>${escapeHtml(item.codigo_barra || '-')}</td>
+        <td>${estadoBadge(item.estado)}</td>
+        <td>${renderProveedor(item)}</td>
+        <td>${escapeHtml(item.numero_orden || '—')}</td>
+        <td>${formatearDinero(item.precio_compra)}</td>
+        <td>${formatearFecha(item.garantia_hasta)}</td>
+        <td>${item.pedido_id ? `#${item.pedido_id}` : '—'}</td>
+        <td>${formatearFecha(item.fecha_ingreso)}</td>
+        <td>${formatearFecha(item.fecha_venta)}</td>
+        <td>${botonPublicacionUnidad(item)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function cerrarDetalleProducto() {
+    $('modalDetalleOverlay').classList.remove('activo');
+    $('modalDetalleProducto').classList.remove('activo');
+  }
+
+  function renderStats() {
+    $('statTotal').textContent = inventario.length;
+    $('statDisponibles').textContent = inventario.filter(i => i.estado === 'disponible').length;
+    $('statVendidas').textContent = inventario.filter(i => i.estado === 'vendido').length;
+    $('statProblemas').textContent = inventario.filter(i => ['devuelto', 'dañado', 'en_revision', 'reclamo_proveedor'].includes(i.estado)).length;
+  }
+
+
+  function botonPublicacionGrupo(grupo) {
+    const publicado = Number(grupo.publicadas || 0) > 0;
+    const disabled = Number(grupo.disponibles || 0) <= 0;
+    const texto = publicado ? `Publicado (${grupo.publicadas})` : 'No publicado';
+
+    return `
+      <label class="publish-switch-wrap ${disabled ? 'disabled' : ''}" title="${disabled ? 'No hay unidades disponibles para publicar' : 'Cambiar publicación del producto'}">
+        <input type="checkbox" ${publicado ? 'checked' : ''} ${disabled ? 'disabled' : ''} onchange="window.cambiarPublicacionProducto(${Number(grupo.producto_id)}, this.checked ? 1 : 0)">
+        <span class="publish-switch"></span>
+        <span class="publish-switch-text">${texto}</span>
+      </label>
+    `;
+  }
+
+  function botonPublicacionUnidad(item) {
+    const publicado = Number(item.publicado || 0) === 1;
+    const disponible = item.estado === 'disponible';
+    const texto = publicado ? 'Publicado' : 'No publicado';
+
+    return `
+      <label class="publish-switch-wrap ${!disponible ? 'disabled' : ''}" title="${!disponible ? 'Solo se publican unidades disponibles' : 'Cambiar publicación de esta unidad'}">
+        <input type="checkbox" ${publicado ? 'checked' : ''} ${!disponible ? 'disabled' : ''} onchange="window.cambiarPublicacionUnidad(${Number(item.id)}, this.checked ? 1 : 0)">
+        <span class="publish-switch"></span>
+        <span class="publish-switch-text">${texto}</span>
+      </label>
+    `;
+  }
+
+  window.cambiarPublicacionProducto = async function(productoId, publicado) {
+    try {
+      const res = await fetch(`${API_BASE}/productos/${productoId}/inventario-fisico/publicacion`, {
+        method: 'PUT',
+        headers: headers(),
+        body: JSON.stringify({ publicado })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(data.mensaje || 'No se pudo actualizar la publicación del producto.');
+        return;
+      }
+      await cargarProductos();
+      await cargarInventario();
+      alert(data.mensaje || 'Publicación actualizada.');
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión al actualizar publicación.');
+    }
+  };
+
+  window.cambiarPublicacionUnidad = async function(unidadId, publicado) {
+    try {
+      const res = await fetch(`${API_BASE}/productos/inventario-fisico/unidad/${unidadId}/publicacion`, {
+        method: 'PUT',
+        headers: headers(),
+        body: JSON.stringify({ publicado })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(data.mensaje || 'No se pudo actualizar la publicación de la unidad.');
+        return;
+      }
+      await cargarProductos();
+      await cargarInventario();
+      if (grupoDetalleActivo) {
+        const productoId = grupoDetalleActivo.producto_id;
+        grupoDetalleActivo = grupos.find(g => Number(g.producto_id) === Number(productoId));
+        if (grupoDetalleActivo) {
+          $('detalleResumenProducto').innerHTML = `
+            <div class="detalle-resumen-card"><small>Total unidades</small><strong>${grupoDetalleActivo.unidades.length}</strong></div>
+            <div class="detalle-resumen-card"><small>Disponibles</small><strong>${grupoDetalleActivo.disponibles}</strong></div>
+            <div class="detalle-resumen-card"><small>Vendidas</small><strong>${grupoDetalleActivo.vendidas}</strong></div>
+            <div class="detalle-resumen-card"><small>Costo total</small><strong>${formatearDinero(grupoDetalleActivo.costo_total)}</strong></div>
+            <div class="detalle-resumen-card"><small>Publicadas</small><strong>${grupoDetalleActivo.publicadas}</strong></div>
+          `;
+          renderDetalleUnidades();
+        }
+      }
+      alert(data.mensaje || 'Publicación actualizada.');
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión al actualizar publicación.');
+    }
+  };
+
+  function renderProveedor(item) {
+    const proveedor = item.proveedor || '—';
+    if (item.proveedor_url) return `<a class="proveedor-link" href="${escapeHtml(item.proveedor_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(proveedor)}</a>`;
+    return escapeHtml(proveedor);
+  }
+  function formatearDinero(valor) { const numero = Number(valor || 0); if (!numero) return '—'; return `$${numero.toFixed(2)}`; }
+  function estadoBadge(estado = '') { const clase = `badge-${estado}`; return `<span class="badge-estado ${clase}">${escapeHtml((estado || 'sin estado').replaceAll('_', ' '))}</span>`; }
+  function formatearFecha(fecha) { if (!fecha) return '—'; const date = new Date(fecha); if (Number.isNaN(date.getTime())) return fecha; return date.toLocaleDateString('es-SV', { year: 'numeric', month: '2-digit', day: '2-digit' }); }
+  function escapeHtml(valor) { return String(valor).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
+
+  function obtenerProveedoresSugeridos() {
+    const proveedoresInventario = inventario.map(item => item.proveedor).filter(Boolean);
+    return [...new Set([...proveedoresBase, ...proveedoresInventario])].sort((a, b) => a.localeCompare(b, 'es'));
+  }
+  function cerrarTodasLasSugerencias() { document.querySelectorAll('.autocomplete-list').forEach(lista => { lista.classList.remove('activo'); lista.innerHTML = ''; }); }
+  function configurarAutocompleteProveedor(inputId, listaId) {
+    const input = $(inputId), lista = $(listaId); if (!input || !lista) return;
+    function renderSugerencias() {
+      const texto = input.value.trim().toLowerCase();
+      if (!texto) { lista.classList.remove('activo'); lista.innerHTML = ''; return; }
+      const sugerencias = obtenerProveedoresSugeridos().filter(nombre => nombre.toLowerCase().includes(texto)).slice(0, 8);
+      if (!sugerencias.length) { lista.innerHTML = '<div class="autocomplete-empty">Sin sugerencias. Puedes escribir un proveedor nuevo.</div>'; lista.classList.add('activo'); return; }
+      lista.innerHTML = sugerencias.map(nombre => `<div class="autocomplete-item" data-proveedor="${escapeHtml(nombre)}">${escapeHtml(nombre)}</div>`).join('');
+      lista.classList.add('activo');
+    }
+    input.addEventListener('input', renderSugerencias); input.addEventListener('focus', renderSugerencias);
+    lista.addEventListener('mousedown', (event) => { const item = event.target.closest('.autocomplete-item'); if (!item) return; input.value = item.dataset.proveedor || ''; lista.classList.remove('activo'); lista.innerHTML = ''; input.dispatchEvent(new Event('input')); });
+  }
+
+  function abrirFiltros() { $('filtrosOverlay').classList.add('activo'); $('filtrosPanel').classList.add('abierto'); }
+  function cerrarFiltros() { $('filtrosOverlay').classList.remove('activo'); $('filtrosPanel').classList.remove('abierto'); cerrarTodasLasSugerencias(); }
+  function abrirModalUnidad() { $('modalUnidadOverlay').classList.add('activo'); $('modalUnidad').classList.add('activo'); cerrarTodasLasSugerencias(); setTimeout(() => $('codigoBarraUnidad').focus(), 100); }
+  function cerrarModalUnidad() {
+    $('modalUnidadOverlay').classList.remove('activo'); $('modalUnidad').classList.remove('activo');
+    ['selectProductoUnidad','codigoBarraUnidad','codigoProductoUnidad','proveedorUnidad','numeroOrdenUnidad','precioCompraUnidad','fechaCompraUnidad','garantiaHastaUnidad','proveedorUrlUnidad','notasUnidad','nuevoProductoNombre','nuevoProductoMarca','nuevoProductoCategoria','nuevoProductoPrecio','nuevoProductoImagen','nuevoProductoDescripcion'].forEach(id => { if ($(id)) $(id).value = ''; });
+    crearProductoNuevoActivo = false;
+    $('productoNuevoBox')?.classList.remove('activo');
+    $('selectProductoUnidad').disabled = false;
+    $('btnToggleProductoNuevo').textContent = '+ Crear producto nuevo';
+    cerrarTodasLasSugerencias();
+  }
+
+  async function crearProductoDesdeInventario() {
+    const nombre = $('nuevoProductoNombre').value.trim();
+    const marca = $('nuevoProductoMarca').value.trim();
+    const categoria = $('nuevoProductoCategoria').value.trim();
+    const precio = Number($('nuevoProductoPrecio').value || 0);
+    const imagen = $('nuevoProductoImagen').value.trim();
+    const descripcion = $('nuevoProductoDescripcion').value.trim();
+
+    if (!nombre) throw new Error('Escribe el nombre del producto nuevo.');
+    if (!precio || precio <= 0) throw new Error('Escribe el precio de venta del producto nuevo.');
+
+    const payload = {
+      nombre,
+      descripcion: descripcion || 'Producto agregado desde inventario físico.',
+      precio,
+      descuento: 0,
+      imagen,
+      stock: 0,
+      categoria: categoria || 'Sin categoría',
+      estado: 'activo',
+      marca,
+      condicion: 'Nuevo',
+      disponibilidad: 'Disponible',
+      tipo_venta: 'stock',
+      permite_bajo_pedido: 0,
+      estado_visual: 'auto',
+      publicado: 0
+    };
+
+    const res = await fetch(`${API_BASE}/productos`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.mensaje || 'No se pudo crear el producto nuevo.');
+
+    let productoId = data.producto?.id || data.id || data.insertId || data.producto_id;
+
+    await cargarProductos();
+
+    if (!productoId) {
+      const encontrado = productos.find(p => String(p.nombre || '').toLowerCase() === nombre.toLowerCase());
+      productoId = encontrado?.id;
+    }
+
+    if (!productoId) throw new Error('El producto se creó, pero no pude obtener su ID. Revisa Productos y vuelve a seleccionar el producto.');
+
+    $('selectProductoUnidad').value = String(productoId);
+    return productoId;
+  }
+
+  function toggleProductoNuevo() {
+    crearProductoNuevoActivo = !crearProductoNuevoActivo;
+    $('productoNuevoBox').classList.toggle('activo', crearProductoNuevoActivo);
+    $('selectProductoUnidad').disabled = crearProductoNuevoActivo;
+    if (crearProductoNuevoActivo) $('selectProductoUnidad').value = '';
+    $('btnToggleProductoNuevo').textContent = crearProductoNuevoActivo ? 'Usar producto existente' : '+ Crear producto nuevo';
+    setTimeout(() => { if (crearProductoNuevoActivo) $('nuevoProductoNombre').focus(); }, 80);
+  }
+
+  async function guardarUnidad() {
+    let productoId = $('selectProductoUnidad').value;
+    const codigo_barra = $('codigoBarraUnidad').value.trim();
+    const codigo_producto = $('codigoProductoUnidad').value.trim();
+    const proveedor = $('proveedorUnidad').value.trim();
+    const proveedor_url = $('proveedorUrlUnidad').value.trim();
+    const numero_orden = $('numeroOrdenUnidad').value.trim();
+    const precio_compra = $('precioCompraUnidad').value || 0;
+    const fecha_compra = $('fechaCompraUnidad').value || null;
+    const garantia_hasta = $('garantiaHastaUnidad').value || null;
+    const notas = $('notasUnidad').value.trim();
+    if (!crearProductoNuevoActivo && !productoId) { alert('Selecciona un producto o crea uno nuevo.'); return; }
+    if (!codigo_barra || !codigo_producto) { alert('Completa código de barras y código interno.'); return; }
+    try {
+      if (crearProductoNuevoActivo) {
+        productoId = await crearProductoDesdeInventario();
+      }
+      const res = await fetch(`${API_BASE}/productos/${productoId}/inventario-fisico`, { method: 'POST', headers: headers(), body: JSON.stringify({ codigo_barra, codigo_producto, proveedor, proveedor_url, numero_orden, precio_compra, fecha_compra, garantia_hasta, notas }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { alert(data.mensaje || 'No se pudo guardar la unidad.'); return; }
+      cerrarModalUnidad(); await cargarProductos(); await cargarInventario(); alert(data.mensaje || 'Unidad física agregada correctamente.');
+    } catch (error) { console.error(error); alert('Error de conexión al guardar la unidad.'); }
+  }
+
+  function configurarEventos() {
+    $('buscarInventario').addEventListener('input', aplicarBusquedaFiltrosYOrden);
+    configurarAutocompleteProveedor('filtroProveedor', 'sugerenciasFiltroProveedor');
+    configurarAutocompleteProveedor('proveedorUnidad', 'sugerenciasProveedorUnidad');
+    document.addEventListener('mousedown', (event) => { if (!event.target.closest('.autocomplete-wrap')) cerrarTodasLasSugerencias(); });
+    $('btnAbrirFiltros').addEventListener('click', abrirFiltros); $('btnCerrarFiltros').addEventListener('click', cerrarFiltros); $('filtrosOverlay').addEventListener('click', cerrarFiltros);
+    $('btnAplicarFiltros').addEventListener('click', () => { filtros.estado = $('filtroEstado').value; filtros.producto = $('filtroProducto').value; filtros.proveedor = $('filtroProveedor').value.trim(); filtros.fechaDesde = $('filtroFechaDesde').value; filtros.fechaHasta = $('filtroFechaHasta').value; cerrarFiltros(); aplicarBusquedaFiltrosYOrden(); });
+    $('btnLimpiarFiltros').addEventListener('click', () => { $('filtroEstado').value = 'todos'; $('filtroProducto').value = 'todos'; $('filtroProveedor').value = ''; $('filtroFechaDesde').value = ''; $('filtroFechaHasta').value = ''; filtros = { estado: 'todos', producto: 'todos', proveedor: '', fechaDesde: '', fechaHasta: '' }; aplicarBusquedaFiltrosYOrden(); });
+    document.querySelectorAll('.tabla-inventario th[data-sort]').forEach((th) => { th.addEventListener('click', () => { const key = th.dataset.sort; if (sortKey === key) sortDir = sortDir === 'asc' ? 'desc' : 'asc'; else { sortKey = key; sortDir = 'asc'; } aplicarBusquedaFiltrosYOrden(); }); });
+    $('btnToggleProductoNuevo').addEventListener('click', toggleProductoNuevo); $('buscarDetalleUnidades').addEventListener('input', renderDetalleUnidades); $('btnAbrirModalUnidad').addEventListener('click', abrirModalUnidad); $('btnCerrarModalUnidad').addEventListener('click', cerrarModalUnidad); $('btnCancelarUnidad').addEventListener('click', cerrarModalUnidad); $('modalUnidadOverlay').addEventListener('click', cerrarModalUnidad); $('btnGuardarUnidad').addEventListener('click', guardarUnidad);
+    $('btnCerrarDetalleProducto').addEventListener('click', cerrarDetalleProducto); $('modalDetalleOverlay').addEventListener('click', cerrarDetalleProducto);
+  }
+
+  async function iniciarInventarioFisico() {
+    configurarEventos();
+    try { await cargarProductos(); await cargarInventario(); }
+    catch (error) { console.error(error); $('tablaInventarioBody').innerHTML = '<tr><td colspan="9" class="empty-table">No se pudo cargar el inventario. Revisa que el servidor esté encendido y que tengas sesión iniciada.</td></tr>'; }
+  }
+  iniciarInventarioFisico();
+})();
+</script>

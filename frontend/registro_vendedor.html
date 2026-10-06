@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Solicitud de vendedor | TiendaPro</title>
+  <link rel="stylesheet" href="css/registro_vendedor.css">
+  <link rel="stylesheet" href="css/vendor-polish.css?v=fase80">
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+<body>
+<main class="seller-shell">
+  <section class="seller-card">
+    <header>
+      <span class="brand">TiendaPro</span>
+      <h1>Quiero vender en TiendaPro</h1>
+      <p>Completa tu solicitud. Tu cuenta se activará únicamente después de la revisión administrativa.</p>
+    </header>
+
+    <div class="steps">
+      <span class="active">1 Datos</span><span>2 Negocio</span><span>3 Liquidaciones</span><span>4 Documentos</span><span>5 Revisión</span>
+    </div>
+
+    <form id="formVendedor" enctype="multipart/form-data">
+      <section class="step active">
+        <h2>Datos del responsable</h2>
+        <div class="grid">
+          <label>Nombre completo<input name="nombre" required></label>
+          <label>Correo<input name="correo" type="email" required></label>
+          <label>Teléfono<input name="telefono" required></label>
+          <label>DUI<input name="dui" required placeholder="00000000-0"></label>
+          <label class="wide">Dirección<textarea name="direccion" required></textarea></label>
+        </div>
+      </section>
+
+      <section class="step">
+        <h2>Información de la tienda</h2>
+        <div class="grid">
+          <label>Nombre de la tienda<input name="tienda" required></label>
+          <label>Tipo de vendedor
+            <select name="tipo_vendedor" id="tipo_vendedor" required>
+              <option value="">Seleccionar</option>
+              <option value="Emprendedor">Emprendedor / Persona natural</option>
+              <option value="Comercial">Negocio o empresa formal</option>
+            </select>
+          </label>
+          <label>Categoría principal<input name="categoria"></label>
+          <label>¿Está inscrito como contribuyente de IVA?
+            <select name="contribuyente_iva" id="contribuyente_iva" required>
+              <option value="">Seleccionar</option><option value="no">No</option><option value="si">Sí</option>
+            </select>
+          </label>
+          <div class="wide fiscal-note" id="fiscal_persona_natural" hidden>Para una persona natural salvadoreña, TiendaPro utilizará el DUI como identificador tributario de referencia. No necesitas escribir un NIT separado en este formulario.</div>
+          <label id="campo_nit" hidden>NIT de la empresa<input name="nit" id="nit"></label>
+          <label id="campo_nrc" hidden>NRC<input name="nrc" id="nrc"></label>
+          <label id="campo_actividad" hidden class="wide">Actividad económica<input name="actividad_economica" id="actividad_economica" placeholder="Ej. Venta al por menor de prendas de vestir"></label>
+          <label class="wide">Descripción del negocio<textarea name="descripcion_negocio"></textarea></label>
+        </div>
+      </section>
+
+      <section class="step">
+        <h2>Datos para futuras liquidaciones</h2>
+        <p class="hint">Estos datos se utilizarán cuando implementemos las liquidaciones a vendedores.</p>
+        <div class="grid">
+          <label class="bank-field">Banco
+            <div class="bank-combobox" id="bankCombobox">
+              <input name="banco" id="banco" autocomplete="off" placeholder="Escribe para buscar un banco..." aria-autocomplete="list" aria-controls="bankSuggestions">
+              <div class="bank-suggestions" id="bankSuggestions" role="listbox" hidden></div>
+            </div>
+            <small class="field-help">Selecciona una entidad de la lista de bancos autorizados en El Salvador.</small>
+          </label>
+          <label>Titular de la cuenta<input name="titular_cuenta"></label>
+          <label class="wide">Número de cuenta<input name="cuenta_bancaria"></label>
+        </div>
+      </section>
+
+      <section class="step">
+        <h2>Documentos</h2>
+        <p class="hint">PDF, JPG, PNG o WEBP. Máximo 8 MB por archivo.</p>
+        <div class="grid docs">
+          <label>DUI — Frente <b>Obligatorio</b><input type="file" name="dui_frente_documento" accept=".pdf,.jpg,.jpeg,.png,.webp" required></label>
+          <label>DUI — Reverso <b>Obligatorio</b><input type="file" name="dui_reverso_documento" accept=".pdf,.jpg,.jpeg,.png,.webp" required></label>
+          <label id="doc_nit" hidden>NIT de la empresa <b>Obligatorio para empresa formal</b><input type="file" name="nit_documento" id="nit_documento" accept=".pdf,.jpg,.jpeg,.png,.webp"></label>
+          <label id="doc_nrc" hidden>NRC / constancia de IVA <b>Obligatorio si está inscrito en IVA</b><input type="file" name="nrc_documento" id="nrc_documento" accept=".pdf,.jpg,.jpeg,.png,.webp"></label>
+          <label id="doc_negocio" hidden>Documento legal del negocio <b>Obligatorio para empresa formal</b><input type="file" name="negocio_documento" id="negocio_documento" accept=".pdf,.jpg,.jpeg,.png,.webp"></label>
+        </div>
+        <div class="fiscal-note doc-note" id="nota_docs_emprendedor" hidden>Como seleccionaste Emprendedor / Persona natural, no se solicita documento legal del negocio. Si estás inscrito en IVA, sí se solicitará tu constancia de NRC.</div>
+      </section>
+
+      <section class="step">
+        <h2>Revisión y envío</h2>
+        <div id="resumen"></div>
+        <label class="check"><input type="checkbox" id="acepta" required> Declaro que la información proporcionada es correcta y autorizo su revisión.</label>
+      </section>
+
+      <div id="mensaje"></div>
+      <footer>
+        <button type="button" id="anterior" class="secondary" hidden>Anterior</button>
+        <button type="button" id="siguiente">Continuar</button>
+        <button type="submit" id="enviar" hidden>Enviar solicitud</button>
+      </footer>
+    </form>
+  </section>
+</main>
+<script src="js/registro_vendedor.js"></script>
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

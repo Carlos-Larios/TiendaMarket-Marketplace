@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# User uploads and runtime data
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/productos/
+!backend/uploads/productos/.gitkeep
+!backend/uploads/vendedores/
+!backend/uploads/vendedores/.gitkeep
+!backend/uploads/branding/
+!backend/uploads/branding/.gitkeep
+backend/data/branding.json
+backend/data/branding-*.tmp
+
+# Generated builds / logs
+frontend/dist/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx

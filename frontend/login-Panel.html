@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso interno | TiendaPro</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#0f172a;
+    }
+
+    .login-container{
+      width:100%;
+      max-width:400px;
+      background:#1e293b;
+      padding:40px;
+      border-radius:20px;
+      box-shadow:0 0 30px rgba(0,0,0,0.3);
+    }
+
+    .login-container h1{
+      color:white;
+      text-align:center;
+      margin-bottom:30px;
+      font-size:32px;
+    }
+
+    .input-group{
+      margin-bottom:20px;
+    }
+
+    .input-group label{
+      display:block;
+      color:#cbd5e1;
+      margin-bottom:8px;
+      font-size:14px;
+    }
+
+    .input-group input{
+      width:100%;
+      padding:14px;
+      border:none;
+      outline:none;
+      border-radius:10px;
+      background:#334155;
+      color:white;
+      font-size:15px;
+    }
+
+    .input-group input::placeholder{
+      color:#94a3b8;
+    }
+
+    .btn-login{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      background:#3b82f6;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .btn-login:hover{
+      background:#2563eb;
+    }
+
+    #mensaje{
+      margin-top:20px;
+      text-align:center;
+      color:#f87171;
+      font-size:14px;
+    }
+  </style>
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+<body>
+
+  <div class="login-container">
+
+    <h1>Panel TiendaPro</h1>
+
+    <form id="loginForm">
+
+      <div class="input-group">
+        <label>Correo</label>
+        <input 
+          type="email" 
+          id="email" 
+          placeholder="Ingresa tu correo"
+          required
+        >
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input 
+          type="password" 
+          id="password" 
+          placeholder="Ingresa tu contraseña"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn-login">
+        Ingresar
+      </button>
+
+    </form>
+
+    <p id="mensaje"></p>
+
+    <div style="margin-top:22px;text-align:center;color:#94a3b8;font-size:13px;line-height:1.8">
+      Acceso exclusivo para personal autorizado.<br>
+      <a href="tienda_publica.html" style="color:#cbd5e1;text-decoration:none">← Ir a la tienda pública</a>
+    </div>
+
+  </div>
+
+  <script src="js/login-Panel.js"></script>
+
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

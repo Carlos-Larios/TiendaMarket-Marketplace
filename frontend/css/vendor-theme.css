@@ -1,0 +1,90 @@
+:root{
+  --tp-accent:#2563eb;
+  --tp-accent-rgb:37,99,235;
+  --tp-accent-contrast:#ffffff;
+  --tp-accent-soft:rgba(37,99,235,.12);
+  --tp-bg:#f6f8fb;
+  --tp-surface:#ffffff;
+  --tp-surface-2:#f8fafc;
+  --tp-text:#172033;
+  --tp-text-secondary:#4b5565;
+  --tp-muted:#697386;
+  --tp-line:#e5e9f0;
+  --tp-shadow:0 8px 28px rgba(15,23,42,.06);
+  color-scheme:light;
+}
+html[data-vendor-theme="dark"]{
+  --tp-bg:#0f172a;
+  --tp-surface:#111c2e;
+  --tp-surface-2:#172337;
+  --tp-text:#eef4ff;
+  --tp-text-secondary:#c5d0df;
+  --tp-muted:#9eacc0;
+  --tp-line:#2b3a50;
+  --tp-shadow:0 8px 28px rgba(0,0,0,.22);
+  color-scheme:dark;
+}
+html,body{background:var(--tp-bg)!important;color:var(--tp-text)!important}
+body{transition:background-color .18s ease,color .18s ease}
+
+/* Superficies comunes. El color de marca NO controla texto normal. */
+.sidebar,.topbar,.panel,.metric,.date-box,.stat,.toolbar,.sales-panel-inner,.history-dialog,.history-tools,.history-foot,.vendor-shell-sidebar,.vendor-shell-mobilebar{
+  background:var(--tp-surface)!important;color:var(--tp-text)!important;border-color:var(--tp-line)!important
+}
+.top,.sales-expand-row,.sales-kpis>div,.history-summary>div,th,.thumb,.close-sales,.history-close{
+  background:var(--tp-surface-2)!important;color:var(--tp-text)!important;border-color:var(--tp-line)!important
+}
+.heading p,.metric small,.seller-mini small,.prod small,.prod-units,.alert-text,.empty,.loading,.sales-loading,.recent-sales-head small,.history-tools label,.history-foot{
+  color:var(--tp-muted)!important
+}
+.row,td,.sales-panel-head,.history-head,.history-tools{border-color:var(--tp-line)!important}
+input,select,textarea,.select,.toolbar input,.toolbar select,.history-tools input,.history-tools select,.action,.history-tools button{
+  background:var(--tp-surface)!important;color:var(--tp-text)!important;border-color:var(--tp-line)!important
+}
+
+/* Navegación del dashboard original */
+.nav-link,.nav-group-title{color:var(--tp-text)!important}
+.nav-sub button{color:var(--tp-text-secondary)!important}
+.chev{color:var(--tp-muted)!important}
+.nav-link:hover,.nav-group-title:hover,.nav-sub button:hover{background:var(--tp-surface-2)!important}
+
+/* Navegación persistente */
+.vendor-shell-link,.vendor-shell-group{color:var(--tp-text)!important}
+.vendor-shell-sub button{color:var(--tp-text-secondary)!important}
+.vendor-shell-chev{color:var(--tp-muted)!important}
+.vendor-shell-link:hover,.vendor-shell-group:hover,.vendor-shell-sub button:hover{background:var(--tp-surface-2)!important}
+
+/* Acento de marca: solo elementos interactivos/seleccionados. */
+.brand small,.metric .link,.viewall,.total-orders,.history-link,.vendor-shell-brand small{color:var(--tp-accent)!important}
+.brand-icon,.btn-primary,.history-tools .apply,.vendor-shell-brand-icon{
+  background:var(--tp-accent)!important;border-color:var(--tp-accent)!important;color:var(--tp-accent-contrast)!important
+}
+.nav-link.active,.vendor-shell-link.active{
+  background:var(--tp-accent)!important;
+  color:var(--tp-accent-contrast)!important;
+  box-shadow:0 6px 16px rgba(var(--tp-accent-rgb),.24)!important
+}
+.nav-link.active *, .vendor-shell-link.active *{color:var(--tp-accent-contrast)!important}
+.nav-sub button.active,.vendor-shell-sub button.active{
+  background:var(--tp-accent-soft)!important;
+  color:var(--tp-accent)!important;
+  font-weight:800
+}
+.legend i{background:var(--tp-accent)!important}
+
+/* En oscuro mantenemos legibilidad independiente del acento. */
+html[data-vendor-theme="dark"] .logout,
+html[data-vendor-theme="dark"] .vendor-shell-logout{background:var(--tp-surface)!important}
+html[data-vendor-theme="dark"] .donut:after{background:var(--tp-surface)!important}
+html[data-vendor-theme="dark"] .chart{
+  border-color:var(--tp-line);background:repeating-linear-gradient(to bottom,transparent 0,transparent 49px,var(--tp-line) 50px)
+}
+html[data-vendor-theme="dark"] .product-row:hover,
+html[data-vendor-theme="dark"] .product-row.sales-open,
+html[data-vendor-theme="dark"] .sales-expand-row{background:var(--tp-surface-2)!important}
+html[data-vendor-theme="dark"] .code,
+html[data-vendor-theme="dark"] .date-box,
+html[data-vendor-theme="dark"] .menu-btn,
+html[data-vendor-theme="dark"] .top-icon{color:var(--tp-text-secondary)!important}
+
+/* Colores semánticos (éxito, advertencia, error, estados) permanecen sin cambios. */

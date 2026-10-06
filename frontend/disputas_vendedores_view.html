@@ -1,0 +1,234 @@
+<section class="disputas-vendedores-pro">
+  <style>
+    .disputas-vendedores-pro{display:grid;gap:18px;width:100%;max-width:100%;overflow-x:hidden;}
+    .disputas-hero{position:relative;overflow:hidden;display:flex;justify-content:space-between;gap:18px;align-items:flex-start;background:linear-gradient(135deg,#3a4270,#2a3042);border:1px solid rgba(166,176,207,.14);border-radius:22px;padding:24px;box-shadow:0 10px 24px rgba(0,0,0,.18);}
+    .disputas-hero h2{font-size:clamp(23px,2vw,30px);line-height:1.1;margin-bottom:8px;color:#fff;}
+    .disputas-hero p{color:#cbd5e1;line-height:1.45;max-width:760px;}
+    .disputas-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 13px;border-radius:999px;background:rgba(15,23,42,.36);border:1px solid rgba(166,176,207,.16);color:#dbeafe;font-weight:900;white-space:nowrap;}
+    .disputas-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+    .disputas-kpi{position:relative;overflow:hidden;min-height:112px;background:rgba(42,48,66,.88);border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:18px;box-shadow:0 10px 24px rgba(0,0,0,.16);}
+    .disputas-kpi::after{content:"";position:absolute;right:-28px;bottom:-38px;width:98px;height:98px;border-radius:999px;background:rgba(85,110,230,.16);}
+    .disputas-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042);}
+    .disputas-kpi.rojo{background:linear-gradient(135deg,#f46a6a,#2a3042);}
+    .disputas-kpi.verde{background:linear-gradient(135deg,#34c38f,#2a3042);}
+    .disputas-kpi small{display:block;color:#dbeafe;text-transform:uppercase;font-weight:900;letter-spacing:.04em;font-size:12px;}
+    .disputas-kpi strong{display:block;color:#fff;font-size:28px;margin-top:8px;}
+    .disputas-kpi span{display:block;color:#cbd5e1;font-size:13px;margin-top:7px;}
+    .disputas-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(42,48,66,.86);border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:14px;box-shadow:0 10px 24px rgba(0,0,0,.16);}
+    .disputas-search{min-width:min(360px,100%);flex:1;display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.36);border:1px solid rgba(166,176,207,.14);border-radius:13px;padding:10px 12px;color:#cbd5e1;}
+    .disputas-search input{width:100%;border:0;outline:0;background:transparent;color:#fff;font-weight:800;}
+    .disputas-filtros{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .disputas-filtro{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.36);color:#cbd5e1;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer;}
+    .disputas-filtro.active,.disputas-filtro:hover{background:#556ee6;color:#fff;border-color:rgba(125,211,252,.24);}
+    .disputas-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(340px,.6fr);gap:18px;align-items:start;}
+    .disputas-panel{background:rgba(42,48,66,.86);border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:18px;box-shadow:0 10px 24px rgba(0,0,0,.16);min-width:0;}
+    .disputas-panel h3{color:#fff;font-size:20px;margin-bottom:5px;}
+    .disputas-panel p{color:#a6b0cf;font-size:13px;line-height:1.45;}
+    .disputas-table-wrap{overflow-x:auto;margin-top:14px;border-radius:15px;border:1px solid rgba(166,176,207,.10);}
+    .disputas-table{width:100%;border-collapse:collapse;min-width:920px;}
+    .disputas-table th,.disputas-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap;}
+    .disputas-table th{background:rgba(15,23,42,.34);color:#8da0ff;text-transform:uppercase;font-size:12px;letter-spacing:.04em;}
+    .disputas-table td{color:#e5e7eb;font-weight:750;font-size:13px;}
+    .disputa-row{cursor:pointer;transition:.18s ease;}
+    .disputa-row:hover td{background:rgba(85,110,230,.10);}
+    .pill{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);font-size:12px;font-weight:900;color:#dbeafe;}
+    .pill.alta{background:rgba(244,106,106,.14);color:#fecaca;border-color:rgba(244,106,106,.28);}
+    .pill.media{background:rgba(241,180,76,.14);color:#fde68a;border-color:rgba(241,180,76,.25);}
+    .pill.baja{background:rgba(52,195,143,.14);color:#bbf7d0;border-color:rgba(52,195,143,.25);}
+    .pill.azul{background:rgba(80,165,241,.14);color:#bfdbfe;border-color:rgba(80,165,241,.25);}
+    .detalle-box{display:grid;gap:14px;margin-top:14px;}
+    .detalle-card{background:rgba(15,23,42,.30);border:1px solid rgba(166,176,207,.10);border-radius:15px;padding:14px;}
+    .detalle-card h4{color:#fff;margin-bottom:10px;font-size:14px;}
+    .detalle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .detalle-item{min-width:0;}
+    .detalle-item small{display:block;color:#8da0ff;text-transform:uppercase;font-size:10px;font-weight:900;letter-spacing:.04em;margin-bottom:4px;}
+    .detalle-item strong{display:block;color:#e5e7eb;font-size:13px;overflow-wrap:anywhere;}
+    .timeline{display:grid;gap:10px;}
+    .timeline-item{display:grid;grid-template-columns:10px 1fr;gap:10px;align-items:start;}
+    .timeline-dot{width:9px;height:9px;border-radius:999px;background:#50a5f1;margin-top:5px;box-shadow:0 0 18px rgba(80,165,241,.38);}
+    .timeline-item strong{display:block;color:#fff;font-size:13px;}
+    .timeline-item span{display:block;color:#a6b0cf;font-size:12px;margin-top:3px;line-height:1.35;}
+    .acciones-detalle{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .btn-disputa{border:1px solid rgba(166,176,207,.14);border-radius:12px;background:rgba(15,23,42,.35);color:#fff;padding:10px 12px;font-weight:900;cursor:pointer;}
+    .btn-disputa:hover{background:#556ee6;}
+    .btn-disputa.rojo:hover{background:#f46a6a;}
+    .btn-disputa.verde:hover{background:#34c38f;}
+    .empty-detail{min-height:300px;display:grid;place-items:center;text-align:center;color:#a6b0cf;border:1px dashed rgba(166,176,207,.16);border-radius:16px;padding:20px;font-weight:800;}
+    @media(max-width:1180px){.disputas-kpis{grid-template-columns:repeat(2,minmax(0,1fr));}.disputas-layout{grid-template-columns:1fr;}}
+    @media(max-width:760px){.disputas-hero{flex-direction:column;padding:18px;}.disputas-kpis{grid-template-columns:1fr;}.disputas-toolbar{align-items:stretch;}.disputas-filtros,.disputas-search{width:100%;}.disputas-filtro{flex:1 1 auto;}.detalle-grid,.acciones-detalle{grid-template-columns:1fr;}}
+  </style>
+
+  <div class="disputas-hero">
+    <div>
+      <h2>⚖️ Disputas de vendedores</h2>
+      <p>Control de conflictos entre vendedor, cliente, plataforma y logística. Esta vista queda preparada para revisar evidencias, responsables, resolución y bitácora.</p>
+    </div>
+    <div class="disputas-badge">Módulo visual preparado</div>
+  </div>
+
+  <div class="disputas-kpis">
+    <div class="disputas-kpi destacado"><small>Disputas abiertas</small><strong id="kpiAbiertas">8</strong><span>Requieren seguimiento</span></div>
+    <div class="disputas-kpi rojo"><small>Prioridad alta/crítica</small><strong id="kpiCriticas">3</strong><span>Atención inmediata</span></div>
+    <div class="disputas-kpi"><small>En investigación</small><strong id="kpiInvestigacion">5</strong><span>Con responsable asignado</span></div>
+    <div class="disputas-kpi verde"><small>Resueltas</small><strong id="kpiResueltas">14</strong><span>Último período</span></div>
+  </div>
+
+  <div class="dashboard-filtros-panel">
+    <div class="dashboard-periodos">
+      <button class="dashboard-filter-btn active" data-periodo="dia">Día</button>
+      <button class="dashboard-filter-btn" data-periodo="mes">Mes</button>
+      <button class="dashboard-filter-btn" data-periodo="anio">Año</button>
+    </div>
+    <div class="dashboard-alcance">
+      <label class="dashboard-date-field">Desde <input id="disputasDesde" type="date"></label>
+      <label class="dashboard-date-field">Hasta <input id="disputasHasta" type="date"></label>
+    </div>
+    <div class="disputas-badge" id="disputasFiltroActivo">Filtro activo: Día</div>
+  </div>
+
+  <div class="disputas-toolbar">
+    <label class="disputas-search">🔎 <input id="buscarDisputa" type="search" placeholder="Buscar por ID, vendedor, cliente o pedido..."></label>
+    <div class="disputas-filtros">
+      <button class="disputas-filtro active" data-estado="todos">Todos</button>
+      <button class="disputas-filtro" data-estado="Abierta">Abiertas</button>
+      <button class="disputas-filtro" data-estado="En investigación">Investigación</button>
+      <button class="disputas-filtro" data-estado="Esperando respuesta">Esperando</button>
+      <button class="disputas-filtro" data-estado="Resuelta">Resueltas</button>
+    </div>
+  </div>
+
+  <div class="disputas-layout">
+    <div class="disputas-panel">
+      <h3>Listado de disputas</h3>
+      <p>Al presionar una disputa se muestra el detalle en el panel derecho. Los datos son de ejemplo hasta conectar con base de datos.</p>
+      <div class="disputas-table-wrap">
+        <table class="disputas-table">
+          <thead><tr><th>ID</th><th>Tipo</th><th>Pedido</th><th>Vendedor</th><th>Cliente</th><th>Estado</th><th>Prioridad</th><th>Fecha</th></tr></thead>
+          <tbody id="tablaDisputas"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="disputas-panel" id="detalleDisputa">
+      <div class="empty-detail">Selecciona una disputa para ver información general, participantes, evidencias, resolución y bitácora.</div>
+    </aside>
+  </div>
+
+  <script>
+  (() => {
+    const disputas = [
+      {id:'DSP-00041',tipo:'Cliente vs Vendedor',pedido:'PED-2026-00154',vendedor:'Tech Store SV',cliente:'Mario R.',estado:'Abierta',prioridad:'Alta',fecha:'2026-07-02',liquidacion:'LIQ-2026-0091',responsable:'Soporte Ana',motivo:'Producto recibido diferente al publicado.',evidencias:'3 fotos, 1 video',resolucion:'Pendiente de respuesta del vendedor'},
+      {id:'DSP-00040',tipo:'Vendedor vs Plataforma',pedido:'PED-2026-00149',vendedor:'Artesanías Luna',cliente:'—',estado:'En investigación',prioridad:'Media',fecha:'2026-07-01',liquidacion:'LIQ-2026-0088',responsable:'Admin Carlos',motivo:'Vendedor reclama saldo retenido.',evidencias:'Comprobante bancario',resolucion:'Revisando cálculo de comisión'},
+      {id:'DSP-00039',tipo:'Vendedor vs Logística',pedido:'PED-2026-00143',vendedor:'Moda Express',cliente:'Laura M.',estado:'Esperando respuesta',prioridad:'Alta',fecha:'2026-06-30',liquidacion:'—',responsable:'Soporte Kevin',motivo:'Paquete dañado durante traslado.',evidencias:'Fotos del empaque',resolucion:'Esperando informe logístico'},
+      {id:'DSP-00038',tipo:'Plataforma vs Vendedor',pedido:'PED-2026-00139',vendedor:'Gadgets Pro',cliente:'Carlos P.',estado:'Abierta',prioridad:'Crítica',fecha:'2026-06-29',liquidacion:'LIQ-2026-0081',responsable:'Supervisor',motivo:'Posible incumplimiento de entrega.',evidencias:'Historial de mensajes',resolucion:'Evaluando penalización'},
+      {id:'DSP-00037',tipo:'Cliente vs Vendedor',pedido:'PED-2026-00131',vendedor:'Casa Bella',cliente:'Diana V.',estado:'Resuelta',prioridad:'Baja',fecha:'2026-06-27',liquidacion:'—',responsable:'Soporte Ana',motivo:'Retraso en confirmación de envío.',evidencias:'Conversación interna',resolucion:'Se cerró con compensación parcial'}
+    ];
+    let estadoActual = 'todos';
+    const tabla = document.getElementById('tablaDisputas');
+    const detalle = document.getElementById('detalleDisputa');
+    const buscar = document.getElementById('buscarDisputa');
+    const filtroActivo = document.getElementById('disputasFiltroActivo');
+    const desde = document.getElementById('disputasDesde');
+    const hasta = document.getElementById('disputasHasta');
+
+    function hoy(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+    if(desde) desde.value = hoy();
+    if(hasta) hasta.value = hoy();
+
+    function clasePrioridad(p){
+      if(p === 'Alta' || p === 'Crítica') return 'alta';
+      if(p === 'Media') return 'media';
+      return 'baja';
+    }
+    function claseEstado(e){
+      if(e === 'Resuelta') return 'baja';
+      if(e === 'En investigación') return 'azul';
+      if(e === 'Esperando respuesta') return 'media';
+      return 'alta';
+    }
+    function filtrar(){
+      const q = (buscar?.value || '').toLowerCase().trim();
+      return disputas.filter(d => {
+        const coincideEstado = estadoActual === 'todos' || d.estado === estadoActual;
+        const texto = `${d.id} ${d.tipo} ${d.pedido} ${d.vendedor} ${d.cliente}`.toLowerCase();
+        return coincideEstado && (!q || texto.includes(q));
+      });
+    }
+    function renderTabla(){
+      const rows = filtrar();
+      tabla.innerHTML = rows.map(d => `
+        <tr class="disputa-row" data-id="${d.id}">
+          <td>${d.id}</td><td>${d.tipo}</td><td>${d.pedido}</td><td>${d.vendedor}</td><td>${d.cliente}</td>
+          <td><span class="pill ${claseEstado(d.estado)}">${d.estado}</span></td>
+          <td><span class="pill ${clasePrioridad(d.prioridad)}">${d.prioridad}</span></td><td>${d.fecha}</td>
+        </tr>`).join('') || `<tr><td colspan="8">No hay disputas con estos filtros.</td></tr>`;
+      tabla.querySelectorAll('.disputa-row').forEach(row => row.addEventListener('click', () => renderDetalle(row.dataset.id)));
+    }
+    function renderDetalle(id){
+      const d = disputas.find(x => x.id === id);
+      if(!d) return;
+      detalle.innerHTML = `
+        <h3>${d.id}</h3>
+        <p>${d.tipo} · ${d.estado}</p>
+        <div class="detalle-box">
+          <div class="detalle-card">
+            <h4>Información general</h4>
+            <div class="detalle-grid">
+              <div class="detalle-item"><small>Pedido</small><strong>${d.pedido}</strong></div>
+              <div class="detalle-item"><small>Liquidación</small><strong>${d.liquidacion}</strong></div>
+              <div class="detalle-item"><small>Fecha</small><strong>${d.fecha}</strong></div>
+              <div class="detalle-item"><small>Responsable</small><strong>${d.responsable}</strong></div>
+            </div>
+          </div>
+          <div class="detalle-card">
+            <h4>Participantes</h4>
+            <div class="detalle-grid">
+              <div class="detalle-item"><small>Vendedor</small><strong>${d.vendedor}</strong></div>
+              <div class="detalle-item"><small>Cliente</small><strong>${d.cliente}</strong></div>
+            </div>
+          </div>
+          <div class="detalle-card">
+            <h4>Motivo y evidencias</h4>
+            <div class="detalle-grid">
+              <div class="detalle-item"><small>Motivo</small><strong>${d.motivo}</strong></div>
+              <div class="detalle-item"><small>Evidencias</small><strong>${d.evidencias}</strong></div>
+            </div>
+          </div>
+          <div class="detalle-card">
+            <h4>Resolución</h4>
+            <div class="detalle-item"><small>Estado de resolución</small><strong>${d.resolucion}</strong></div>
+          </div>
+          <div class="detalle-card">
+            <h4>Bitácora preliminar</h4>
+            <div class="timeline">
+              <div class="timeline-item"><span class="timeline-dot"></span><div><strong>Disputa creada</strong><span>${d.fecha} · Sistema registró el caso.</span></div></div>
+              <div class="timeline-item"><span class="timeline-dot"></span><div><strong>Responsable asignado</strong><span>${d.responsable} quedó a cargo del seguimiento.</span></div></div>
+              <div class="timeline-item"><span class="timeline-dot"></span><div><strong>Última actualización</strong><span>${d.resolucion}</span></div></div>
+            </div>
+          </div>
+          <div class="acciones-detalle">
+            <button class="btn-disputa verde">Marcar resuelta</button>
+            <button class="btn-disputa">Solicitar evidencia</button>
+            <button class="btn-disputa">Escalar caso</button>
+            <button class="btn-disputa rojo">Cerrar disputa</button>
+          </div>
+        </div>`;
+    }
+    document.querySelectorAll('.disputas-filtro').forEach(btn => btn.addEventListener('click', () => {
+      estadoActual = btn.dataset.estado;
+      document.querySelectorAll('.disputas-filtro').forEach(b => b.classList.toggle('active', b === btn));
+      renderTabla();
+    }));
+    document.querySelectorAll('.dashboard-filter-btn').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.dashboard-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      if(filtroActivo) filtroActivo.textContent = `Filtro activo: ${btn.textContent}`;
+    }));
+    [desde,hasta].forEach(input => input?.addEventListener('change', () => {
+      if(filtroActivo) filtroActivo.textContent = `Filtro activo: ${desde.value || '—'} a ${hasta.value || '—'}`;
+    }));
+    buscar?.addEventListener('input', renderTabla);
+    renderTabla();
+    if(disputas[0]) renderDetalle(disputas[0].id);
+  })();
+  </script>
+</section>

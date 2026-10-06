@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="css/configuracion.css?v=138">
+<section class="section branding-settings" id="brandingSettings">
+  <h2>Configuración</h2>
+  <form id="brandingForm">
+    <h3>Logo de Market</h3>
+    <div class="branding-settings-preview"><span id="brandingDefault" aria-label="Logo temporal de Market">M</span><img id="brandingPreview" alt="Logo de Market" hidden></div>
+    <label for="brandingFile">Imagen del logo</label>
+    <input id="brandingFile" type="file" accept="image/png,image/jpeg,image/webp">
+    <div class="branding-settings-actions"><button type="submit" id="brandingSave" disabled>Guardar logo</button><button type="button" id="brandingReset" disabled>Restaurar logo original</button></div>
+    <p class="branding-settings-status" id="brandingStatus" role="status" aria-live="polite"></p>
+  </form>
+</section>
+<script src="js/configuracion.js?v=138"></script>

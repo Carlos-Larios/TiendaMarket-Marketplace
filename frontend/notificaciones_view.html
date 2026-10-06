@@ -1,0 +1,426 @@
+<section class="notificaciones-pro">
+  <style>
+    .notificaciones-pro{display:grid;gap:18px;}
+    .notificaciones-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#2f3a67,#2a3042);border:1px solid rgba(166,176,207,.12);border-radius:24px;padding:30px;box-shadow:var(--shadow);}
+    .notificaciones-hero::after{content:"";position:absolute;right:-90px;bottom:-130px;width:280px;height:280px;border-radius:999px;background:rgba(80,165,241,.14);}
+    .notificaciones-hero .eyebrow{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(80,165,241,.14);border:1px solid rgba(80,165,241,.24);color:#dbeafe;font-weight:900;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+    .notificaciones-hero h2{font-size:clamp(28px,4vw,42px);letter-spacing:-1px;margin-bottom:8px;}
+    .notificaciones-hero p{color:#cbd5e1;line-height:1.65;max-width:840px;}
+
+    .notificaciones-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+    .noti-kpi{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);min-height:112px;}
+    .noti-kpi::after{content:"";position:absolute;right:-35px;bottom:-45px;width:120px;height:120px;border-radius:999px;background:rgba(85,110,230,.14);}
+    .noti-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042);}
+    .noti-kpi span{display:block;color:#dbeafe;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+    .noti-kpi strong{display:block;margin-top:9px;color:#fff;font-size:30px;letter-spacing:-.5px;}
+    .noti-kpi small{display:block;margin-top:7px;color:#a6b0cf;font-weight:800;}
+
+    .notificaciones-filtros{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow);}
+    .noti-periodos,.noti-rango,.noti-tipos{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .noti-btn{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#cbd5e1;padding:10px 13px;border-radius:12px;cursor:pointer;font-weight:900;transition:.2s ease;}
+    .noti-btn:hover,.noti-btn.active{color:#fff;background:var(--primary);border-color:rgba(125,211,252,.24);}
+    .noti-date{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(166,176,207,.14);color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase;}
+    .noti-date input{border:0;outline:0;color:#fff;background:transparent;font-weight:900;color-scheme:dark;}
+
+    .notificaciones-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,.6fr);gap:18px;align-items:start;}
+    .noti-panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);min-width:0;}
+    .noti-panel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px;}
+    .noti-panel-head h3{color:#fff;font-size:20px;letter-spacing:-.4px;}
+    .noti-panel-head p{color:var(--muted);margin-top:5px;font-size:13px;line-height:1.5;}
+
+    .noti-search{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+    .noti-search input,.noti-search select{background:rgba(15,23,42,.38);border:1px solid rgba(166,176,207,.14);border-radius:12px;color:#fff;padding:12px 13px;outline:0;font-weight:800;}
+    .noti-search input{flex:1 1 280px;}
+    .noti-search select{min-width:180px;color-scheme:dark;}
+
+    .noti-table-wrap{width:100%;overflow-x:auto;}
+    .noti-table{width:100%;min-width:1080px;border-collapse:separate;border-spacing:0;}
+    .noti-table th,.noti-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap;}
+    .noti-table th{color:#8da0ff;font-size:12px;text-transform:uppercase;letter-spacing:.04em;background:rgba(15,23,42,.38);}
+    .noti-row{cursor:pointer;transition:.18s ease;}
+    .noti-row:hover td{background:rgba(85,110,230,.08);}
+    .noti-row.sin-leer td:first-child{position:relative;}
+    .noti-row.sin-leer td:first-child::before{content:"";position:absolute;left:3px;top:50%;width:7px;height:7px;border-radius:999px;background:#50a5f1;box-shadow:0 0 12px rgba(80,165,241,.6);transform:translateY(-50%);}
+
+    .tipo-chip{display:inline-flex;align-items:center;gap:7px;font-weight:900;color:#e5e7eb;}
+    .tipo-icon{width:28px;height:28px;border-radius:10px;display:inline-grid;place-items:center;background:rgba(85,110,230,.16);border:1px solid rgba(166,176,207,.12);}
+    .prioridad,.estado-noti,.accion-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900;border:1px solid transparent;}
+    .p-critica{background:rgba(244,106,106,.14);color:#fecaca;border-color:rgba(244,106,106,.25);}
+    .p-alta{background:rgba(249,115,22,.14);color:#fed7aa;border-color:rgba(249,115,22,.24);}
+    .p-media{background:rgba(241,180,76,.14);color:#fde68a;border-color:rgba(241,180,76,.24);}
+    .p-baja{background:rgba(52,195,143,.14);color:#bbf7d0;border-color:rgba(52,195,143,.24);}
+    .e-leida{background:rgba(148,163,184,.14);color:#cbd5e1;border-color:rgba(148,163,184,.18);}
+    .e-nueva{background:rgba(80,165,241,.14);color:#bfdbfe;border-color:rgba(80,165,241,.24);}
+    .e-resuelta{background:rgba(52,195,143,.14);color:#bbf7d0;border-color:rgba(52,195,143,.24);}
+    .a-no{background:rgba(52,195,143,.14);color:#bbf7d0;border-color:rgba(52,195,143,.24);}
+    .a-revision{background:rgba(241,180,76,.14);color:#fde68a;border-color:rgba(241,180,76,.24);}
+    .a-inmediata{background:rgba(244,106,106,.14);color:#fecaca;border-color:rgba(244,106,106,.25);}
+    .noti-action{border:1px solid rgba(125,211,252,.22);background:rgba(80,165,241,.10);color:#bfdbfe;border-radius:10px;padding:8px 10px;font-weight:900;cursor:pointer;transition:.2s ease;}
+    .noti-action:hover{background:rgba(80,165,241,.20);color:#fff;}
+
+    .noti-side{display:grid;gap:18px;}
+    .pin-list,.activity-list-noti{display:grid;gap:12px;}
+    .pin-item,.activity-noti{padding:13px;border-radius:14px;background:rgba(15,23,42,.34);border:1px solid rgba(166,176,207,.10);}
+    .pin-item strong,.activity-noti strong{display:block;color:#fff;font-size:14px;}
+    .pin-item span,.activity-noti span{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.45;}
+    .pin-item{border-color:rgba(241,180,76,.22);}
+    .activity-noti{display:grid;grid-template-columns:10px 1fr;gap:10px;align-items:start;}
+    .activity-noti i{width:9px;height:9px;border-radius:999px;background:#34c38f;margin-top:4px;box-shadow:0 0 14px rgba(52,195,143,.45);}
+
+    .noti-modal-overlay{position:fixed;inset:0;background:rgba(2,6,23,.66);backdrop-filter:blur(4px);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;}
+    .noti-modal-overlay.visible{display:flex;}
+    .noti-modal{width:min(1060px,100%);max-height:92vh;overflow:auto;background:linear-gradient(180deg,#2a3042,#222736);border:1px solid rgba(166,176,207,.16);border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.48);}
+    .noti-modal-head{position:relative;overflow:hidden;padding:24px;border-bottom:1px solid rgba(166,176,207,.12);background:linear-gradient(135deg,rgba(85,110,230,.42),rgba(15,23,42,.10));}
+    .noti-modal-head::after{content:"";position:absolute;right:-70px;top:-90px;width:220px;height:220px;border-radius:999px;background:rgba(80,165,241,.16);}
+    .noti-modal-top{position:relative;z-index:1;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;}
+    .noti-modal-id{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+    .noti-modal-id b{color:#fff;font-size:14px;letter-spacing:.04em;}
+    .noti-modal-head h3{position:relative;z-index:1;color:#fff;font-size:26px;letter-spacing:-.7px;margin-bottom:8px;}
+    .noti-modal-head p{position:relative;z-index:1;color:#dbeafe;line-height:1.6;max-width:760px;}
+    .noti-close{position:relative;z-index:2;border:1px solid rgba(255,255,255,.14);background:rgba(15,23,42,.35);color:#fff;width:42px;height:42px;border-radius:14px;font-size:22px;cursor:pointer;}
+    .noti-modal-body{padding:22px;display:grid;gap:18px;}
+    .noti-modal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+    .noti-box{background:rgba(15,23,42,.28);border:1px solid rgba(166,176,207,.12);border-radius:18px;padding:16px;min-width:0;}
+    .noti-box h4{color:#fff;margin-bottom:12px;font-size:16px;letter-spacing:-.2px;}
+    .noti-info-list{display:grid;gap:10px;}
+    .noti-info-row{display:flex;justify-content:space-between;gap:16px;padding-bottom:9px;border-bottom:1px dashed rgba(166,176,207,.12);}
+    .noti-info-row:last-child{border-bottom:0;padding-bottom:0;}
+    .noti-info-row span{color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+    .noti-info-row strong{color:#fff;text-align:right;}
+    .noti-route{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px;}
+    .noti-route span{padding:8px 10px;border-radius:12px;background:rgba(85,110,230,.14);border:1px solid rgba(85,110,230,.18);color:#dbeafe;font-weight:900;}
+    .noti-route i{color:#8da0ff;font-style:normal;font-weight:900;}
+    .timeline-noti{display:grid;gap:12px;position:relative;padding-left:18px;}
+    .timeline-noti::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:rgba(148,163,184,.18);}
+    .time-item{position:relative;display:grid;gap:3px;}
+    .time-item::before{content:"";position:absolute;left:-17px;top:5px;width:10px;height:10px;border-radius:999px;background:#50a5f1;box-shadow:0 0 12px rgba(80,165,241,.55);}
+    .time-item strong{color:#fff;font-size:13px;}
+    .time-item span{color:var(--muted);font-size:12px;line-height:1.4;}
+    .noti-actions-modal{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:4px;}
+    .noti-primary-action,.noti-secondary-action{border:1px solid transparent;border-radius:14px;padding:12px 16px;font-weight:900;cursor:pointer;transition:.2s ease;}
+    .noti-primary-action{background:linear-gradient(135deg,#556ee6,#50a5f1);color:#fff;box-shadow:0 12px 28px rgba(80,165,241,.18);}
+    .noti-secondary-action{background:rgba(15,23,42,.35);border-color:rgba(166,176,207,.14);color:#cbd5e1;}
+    .noti-primary-action:hover,.noti-secondary-action:hover{transform:translateY(-2px);filter:brightness(1.06);}
+    .noti-toast{position:fixed;right:22px;top:22px;z-index:5000;background:linear-gradient(135deg,rgba(15,23,42,.96),rgba(30,41,59,.94));border:1px solid rgba(80,165,241,.28);box-shadow:0 20px 50px rgba(0,0,0,.38);color:#dbeafe;border-radius:16px;padding:13px 15px;max-width:360px;display:none;}
+    .noti-toast.visible{display:block;}
+    .noti-toast strong{display:block;color:#86efac;margin-bottom:4px;}
+    .noti-destino-json{display:none;}
+
+    @media(max-width:1180px){.notificaciones-layout{grid-template-columns:1fr}.notificaciones-kpis{grid-template-columns:repeat(2,1fr)}.noti-modal-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:680px){.notificaciones-kpis{grid-template-columns:1fr}.notificaciones-filtros{align-items:stretch}.noti-periodos,.noti-rango,.noti-tipos{width:100%}.noti-btn,.noti-date{flex:1 1 auto;justify-content:center}.noti-modal-grid{grid-template-columns:1fr}.noti-modal-head h3{font-size:22px}.noti-actions-modal{flex-direction:column}.noti-primary-action,.noti-secondary-action{width:100%}}
+  </style>
+
+  <div class="notificaciones-hero">
+    <span class="eyebrow">Centro de control</span>
+    <h2>Centro de Notificaciones</h2>
+    <p>Panel central para alertas de pedidos, vendedores, pagos, postventa, usuarios, seguridad y sistema. Cada notificación queda preparada con destino interno para abrir el módulo correcto cuando conectemos las acciones.</p>
+  </div>
+
+  <div class="notificaciones-kpis">
+    <div class="noti-kpi destacado"><span>Total</span><strong>128</strong><small>Notificaciones generadas</small></div>
+    <div class="noti-kpi"><span>Sin leer</span><strong>34</strong><small>Requieren revisión</small></div>
+    <div class="noti-kpi"><span>Críticas</span><strong>7</strong><small>Prioridad inmediata</small></div>
+    <div class="noti-kpi"><span>Resueltas</span><strong>87</strong><small>Cerradas este período</small></div>
+  </div>
+
+  <div class="notificaciones-filtros">
+    <div class="noti-periodos">
+      <button class="noti-btn active" data-periodo="dia">Día</button>
+      <button class="noti-btn" data-periodo="mes">Mes</button>
+      <button class="noti-btn" data-periodo="anio">Año</button>
+    </div>
+    <div class="noti-rango">
+      <label class="noti-date">Desde <input type="date"></label>
+      <label class="noti-date">Hasta <input type="date"></label>
+    </div>
+    <div class="noti-tipos">
+      <button class="noti-btn active" data-tipo="todas">Todas</button>
+      <button class="noti-btn" data-tipo="pedidos">Pedidos</button>
+      <button class="noti-btn" data-tipo="vendedores">Vendedores</button>
+      <button class="noti-btn" data-tipo="postventa">Postventa</button>
+      <button class="noti-btn" data-tipo="seguridad">Seguridad</button>
+    </div>
+  </div>
+
+  <div class="notificaciones-layout">
+    <div class="noti-panel">
+      <div class="noti-panel-head">
+        <div>
+          <h3>Notificaciones recientes</h3>
+          <p>Listado visual preparado para acciones rápidas, base de datos y navegación directa al registro relacionado.</p>
+        </div>
+      </div>
+      <div class="noti-search">
+        <input id="notiBuscar" type="search" placeholder="Buscar por pedido, cliente, vendedor, empleado o descripción...">
+        <select id="notiPrioridad">
+          <option value="todas">Todas las prioridades</option>
+          <option value="Crítica">Crítica</option>
+          <option value="Alta">Alta</option>
+          <option value="Media">Media</option>
+          <option value="Baja">Baja</option>
+        </select>
+      </div>
+      <div class="noti-table-wrap">
+        <table class="noti-table">
+          <thead>
+            <tr><th>ID</th><th>Prioridad</th><th>Tipo</th><th>Descripción</th><th>Relacionado</th><th>Acción requerida</th><th>Estado</th><th>Fecha</th><th>Destino</th><th>Acción</th></tr>
+          </thead>
+          <tbody id="notificacionesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="noti-side">
+      <div class="noti-panel">
+        <div class="noti-panel-head"><div><h3>📌 Fijadas</h3><p>Alertas que el administrador decide mantener arriba.</p></div></div>
+        <div class="pin-list">
+          <div class="pin-item"><strong>Liquidación retenida</strong><span>Vendedor TecnoSV tiene $842.50 retenidos por revisión.</span></div>
+          <div class="pin-item"><strong>Disputa crítica</strong><span>Pedido #TP-4587 requiere decisión del administrador.</span></div>
+          <div class="pin-item"><strong>Inventario bajo</strong><span>5 productos están por debajo del mínimo recomendado.</span></div>
+        </div>
+      </div>
+      <div class="noti-panel">
+        <div class="noti-panel-head"><div><h3>Actividad en tiempo real</h3><p>Simulación visual preparada para actualizaciones en vivo.</p></div></div>
+        <div class="activity-list-noti">
+          <div class="activity-noti"><i></i><div><strong>Hace 5 segundos</strong><span>Nuevo pedido #TP-4591 recibido.</span></div></div>
+          <div class="activity-noti"><i></i><div><strong>Hace 1 minuto</strong><span>Solicitud de vendedor recibida.</span></div></div>
+          <div class="activity-noti"><i></i><div><strong>Hace 3 minutos</strong><span>Liquidación aprobada por finanzas.</span></div></div>
+          <div class="activity-noti"><i></i><div><strong>Hace 6 minutos</strong><span>Cliente abrió un caso de devolución.</span></div></div>
+          <div class="activity-noti"><i></i><div><strong>Hace 8 minutos</strong><span>Empleado inició sesión correctamente.</span></div></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="noti-modal-overlay" id="notiModalOverlay" aria-hidden="true">
+    <div class="noti-modal" role="dialog" aria-modal="true" aria-labelledby="notiModalTitulo">
+      <div class="noti-modal-head">
+        <div class="noti-modal-top">
+          <div>
+            <div class="noti-modal-id" id="notiModalBadges"></div>
+            <h3 id="notiModalTitulo">Detalle de notificación</h3>
+            <p id="notiModalDescripcion"></p>
+          </div>
+          <button class="noti-close" id="notiCerrarModal" type="button">×</button>
+        </div>
+      </div>
+      <div class="noti-modal-body">
+        <div class="noti-modal-grid">
+          <div class="noti-box">
+            <h4>Relacionado con</h4>
+            <div class="noti-info-list" id="notiRelacionado"></div>
+          </div>
+          <div class="noti-box">
+            <h4>Acción requerida</h4>
+            <div class="noti-info-list" id="notiAccionRequerida"></div>
+          </div>
+          <div class="noti-box">
+            <h4>Destino</h4>
+            <div class="noti-route" id="notiDestinoRuta"></div>
+            <div class="noti-info-list" style="margin-top:14px" id="notiDestinoMeta"></div>
+          </div>
+        </div>
+
+        <div class="noti-box">
+          <h4>Historial de la notificación</h4>
+          <div class="timeline-noti" id="notiTimeline"></div>
+        </div>
+
+        <pre class="noti-destino-json" id="notiDestinoJson"></pre>
+
+        <div class="noti-actions-modal">
+          <div>
+            <button class="noti-secondary-action" id="notiMarcarLeida" type="button">Marcar como leída</button>
+            <button class="noti-secondary-action" id="notiFijar" type="button">Fijar</button>
+            <button class="noti-secondary-action" id="notiArchivar" type="button">Archivar</button>
+          </div>
+          <button class="noti-primary-action" id="notiAbrirDestino" type="button">Abrir registro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="noti-toast" id="notiToast"><strong>Preparado</strong><span>Función disponible próximamente.</span></div>
+</section>
+
+<script>
+(() => {
+  const datos = [
+    {
+      id:'NOT-001', prioridad:'Crítica', tipo:'Disputas', icono:'⚠️', titulo:'Disputa crítica de pedido',
+      descripcion:'El cliente abrió una disputa indicando que recibió el producto con daños físicos en el embalaje. Requiere revisión antes de 24 horas.',
+      relacionado:'Pedido #TP-4587', estado:'Nueva', fecha:'Hoy 10:35', accionNivel:'Acción inmediata', accionTexto:'Resolver antes de 24 horas.', boton:'Abrir disputa',
+      destino:{modulo:'Vendedores', vista:'disputas_vendedores_view.html', seccion:'Disputas', accion:'abrirDisputa', registro:'DIS-000023'},
+      relaciones:{Disputa:'DIS-000023', Pedido:'PED-000458', Cliente:'Carlos Pérez', Vendedor:'TecnoSV', Producto:'Monitor MSI 27"'},
+      historial:[['10:30','Disputa creada por el cliente'],['10:35','Evidencia recibida'],['10:41','Asignada a administración'],['Pendiente','Esperando resolución']]
+    },
+    {
+      id:'NOT-002', prioridad:'Alta', tipo:'Liquidaciones', icono:'💰', titulo:'Liquidación retenida',
+      descripcion:'La liquidación del vendedor fue retenida por reclamos recientes y necesita revisión del área financiera.',
+      relacionado:'TecnoSV', estado:'Nueva', fecha:'Hoy 09:48', accionNivel:'Revisión recomendada', accionTexto:'Validar reclamos antes de aprobar el pago.', boton:'Abrir liquidación',
+      destino:{modulo:'Vendedores', vista:'liquidaciones_vendedores_view.html', seccion:'Liquidaciones', accion:'abrirLiquidacion', registro:'LIQ-000071'},
+      relaciones:{Liquidación:'LIQ-000071', Vendedor:'TecnoSV', Monto:'$842.50', Estado:'Retenida', Corte:'Julio 2026'},
+      historial:[['09:30','Liquidación generada'],['09:42','Sistema detectó reclamos'],['09:48','Pago retenido'],['Pendiente','Revisión financiera']]
+    },
+    {
+      id:'NOT-003', prioridad:'Media', tipo:'Pedidos', icono:'📦', titulo:'Pedido con retraso de entrega',
+      descripcion:'El pedido superó el tiempo estimado de entrega y debe validarse con logística.',
+      relacionado:'Pedido #TP-4590', estado:'Leída', fecha:'Hoy 08:20', accionNivel:'Revisión recomendada', accionTexto:'Revisar estado de entrega y ruta logística.', boton:'Abrir pedido',
+      destino:{modulo:'Ventas', vista:'pedidos_view.html', seccion:'Pedidos', accion:'abrirPedido', registro:'PED-000459'},
+      relaciones:{Pedido:'PED-000459', Cliente:'María López', Ruta:'San Salvador', Estado:'En entrega', Logística:'Pendiente confirmar'},
+      historial:[['08:00','Retraso detectado'],['08:20','Notificación generada'],['08:35','Marcada como leída']]
+    },
+    {
+      id:'NOT-004', prioridad:'Crítica', tipo:'Seguridad', icono:'🔐', titulo:'Intentos fallidos repetidos',
+      descripcion:'Se detectaron varios intentos fallidos en una cuenta de empleado. Puede requerir bloqueo temporal o revisión de seguridad.',
+      relacionado:'Empleado soporte', estado:'Nueva', fecha:'Ayer 22:14', accionNivel:'Acción inmediata', accionTexto:'Revisar acceso y actividad de la cuenta.', boton:'Abrir empleado',
+      destino:{modulo:'Usuarios', vista:'empleados_view.html', seccion:'Empleados', accion:'abrirEmpleado', registro:'EMP-000018'},
+      relaciones:{Empleado:'Soporte 03', Área:'Postventa', Intentos:'7', IP:'Pendiente registrar', Estado:'Cuenta activa'},
+      historial:[['22:05','Primer intento fallido'],['22:10','Quinto intento fallido'],['22:14','Alerta crítica creada']]
+    },
+    {
+      id:'NOT-005', prioridad:'Alta', tipo:'Postventa', icono:'↩️', titulo:'Caso de devolución vencido',
+      descripcion:'Un caso de devolución superó el plazo interno de resolución y necesita intervención.',
+      relacionado:'Caso DEV-018', estado:'Nueva', fecha:'Ayer 17:02', accionNivel:'Acción inmediata', accionTexto:'Resolver o reasignar el caso.', boton:'Abrir caso',
+      destino:{modulo:'Postventa', vista:'devoluciones_view.html', seccion:'Casos', accion:'abrirCaso', registro:'DEV-000018'},
+      relaciones:{Caso:'DEV-000018', Pedido:'PED-000451', Cliente:'Andrea Rivas', Producto:'Audífonos X12', Estado:'En revisión'},
+      historial:[['Día 1','Caso recibido'],['Día 3','Evidencia agregada'],['Ayer 17:02','Plazo vencido']]
+    },
+    {
+      id:'NOT-006', prioridad:'Baja', tipo:'Usuarios', icono:'👤', titulo:'Cliente actualizó dirección',
+      descripcion:'El cliente actualizó su dirección principal. No requiere acción del administrador.',
+      relacionado:'Carlos M.', estado:'Resuelta', fecha:'Ayer 12:10', accionNivel:'No requiere acción', accionTexto:'Solo queda como registro informativo.', boton:'Ver detalle',
+      destino:{modulo:'Usuarios', vista:'clientes_view.html', seccion:'Clientes', accion:'verDetalle', registro:'CLI-000044'},
+      relaciones:{Cliente:'Carlos M.', Cambio:'Dirección principal', Ciudad:'Santa Tecla', Estado:'Actualizado'},
+      historial:[['12:08','Cliente editó dirección'],['12:10','Registro guardado'],['12:10','Notificación informativa cerrada']]
+    },
+    {
+      id:'NOT-007', prioridad:'Media', tipo:'Inventario', icono:'📊', titulo:'Producto con stock bajo',
+      descripcion:'Un producto llegó al mínimo recomendado de unidades disponibles.',
+      relacionado:'Audífonos X12', estado:'Leída', fecha:'01/07/2026', accionNivel:'Revisión recomendada', accionTexto:'Revisar reposición o publicación del producto.', boton:'Abrir inventario',
+      destino:{modulo:'Mi Tienda', vista:'inventario_fisico_view.html', seccion:'Inventario físico', accion:'abrirProductoInventario', registro:'INV-X12'},
+      relaciones:{Producto:'Audífonos X12', Disponibles:'2', Mínimo:'5', Estado:'Bajo stock'},
+      historial:[['01/07','Stock bajó a 2 unidades'],['01/07','Alerta generada']]
+    },
+    {
+      id:'NOT-008', prioridad:'Alta', tipo:'Vendedores', icono:'🏪', titulo:'Nueva solicitud de vendedor',
+      descripcion:'Un nuevo vendedor envió documentos y solicita acceso para publicar productos en la plataforma.',
+      relacionado:'Moda Bella', estado:'Nueva', fecha:'01/07/2026', accionNivel:'Revisión recomendada', accionTexto:'Revisar documentos y aprobar o rechazar la solicitud.', boton:'Abrir solicitud',
+      destino:{modulo:'Vendedores', vista:'solicitudes_vendedores_view.html', seccion:'Solicitudes', accion:'abrirSolicitud', registro:'SOL-000102'},
+      relaciones:{Solicitud:'SOL-000102', Tienda:'Moda Bella', Documento:'DUI / NIT', Estado:'Pendiente'},
+      historial:[['01/07','Solicitud enviada'],['01/07','Documentos recibidos'],['Pendiente','Revisión administrativa']]
+    },
+    {
+      id:'NOT-009', prioridad:'Baja', tipo:'Sistema', icono:'⚙️', titulo:'Copia de seguridad completada',
+      descripcion:'La copia de seguridad diaria se completó correctamente. Esta notificación es solo informativa.',
+      relacionado:'Sistema', estado:'Resuelta', fecha:'Hoy 02:00', accionNivel:'No requiere acción', accionTexto:'No se necesita intervención.', boton:'Ver detalle',
+      destino:{modulo:'Sistema', vista:'notificaciones_view.html', seccion:'Notificaciones', accion:'verDetalle', registro:'BACKUP-20260702'},
+      relaciones:{Proceso:'Backup diario', Estado:'Completado', Duración:'3 min', Ubicación:'Servidor principal'},
+      historial:[['02:00','Backup iniciado'],['02:03','Backup completado'],['02:03','Notificación cerrada']]
+    }
+  ];
+
+  const body = document.getElementById('notificacionesBody');
+  const buscar = document.getElementById('notiBuscar');
+  const prioridad = document.getElementById('notiPrioridad');
+  const overlay = document.getElementById('notiModalOverlay');
+  const closeBtn = document.getElementById('notiCerrarModal');
+  const toast = document.getElementById('notiToast');
+  let notificacionActiva = null;
+
+  const clsP = p => ({'Crítica':'p-critica','Alta':'p-alta','Media':'p-media','Baja':'p-baja'}[p] || 'p-baja');
+  const clsE = e => e === 'Nueva' ? 'e-nueva' : e === 'Resuelta' ? 'e-resuelta' : 'e-leida';
+  const clsA = a => a === 'Acción inmediata' ? 'a-inmediata' : a === 'Revisión recomendada' ? 'a-revision' : 'a-no';
+
+  function pintar(lista = datos){
+    body.innerHTML = lista.map((n) => `
+      <tr class="noti-row ${n.estado === 'Nueva' ? 'sin-leer' : ''}" data-id="${n.id}">
+        <td style="padding-left:18px">${n.id}</td>
+        <td><span class="prioridad ${clsP(n.prioridad)}">${n.prioridad}</span></td>
+        <td><span class="tipo-chip"><span class="tipo-icon">${n.icono}</span>${n.tipo}</span></td>
+        <td>${n.titulo}</td>
+        <td>${n.relacionado}</td>
+        <td><span class="accion-chip ${clsA(n.accionNivel)}">${n.accionNivel}</span></td>
+        <td><span class="estado-noti ${clsE(n.estado)}">${n.estado}</span></td>
+        <td>${n.fecha}</td>
+        <td>${n.destino.modulo} → ${n.destino.seccion}</td>
+        <td><button class="noti-action" data-id="${n.id}">${n.boton}</button></td>
+      </tr>`).join('');
+  }
+
+  function filas(obj){
+    return Object.entries(obj).map(([a,b]) => `<div class="noti-info-row"><span>${a}</span><strong>${b}</strong></div>`).join('');
+  }
+
+  function abrir(n){
+    notificacionActiva = n;
+    document.getElementById('notiModalBadges').innerHTML = `
+      <b>${n.icono} ${n.id}</b>
+      <span class="prioridad ${clsP(n.prioridad)}">${n.prioridad}</span>
+      <span class="estado-noti ${clsE(n.estado)}">${n.estado}</span>
+      <span class="accion-chip ${clsA(n.accionNivel)}">${n.accionNivel}</span>
+    `;
+    document.getElementById('notiModalTitulo').textContent = n.titulo;
+    document.getElementById('notiModalDescripcion').textContent = n.descripcion;
+    document.getElementById('notiRelacionado').innerHTML = filas(n.relaciones);
+    document.getElementById('notiAccionRequerida').innerHTML = filas({Nivel:n.accionNivel, Indicacion:n.accionTexto, Fecha:n.fecha, Estado:n.estado});
+    document.getElementById('notiDestinoRuta').innerHTML = `<span>${n.destino.modulo}</span><i>→</i><span>${n.destino.seccion}</span><i>→</i><span>${n.destino.registro}</span>`;
+    document.getElementById('notiDestinoMeta').innerHTML = filas({Vista:n.destino.vista, Acción:n.destino.accion, Registro:n.destino.registro});
+    document.getElementById('notiTimeline').innerHTML = n.historial.map(([h,t]) => `<div class="time-item"><strong>${h}</strong><span>${t}</span></div>`).join('');
+    document.getElementById('notiDestinoJson').textContent = JSON.stringify(n.destino, null, 2);
+    document.getElementById('notiAbrirDestino').textContent = n.boton;
+    overlay.classList.add('visible');
+    overlay.setAttribute('aria-hidden','false');
+  }
+
+  function cerrar(){
+    overlay.classList.remove('visible');
+    overlay.setAttribute('aria-hidden','true');
+  }
+
+  function filtrar(){
+    const q = (buscar.value || '').toLowerCase();
+    const p = prioridad.value;
+    const lista = datos.filter(n => (p === 'todas' || n.prioridad === p) && Object.values({...n, destino: JSON.stringify(n.destino), relaciones: JSON.stringify(n.relaciones)}).join(' ').toLowerCase().includes(q));
+    pintar(lista);
+  }
+
+  function mostrarToast(titulo, mensaje){
+    toast.innerHTML = `<strong>${titulo}</strong><span>${mensaje}</span>`;
+    toast.classList.add('visible');
+    clearTimeout(window.notiToastTimer);
+    window.notiToastTimer = setTimeout(() => toast.classList.remove('visible'), 2600);
+  }
+
+  body.addEventListener('click', e => {
+    const tr = e.target.closest('tr');
+    if(!tr) return;
+    const n = datos.find(x => x.id === tr.dataset.id);
+    if(n) abrir(n);
+  });
+
+  closeBtn.addEventListener('click', cerrar);
+  overlay.addEventListener('click', e => { if(e.target === overlay) cerrar(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') cerrar(); });
+  buscar.addEventListener('input', filtrar);
+  prioridad.addEventListener('change', filtrar);
+
+  document.getElementById('notiAbrirDestino').addEventListener('click', () => {
+    if(!notificacionActiva) return;
+    const d = notificacionActiva.destino;
+    mostrarToast('Destino preparado', `${d.modulo} → ${d.seccion} · ${d.registro}. La navegación real se conectará después.`);
+  });
+
+  document.getElementById('notiMarcarLeida').addEventListener('click', () => mostrarToast('Estado visual', 'Marcado como leído quedará conectado a la base de datos después.'));
+  document.getElementById('notiFijar').addEventListener('click', () => mostrarToast('Notificación fijada', 'La función de fijar quedará conectada después.'));
+  document.getElementById('notiArchivar').addEventListener('click', () => mostrarToast('Archivado visual', 'El archivado real se conectará después.'));
+
+  document.querySelectorAll('.noti-btn').forEach(btn => btn.addEventListener('click', () => {
+    const group = btn.parentElement;
+    group.querySelectorAll('.noti-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }));
+
+  pintar();
+})();
+</script>

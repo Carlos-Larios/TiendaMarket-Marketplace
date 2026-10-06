@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Editor visual de prueba | TiendaPro</title>
+  <link rel="stylesheet" href="css/editor_visual_demo.css?v=140">
+</head>
+<body>
+  <header class="editor-toolbar">
+    <div class="editor-title"><strong>Market</strong><span>Borrador de prueba</span></div>
+    <div class="toolbar-controls">
+      <button type="button" id="undo" title="Deshacer" aria-label="Deshacer">↶</button><button type="button" id="redo" title="Rehacer" aria-label="Rehacer">↷</button>
+      <div class="mode-switch" aria-label="Pantalla"><button type="button" data-viewport="desktop" aria-pressed="true">Computadora</button><button type="button" data-viewport="mobile" aria-pressed="false">Celular</button></div>
+      <button type="button" id="preview" aria-pressed="false">Vista previa</button>
+      <button type="button" id="reset" title="Restaurar ejemplo" aria-label="Restaurar ejemplo">⟲</button>
+      <button type="button" class="primary" id="save">Guardar borrador</button>
+    </div>
+  </header>
+  <div class="editor-layout">
+    <main class="workspace"><div class="canvas-wrap"><div id="pageCanvas" class="page-canvas"></div></div></main>
+    <aside class="inspector" aria-label="Propiedades del elemento">
+      <label for="elementSelect">Elemento</label><select id="elementSelect"></select>
+      <div class="selection-heading"><strong id="selectionName">Logo</strong><small id="selectionType"></small></div>
+      <label class="check-label" id="groupLabel" hidden><input type="checkbox" id="applyGroup" checked> Todas las tarjetas de este tipo</label>
+      <fieldset><legend>Contenido</legend><label for="copy">Texto</label><textarea id="copy" rows="2"></textarea>
+        <small id="contentLock" hidden>Contenido del producto protegido</small>
+        <label for="imageUpload">Imagen</label><input id="imageUpload" type="file" accept="image/png,image/jpeg,image/webp">
+        <label for="iconSelect">Icono</label><select id="iconSelect"><option value="">Sin icono</option><option value="heart">Corazón</option><option value="star">Estrella</option><option value="check">Verificado</option><option value="arrow">Flecha</option></select>
+      </fieldset>
+      <fieldset><legend>Efectos y bordes</legend>
+        <div class="field-pair"><label>Grosor del borde<input id="borderWidth" type="number" min="0" max="24"></label><label>Color del borde<input id="borderColor" type="color"></label></div>
+        <label>Tipo de borde<select id="borderStyle"><option value="solid">Continuo</option><option value="dashed">Discontinuo</option><option value="dotted">Puntos</option><option value="double">Doble</option><option value="none">Ninguno</option></select></label>
+        <label>Opacidad del elemento<input id="opacity" type="range" min="0" max="100"></label>
+        <label>Opacidad del fondo<input id="backgroundAlpha" type="range" min="0" max="100"></label>
+        <label>Sombra<input id="shadow" type="range" min="0" max="40"></label>
+        <label>Desenfoque<input id="blur" type="range" min="0" max="12"></label>
+        <div class="field-pair"><label>Giro<input id="rotate" type="number" min="-180" max="180"></label><label>Grosor del texto<select id="weight"><option value="400">Normal</option><option value="500">Medio</option><option value="700">Negrita</option><option value="900">Grueso</option></select></label></div>
+        <label>Estilo del texto<select id="textStyle"><option value="normal">Normal</option><option value="italic">Cursiva</option><option value="underline">Subrayado</option></select></label>
+        <label>Ajuste de imagen<select id="fit"><option value="contain">Completa</option><option value="cover">Cubrir</option></select></label>
+      </fieldset>
+      <fieldset><legend>Estructura</legend>
+        <label>Distribución<select id="layout"><option value="default">Original</option><option value="block">Vertical</option><option value="row">Fila flexible</option><option value="column">Columna flexible</option><option value="grid">Cuadrícula</option></select></label>
+        <div class="field-pair"><label>Separación<input id="gap" type="number" min="0" max="80"></label><label>Columnas<input id="columns" type="number" min="1" max="6"></label></div>
+      </fieldset>
+      <fieldset><legend>Enlace</legend><small id="actionLock" hidden>Acción original protegida</small><label>Destino<input id="linkUrl" type="text" placeholder="https:// o #seccion"></label><label class="check-label"><input id="linkNewTab" type="checkbox"> Abrir en otra pestaña</label><button id="applyLink" type="button">Aplicar enlace</button></fieldset>
+      <fieldset><legend>Apariencia</legend><div class="field-pair"><label>Texto<input type="color" id="color"></label><label>Fondo<input type="color" id="background"></label></div>
+        <div class="field-pair"><label>Tamaño de letra<input type="number" id="fontSize" min="9" max="80" step="1"></label><label>Borde redondeado<input type="number" id="radius" min="0" max="80" step="1"></label></div>
+        <div class="field-pair"><label>Ancho<input type="number" id="width" min="24" max="1200" step="1"></label><label>Alto<input type="number" id="height" min="24" max="1000" step="1"></label></div>
+        <label for="align">Alineación</label><select id="align"><option value="left">Izquierda</option><option value="center">Centro</option><option value="right">Derecha</option></select>
+        <label for="padding">Espacio interior</label><input type="range" id="padding" min="0" max="48" step="1">
+      </fieldset>
+      <fieldset><legend>Posición</legend><div class="field-pair"><label>Horizontal<input type="number" id="x" min="-600" max="600" step="1"></label><label>Vertical<input type="number" id="y" min="-600" max="600" step="1"></label></div>
+        <div class="field-pair"><button type="button" id="back" title="Enviar detrás">↓ Detrás</button><button type="button" id="front" title="Traer al frente">↑ Al frente</button></div>
+        <div class="field-pair"><button type="button" id="before" title="Mover antes en el contenedor">↑ Antes</button><button type="button" id="after" title="Mover después en el contenedor">↓ Después</button></div>
+      </fieldset>
+      <fieldset><legend>Añadir dentro</legend><div class="add-controls"><button type="button" data-add="text">Texto</button><button type="button" data-add="image">Imagen</button><button type="button" data-add="container">Contenedor</button><button type="button" data-add="button">Botón</button><button type="button" data-add="rectangle" title="Rectángulo">▭</button><button type="button" data-add="circle" title="Círculo">○</button><button type="button" data-add="line" title="Línea">╱</button><button type="button" data-add="triangle" title="Triángulo">△</button></div></fieldset>
+      <details class="code-panel"><summary>CSS del elemento</summary><textarea id="customCss" rows="6" spellcheck="false" aria-label="CSS del elemento" placeholder="border-radius: 8px;\nbackground-color: #168452;"></textarea><button id="applyCss" type="button">Aplicar CSS</button><button id="clearCss" type="button">Quitar CSS</button><p id="cssError" role="alert"></p></details>
+      <button type="button" id="restoreElement">Restaurar elemento</button><button type="button" id="deleteAdded" hidden>Eliminar elemento añadido</button>
+      <p id="editorStatus" role="status" aria-live="polite">Borrador local</p>
+    </aside>
+  </div>
+  <script src="js/editor_visual_demo.js?v=140"></script>
+</body>
+</html>

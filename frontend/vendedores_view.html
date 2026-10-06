@@ -1,0 +1,293 @@
+<!-- =====================================================
+     VENDEDORES VIEW / Marketplace
+     Fase 7: Lista principal de vendedores y detalle
+     ===================================================== -->
+
+<style>
+  .vendedores-view{color:#f8fafc;display:grid;gap:18px;width:100%;max-width:100%;overflow-x:hidden;}
+  .vendedores-view *{box-sizing:border-box;}
+  .vendedores-head{display:flex;justify-content:space-between;gap:16px;align-items:center;background:rgba(42,48,66,.82);border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:22px;box-shadow:0 12px 30px rgba(0,0,0,.14);}
+  .vendedores-head h2{margin:0 0 6px;font-size:clamp(22px,2vw,28px);letter-spacing:-.03em;}
+  .vendedores-head p{margin:0;color:#a6b0cf;line-height:1.45;max-width:880px;}
+  .vendedores-contador{min-width:145px;text-align:center;border-radius:18px;padding:16px;background:linear-gradient(135deg,#50a5f1,#556ee6);box-shadow:0 14px 32px rgba(80,165,241,.18);}
+  .vendedores-contador span{display:block;font-size:12px;font-weight:900;text-transform:uppercase;color:#e0f2fe;}
+  .vendedores-contador strong{display:block;font-size:30px;line-height:1;color:#fff;margin-top:5px;}
+
+  .vendedores-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+  .vendedores-kpi{position:relative;overflow:hidden;background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:18px;min-height:110px;box-shadow:0 12px 30px rgba(0,0,0,.14);}
+  .vendedores-kpi::after{content:"";position:absolute;right:-34px;bottom:-40px;width:110px;height:110px;border-radius:50%;background:rgba(85,110,230,.16);}
+  .vendedores-kpi span{display:block;color:#a6b0cf;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+  .vendedores-kpi strong{display:block;color:#fff;font-size:28px;margin-top:9px;}
+  .vendedores-kpi small{display:block;color:#94a3b8;font-weight:800;margin-top:6px;}
+  .vendedores-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042);}
+
+  .vendedores-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:14px;box-shadow:0 12px 30px rgba(0,0,0,.14);}
+  .vendedores-search{display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.55);border:1px solid rgba(166,176,207,.12);border-radius:14px;padding:0 13px;min-height:48px;}
+  .vendedores-search span{color:#50a5f1;font-size:18px;}
+  .vendedores-search input{width:100%;border:0;outline:none;background:transparent;color:#fff;font-weight:800;min-width:0;}
+  .vendedores-search input::placeholder{color:#7f8aa3;}
+  .vendedores-filtros{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  .vendedores-filter{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#cbd5e1;padding:10px 13px;border-radius:12px;cursor:pointer;font-weight:900;transition:.18s ease;}
+  .vendedores-filter:hover,.vendedores-filter.active{background:#556ee6;color:#fff;border-color:rgba(125,211,252,.24);}
+
+  .vendedores-panel{background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.14);min-width:0;}
+  .vendedores-panel-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;}
+  .vendedores-panel-title h3{margin:0;color:#fff;font-size:20px;}
+  .vendedores-panel-title p{margin:5px 0 0;color:#a6b0cf;font-size:13px;}
+  .vendedores-table-wrap{width:100%;overflow-x:auto;border-radius:16px;}
+  .vendedores-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1100px;overflow:hidden;}
+  .vendedores-table th,.vendedores-table td{padding:14px 13px;text-align:left;border-bottom:1px solid rgba(166,176,207,.10);white-space:nowrap;}
+  .vendedores-table th{background:rgba(15,23,42,.58);color:#8da0ff;font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
+  .vendedores-table td{color:#e5e7eb;font-size:13px;font-weight:800;}
+  .fila-vendedor{cursor:pointer;transition:.18s ease;}
+  .fila-vendedor:hover td{background:rgba(85,110,230,.10);}
+  .vendedores-badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:900;border:1px solid rgba(166,176,207,.16);background:rgba(15,23,42,.38);color:#cbd5e1;}
+  .vendedores-badge.ok{color:#86efac;border-color:rgba(52,195,143,.32);background:rgba(52,195,143,.12);}
+  .vendedores-badge.warn{color:#fbbf24;border-color:rgba(241,180,76,.32);background:rgba(241,180,76,.12);}
+  .vendedores-badge.danger{color:#fca5a5;border-color:rgba(244,106,106,.32);background:rgba(244,106,106,.12);}
+  .vendedores-badge.info{color:#bfdbfe;border-color:rgba(80,165,241,.32);background:rgba(80,165,241,.12);}
+  .vendedores-rating{display:flex;align-items:center;gap:6px;color:#fbbf24;font-weight:900;}
+  .vendedores-empty{padding:24px;border:1px dashed rgba(166,176,207,.22);border-radius:16px;text-align:center;color:#a6b0cf;font-weight:800;display:none;}
+
+  .vendedor-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(2,6,23,.68);backdrop-filter:blur(6px);}
+  .vendedor-modal.visible{display:flex;}
+  .vendedor-modal-card{width:min(1180px,100%);max-height:92vh;overflow:auto;background:#222736;border:1px solid rgba(166,176,207,.18);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.45);}
+  .vendedor-modal-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:22px;border-bottom:1px solid rgba(166,176,207,.12);background:linear-gradient(135deg,rgba(85,110,230,.34),rgba(15,23,42,.24));}
+  .vendedor-modal-head h3{margin:0;font-size:26px;letter-spacing:-.03em;}
+  .vendedor-modal-head p{margin:6px 0 0;color:#a6b0cf;}
+  .vendedor-close{border:1px solid rgba(166,176,207,.18);background:rgba(15,23,42,.45);color:#fff;border-radius:14px;width:42px;height:42px;cursor:pointer;font-size:20px;font-weight:900;}
+  .vendedor-modal-body{padding:22px;display:grid;gap:18px;}
+  .vendedor-detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+  .vendedor-detail-card{background:#2a3042;border:1px solid rgba(166,176,207,.13);border-radius:16px;padding:16px;min-height:95px;}
+  .vendedor-detail-card span{display:block;color:#a6b0cf;font-size:12px;text-transform:uppercase;font-weight:900;letter-spacing:.04em;}
+  .vendedor-detail-card strong{display:block;margin-top:8px;font-size:22px;color:#fff;overflow-wrap:anywhere;}
+  .vendedor-info-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;}
+  .vendedor-info-panel{background:#2a3042;border:1px solid rgba(166,176,207,.13);border-radius:18px;padding:18px;}
+  .vendedor-info-panel h4{margin:0 0 12px;color:#fff;}
+  .vendedor-info-list{display:grid;gap:10px;}
+  .vendedor-info-row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(166,176,207,.10);padding-bottom:9px;color:#cbd5e1;}
+  .vendedor-info-row span:first-child{color:#94a3b8;}
+  .vendedor-info-row b{text-align:right;}
+  .vendedor-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .vendedor-action{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.42);color:#fff;border-radius:12px;padding:10px 13px;font-weight:900;cursor:pointer;}
+  .vendedor-action.primary{background:#556ee6;}
+  .vendedor-action.danger{background:rgba(244,106,106,.14);color:#fca5a5;border-color:rgba(244,106,106,.28);}
+
+  @media(max-width:1200px){.vendedores-kpis,.vendedor-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.vendedor-info-grid{grid-template-columns:1fr;}}
+  @media(max-width:760px){.vendedores-head,.vendedores-toolbar{grid-template-columns:1fr;flex-direction:column;align-items:stretch;}.vendedores-contador{width:100%;}.vendedores-filtros{justify-content:flex-start}.vendedores-kpis,.vendedor-detail-grid{grid-template-columns:1fr}.vendedor-modal{padding:10px}.vendedor-modal-head{align-items:center}.vendedor-modal-head h3{font-size:21px}}
+</style>
+
+<section class="vendedores-view">
+  <div class="vendedores-head">
+    <div>
+      <h2>🏪 Vendedores</h2>
+      <p>Lista principal de tiendas del marketplace. Aquí se administra el negocio del vendedor: estado, rendimiento, ganancias, reclamos y acceso a detalles completos.</p>
+    </div>
+    <div class="vendedores-contador"><span>Vendedores</span><strong id="vendTotalContador">0</strong></div>
+  </div>
+
+  <div class="vendedores-kpis">
+    <div class="vendedores-kpi destacado"><span>Activos</span><strong id="vendKpiActivosLista">0</strong><small>Vendiendo en plataforma</small></div>
+    <div class="vendedores-kpi"><span>Comerciales</span><strong id="vendKpiComerciales">0</strong><small>Tiendas locales</small></div>
+    <div class="vendedores-kpi"><span>Emprendedores</span><strong id="vendKpiEmprendedores">0</strong><small>Programa especial</small></div>
+    <div class="vendedores-kpi"><span>En advertencia</span><strong id="vendKpiAdvertencia">0</strong><small>Requieren revisión</small></div>
+  </div>
+
+  <div class="vendedores-toolbar">
+    <label class="vendedores-search">
+      <span>🔎</span>
+      <input id="buscarVendedor" type="search" placeholder="Buscar por tienda, propietario, tipo o estado...">
+    </label>
+    <div class="vendedores-filtros">
+      <button class="vendedores-filter active" data-filtro="todos" type="button">Todos</button>
+      <button class="vendedores-filter" data-filtro="Comercial" type="button">Comercial</button>
+      <button class="vendedores-filter" data-filtro="Emprendedor" type="button">Emprendedor</button>
+      <button class="vendedores-filter" data-filtro="Activo" type="button">Activos</button>
+      <button class="vendedores-filter" data-filtro="Advertencia" type="button">Advertencia</button>
+      <button class="vendedores-filter" data-filtro="Suspendido" type="button">Suspendidos</button>
+    </div>
+  </div>
+
+  <div class="vendedores-panel">
+    <div class="vendedores-panel-title">
+      <div>
+        <h3>Listado de vendedores</h3>
+        <p>Al presionar una tienda se abrirán los detalles del vendedor.</p>
+      </div>
+      <span class="vendedores-badge info">Datos demo / luego MySQL</span>
+    </div>
+    <div class="vendedores-table-wrap">
+      <table class="vendedores-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre de tienda</th>
+            <th>Tipo</th>
+            <th>Productos</th>
+            <th>Vendidos</th>
+            <th>Ganancias</th>
+            <th>Reclamos</th>
+            <th>Aceptación</th>
+            <th>Puntuación</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaVendedoresBody"></tbody>
+      </table>
+    </div>
+    <div id="vendedoresEmpty" class="vendedores-empty">No se encontraron vendedores con el filtro actual.</div>
+  </div>
+</section>
+
+<div class="vendedor-modal" id="vendedorModal" aria-hidden="true">
+  <div class="vendedor-modal-card" role="dialog" aria-modal="true">
+    <div class="vendedor-modal-head">
+      <div>
+        <h3 id="modalVendedorNombre">Detalle del vendedor</h3>
+        <p id="modalVendedorSubtitulo">Información general del negocio.</p>
+      </div>
+      <button class="vendedor-close" id="cerrarVendedorModal" type="button" aria-label="Cerrar">×</button>
+    </div>
+    <div class="vendedor-modal-body" id="modalVendedorBody"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const vendedores = [
+    {id:'VEN-001', tienda:'Tienda Demo SV', propietario:'Carlos Larios', tipo:'Comercial', productos:48, vendidos:320, ganancias:4250.00, reclamos:2, aceptacion:98, puntuacion:4.9, estado:'Activo', correo:'demo@tiendapro.sv', telefono:'7863-2203', registro:'12/06/2026', comision:'5%', documentos:'Verificados', fulfillment:'No', direccion:'San Salvador, El Salvador'},
+    {id:'VEN-002', tienda:'Artesanías Ana', propietario:'Ana Martínez', tipo:'Emprendedor', productos:15, vendidos:86, ganancias:980.00, reclamos:1, aceptacion:96, puntuacion:4.8, estado:'Activo', correo:'ana@artesanias.sv', telefono:'7000-1122', registro:'18/06/2026', comision:'5%', documentos:'Pendiente negocio', fulfillment:'Sí', direccion:'Suchitoto, Cuscatlán'},
+    {id:'VEN-003', tienda:'Accesorios López', propietario:'Mario López', tipo:'Comercial', productos:33, vendidos:154, ganancias:2100.00, reclamos:5, aceptacion:87, puntuacion:4.2, estado:'Advertencia', correo:'lopez@accesorios.sv', telefono:'7333-4455', registro:'20/06/2026', comision:'6%', documentos:'Verificados', fulfillment:'No', direccion:'Santa Tecla, La Libertad'},
+    {id:'VEN-004', tienda:'Detalles Mía', propietario:'Mía Hernández', tipo:'Emprendedor', productos:22, vendidos:72, ganancias:760.00, reclamos:0, aceptacion:100, puntuacion:5.0, estado:'Activo', correo:'mia@detalles.sv', telefono:'7111-2222', registro:'25/06/2026', comision:'5%', documentos:'Verificados', fulfillment:'Sí', direccion:'San Miguel'},
+    {id:'VEN-005', tienda:'Tech Local', propietario:'Roberto Méndez', tipo:'Comercial', productos:64, vendidos:240, ganancias:5300.00, reclamos:7, aceptacion:82, puntuacion:4.0, estado:'Suspendido', correo:'techlocal@sv.com', telefono:'7444-8899', registro:'03/06/2026', comision:'7%', documentos:'Verificados', fulfillment:'No', direccion:'Soyapango, San Salvador'}
+  ];
+
+  const money = n => `$${Number(n || 0).toFixed(2)}`;
+  const body = document.getElementById('tablaVendedoresBody');
+  const empty = document.getElementById('vendedoresEmpty');
+  const buscar = document.getElementById('buscarVendedor');
+  const modal = document.getElementById('vendedorModal');
+  const modalBody = document.getElementById('modalVendedorBody');
+  const modalNombre = document.getElementById('modalVendedorNombre');
+  const modalSubtitulo = document.getElementById('modalVendedorSubtitulo');
+  let filtroActivo = 'todos';
+
+  function badgeClase(valor){
+    if(['Activo','Comercial'].includes(valor)) return 'ok';
+    if(['Advertencia','Emprendedor'].includes(valor)) return 'warn';
+    if(['Suspendido','Suspendido permanentemente'].includes(valor)) return 'danger';
+    return 'info';
+  }
+
+  function actualizarKpis(){
+    document.getElementById('vendTotalContador').textContent = vendedores.length;
+    document.getElementById('vendKpiActivosLista').textContent = vendedores.filter(v => v.estado === 'Activo').length;
+    document.getElementById('vendKpiComerciales').textContent = vendedores.filter(v => v.tipo === 'Comercial').length;
+    document.getElementById('vendKpiEmprendedores').textContent = vendedores.filter(v => v.tipo === 'Emprendedor').length;
+    document.getElementById('vendKpiAdvertencia').textContent = vendedores.filter(v => v.estado === 'Advertencia').length;
+  }
+
+  function obtenerFiltrados(){
+    const q = (buscar?.value || '').toLowerCase().trim();
+    return vendedores.filter(v => {
+      const coincideFiltro = filtroActivo === 'todos' || v.tipo === filtroActivo || v.estado === filtroActivo;
+      const texto = `${v.id} ${v.tienda} ${v.propietario} ${v.tipo} ${v.estado}`.toLowerCase();
+      return coincideFiltro && (!q || texto.includes(q));
+    });
+  }
+
+  function renderTabla(){
+    const rows = obtenerFiltrados();
+    if(!body) return;
+    body.innerHTML = rows.map(v => `
+      <tr class="fila-vendedor" data-id="${v.id}">
+        <td>${v.id}</td>
+        <td>${v.tienda}</td>
+        <td><span class="vendedores-badge ${badgeClase(v.tipo)}">${v.tipo}</span></td>
+        <td>${v.productos}</td>
+        <td>${v.vendidos}</td>
+        <td>${money(v.ganancias)}</td>
+        <td>${v.reclamos}</td>
+        <td>${v.aceptacion}%</td>
+        <td><span class="vendedores-rating">★ ${v.puntuacion}</span></td>
+        <td><span class="vendedores-badge ${badgeClase(v.estado)}">${v.estado}</span></td>
+      </tr>
+    `).join('');
+    if(empty) empty.style.display = rows.length ? 'none' : 'block';
+    body.querySelectorAll('.fila-vendedor').forEach(tr => tr.addEventListener('click', () => abrirDetalle(tr.dataset.id)));
+  }
+
+  function abrirDetalle(id){
+    const v = vendedores.find(item => item.id === id);
+    if(!v || !modal) return;
+    modalNombre.textContent = v.tienda;
+    modalSubtitulo.textContent = `${v.tipo} • ${v.propietario} • ${v.estado}`;
+    modalBody.innerHTML = `
+      <div class="vendedor-detail-grid">
+        <div class="vendedor-detail-card"><span>Productos</span><strong>${v.productos}</strong></div>
+        <div class="vendedor-detail-card"><span>Vendidos</span><strong>${v.vendidos}</strong></div>
+        <div class="vendedor-detail-card"><span>Ganancias</span><strong>${money(v.ganancias)}</strong></div>
+        <div class="vendedor-detail-card"><span>Aceptación</span><strong>${v.aceptacion}%</strong></div>
+      </div>
+      <div class="vendedor-info-grid">
+        <div class="vendedor-info-panel">
+          <h4>Información del vendedor</h4>
+          <div class="vendedor-info-list">
+            <div class="vendedor-info-row"><span>ID</span><b>${v.id}</b></div>
+            <div class="vendedor-info-row"><span>Propietario</span><b>${v.propietario}</b></div>
+            <div class="vendedor-info-row"><span>Correo</span><b>${v.correo}</b></div>
+            <div class="vendedor-info-row"><span>Teléfono</span><b>${v.telefono}</b></div>
+            <div class="vendedor-info-row"><span>Dirección</span><b>${v.direccion}</b></div>
+            <div class="vendedor-info-row"><span>Registro</span><b>${v.registro}</b></div>
+          </div>
+        </div>
+        <div class="vendedor-info-panel">
+          <h4>Estado del negocio</h4>
+          <div class="vendedor-info-list">
+            <div class="vendedor-info-row"><span>Tipo</span><b>${v.tipo}</b></div>
+            <div class="vendedor-info-row"><span>Estado</span><b>${v.estado}</b></div>
+            <div class="vendedor-info-row"><span>Comisión</span><b>${v.comision}</b></div>
+            <div class="vendedor-info-row"><span>Documentos</span><b>${v.documentos}</b></div>
+            <div class="vendedor-info-row"><span>Fulfillment</span><b>${v.fulfillment}</b></div>
+            <div class="vendedor-info-row"><span>Reclamos</span><b>${v.reclamos}</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="vendedor-info-panel">
+        <h4>Acciones administrativas</h4>
+        <div class="vendedor-actions">
+          <button class="vendedor-action primary" type="button">Ver productos</button>
+          <button class="vendedor-action" type="button">Ver pedidos</button>
+          <button class="vendedor-action" type="button">Ver liquidaciones</button>
+          <button class="vendedor-action" type="button">Ver reclamos</button>
+          <button class="vendedor-action danger" type="button">Suspender / advertir</button>
+        </div>
+      </div>
+    `;
+    modal.classList.add('visible');
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  function cerrarDetalle(){
+    if(!modal) return;
+    modal.classList.remove('visible');
+    modal.setAttribute('aria-hidden','true');
+  }
+
+  document.getElementById('cerrarVendedorModal')?.addEventListener('click', cerrarDetalle);
+  modal?.addEventListener('click', e => { if(e.target === modal) cerrarDetalle(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') cerrarDetalle(); });
+
+  document.querySelectorAll('.vendedores-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      filtroActivo = btn.dataset.filtro;
+      document.querySelectorAll('.vendedores-filter').forEach(b => b.classList.toggle('active', b === btn));
+      renderTabla();
+    });
+  });
+  buscar?.addEventListener('input', renderTabla);
+
+  actualizarKpis();
+  renderTabla();
+})();
+</script>

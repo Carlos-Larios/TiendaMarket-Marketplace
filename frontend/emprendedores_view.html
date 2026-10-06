@@ -1,0 +1,241 @@
+<style>
+  .emprendedores-view{color:#f8fafc}.emprendedores-view *{box-sizing:border-box}
+  .emp-panel{background:linear-gradient(180deg,rgba(30,41,59,.96),rgba(15,23,42,.98));border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.28)}
+  .emp-top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}.emp-top h1{margin:0;font-size:32px;letter-spacing:-.03em}.emp-top p{margin:6px 0 0;color:#94a3b8;font-size:14px;line-height:1.5}
+  .emp-pill{background:rgba(15,23,42,.75);border:1px solid rgba(255,255,255,.08);padding:14px 18px;border-radius:16px;color:#e2e8f0;font-weight:900;white-space:nowrap;text-align:right}.emp-pill small{display:block;color:#94a3b8;font-size:12px;margin-bottom:3px}
+  .emp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}.emp-card{position:relative;overflow:hidden;background:rgba(15,23,42,.72);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px}.emp-card::after{content:"";position:absolute;right:-35px;bottom:-55px;width:110px;height:110px;background:rgba(56,189,248,.12);border-radius:50%}.emp-card small{display:block;color:#94a3b8;font-weight:800;margin-bottom:8px}.emp-card strong{display:block;color:#fff;font-size:28px}.emp-card span{color:#38bdf8;font-size:13px;font-weight:800}
+  .emp-toolbar{display:flex;justify-content:space-between;gap:14px;padding:16px;margin:20px 0;background:rgba(30,41,59,.76);border:1px solid rgba(148,163,184,.18);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.22)}.emp-search{flex:1;display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.78);border:1px solid rgba(148,163,184,.18);border-radius:14px;padding:0 14px}.emp-search input{width:100%;border:none;background:transparent;color:white;padding:12px 0;outline:none}.emp-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .emp-btn{border:none;border-radius:13px;padding:12px 16px;color:white;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#2563eb,#38bdf8);transition:.2s;white-space:nowrap}.emp-btn:hover{transform:translateY(-1px);filter:brightness(1.08)}.emp-btn.secondary{background:rgba(51,65,85,.95)}.emp-btn.green{background:linear-gradient(135deg,#16a34a,#22c55e)}
+  .emp-filter-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;margin-bottom:16px;background:rgba(15,23,42,.55);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px}.emp-filter-row select,.emp-filter-row input{width:100%;border:1px solid rgba(255,255,255,.08);background:#0f172a;color:white;border-radius:13px;padding:12px;outline:none}
+  .emp-list-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:18px 0 10px}.emp-list-head h2{margin:0;color:#38bdf8;font-size:20px}.emp-meta{color:#94a3b8;font-size:13px}
+  .emp-table-wrap{overflow-x:auto;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:#0f172a}.emp-table{width:100%;border-collapse:collapse;min-width:980px}.emp-table th{background:#020617;color:#38bdf8;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:14px;text-align:left;border-bottom:1px solid #334155}.emp-table td{padding:14px;border-bottom:1px solid rgba(255,255,255,.06);color:#e2e8f0;font-size:14px}.emp-row{cursor:pointer;transition:.2s}.emp-row:hover{background:rgba(51,65,85,.75)}
+  .emp-name strong{display:block;color:white}.emp-name small{display:block;color:#94a3b8;margin-top:4px}.emp-money{color:#4ade80;font-weight:950}.emp-status{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;border:1px solid rgba(148,163,184,.2)}.emp-status.activo{color:#86efac;background:rgba(22,163,74,.14);border-color:rgba(34,197,94,.32)}.emp-status.pausado{color:#facc15;background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.32)}.emp-status.suspendido{color:#fb7185;background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.32)}
+  .emp-detail{max-height:72vh;overflow:auto;text-align:left;color:#e2e8f0;background:#020617;border:1px solid rgba(56,189,248,.18);border-radius:22px;padding:18px}.emp-detail-hero{display:flex;justify-content:space-between;gap:15px;background:linear-gradient(135deg,rgba(30,41,59,.9),rgba(2,6,23,.72));border:1px solid rgba(56,189,248,.15);border-radius:18px;padding:16px;margin-bottom:14px}.emp-detail-hero h2{margin:0 0 6px;color:white}.emp-detail-hero p{margin:0;color:#94a3b8}.emp-detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.emp-detail-card{background:rgba(15,23,42,.74);border:1px solid rgba(148,163,184,.14);border-radius:16px;padding:13px}.emp-detail-card small{display:block;color:#94a3b8;margin-bottom:5px;font-weight:800}.emp-detail-card strong{display:block;color:#f8fafc;font-size:18px}.emp-section-title{display:flex;align-items:center;gap:10px;color:#67e8f9;margin:18px 0 10px;font-weight:950}.emp-section-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(56,189,248,.35),transparent)}
+  .emp-products{display:grid;gap:10px}.emp-product{display:grid;grid-template-columns:1fr repeat(4,110px);gap:10px;align-items:center;background:rgba(15,23,42,.72);border:1px solid rgba(148,163,184,.14);border-radius:16px;padding:12px}.emp-product strong{color:#f8fafc}.emp-product small{color:#94a3b8}.emp-chip{display:inline-flex;justify-content:center;border-radius:999px;padding:6px 8px;background:rgba(14,165,233,.10);border:1px solid rgba(56,189,248,.22);color:#bae6fd;font-weight:900;font-size:12px}.emp-history{display:grid;gap:9px}.emp-history-item{display:grid;grid-template-columns:130px 1fr;gap:12px;background:rgba(15,23,42,.72);border:1px solid rgba(148,163,184,.14);border-radius:16px;padding:12px}.emp-history-item small{color:#7dd3fc;font-weight:900}.emp-history-item strong{display:block;color:#fff;margin-bottom:3px}.emp-empty{text-align:center;color:#94a3b8;background:rgba(15,23,42,.72);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:28px}
+  @media(max-width:1000px){.emp-stats,.emp-detail-grid{grid-template-columns:repeat(2,1fr)}.emp-filter-row{grid-template-columns:1fr}.emp-top,.emp-toolbar{flex-direction:column}.emp-actions{width:100%}.emp-btn{flex:1}.emp-product{grid-template-columns:1fr 1fr}.emp-detail-hero{flex-direction:column}}
+  @media(max-width:650px){.emp-stats,.emp-detail-grid{grid-template-columns:1fr}.emp-product,.emp-history-item{grid-template-columns:1fr}.emp-pill{text-align:left}}
+</style>
+
+<section class="emprendedores-view">
+  <div class="emp-panel">
+    <div class="emp-top">
+      <div>
+        <h1>🤝 Emprendedores</h1>
+        <p>Administra el programa de fulfillment: emprendedores, productos almacenados, ventas, disponibilidad e historial de entregas o retiros.</p>
+      </div>
+      <div class="emp-pill"><small>Programa</small>Fulfillment local</div>
+    </div>
+
+    <div class="emp-stats">
+      <div class="emp-card"><small>Emprendedores</small><strong id="empStatTotal">0</strong><span>Registrados</span></div>
+      <div class="emp-card"><small>Productos almacenados</small><strong id="empStatAlmacenados">0</strong><span>Unidades recibidas</span></div>
+      <div class="emp-card"><small>Disponibles</small><strong id="empStatDisponibles">0</strong><span>Listos para venta</span></div>
+      <div class="emp-card"><small>Ventas generadas</small><strong id="empStatVentas">$0.00</strong><span>Programa emprendedores</span></div>
+    </div>
+
+    <div class="emp-toolbar">
+      <div class="emp-search"><span>🔎</span><input id="empBuscar" type="text" placeholder="Buscar por emprendimiento, propietario, producto o teléfono..."></div>
+      <div class="emp-actions">
+        <button class="emp-btn green" type="button" id="empBtnNuevo">➕ Agregar emprendedor</button>
+        <button class="emp-btn secondary" type="button" id="empBtnDemo">↻ Restaurar demo</button>
+      </div>
+    </div>
+
+    <div class="emp-filter-row">
+      <select id="empFiltroEstado">
+        <option value="">Todos los estados</option>
+        <option value="Activo">Activo</option>
+        <option value="Pausado">Pausado</option>
+        <option value="Suspendido">Suspendido</option>
+      </select>
+      <select id="empFiltroInventario">
+        <option value="">Todo el inventario</option>
+        <option value="con-stock">Con unidades disponibles</option>
+        <option value="sin-stock">Sin unidades disponibles</option>
+      </select>
+      <input id="empFiltroProducto" type="text" placeholder="Filtrar por producto">
+      <button class="emp-btn secondary" type="button" id="empBtnLimpiar">Limpiar</button>
+    </div>
+
+    <div class="emp-list-head">
+      <h2>Lista de emprendedores</h2>
+      <div class="emp-meta" id="empMeta">Mostrando emprendedores...</div>
+    </div>
+
+    <div class="emp-table-wrap">
+      <table class="emp-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Emprendimiento</th><th>Propietario</th><th>Productos</th><th>Recibidos</th><th>Disponibles</th><th>Vendidos</th><th>Ventas</th><th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="empTabla"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+(function(){
+  const STORAGE_KEY = "tiendapro_emprendedores_demo_v1";
+  const $ = id => document.getElementById(id);
+  const dinero = n => `$${Number(n||0).toFixed(2)}`;
+  const norm = t => String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+  const escapeHtml = v => String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+
+  const demo = [
+    {id:1, nombre:"Artesanías Ana", propietario:"Ana Martínez", telefono:"7000-1122", correo:"ana@demo.com", estado:"Activo", fecha_ingreso:"2026-07-01", comision:5, productos:[
+      {nombre:"Pulsera artesanal", recibidos:30, disponibles:12, vendidos:18, precio:3.50, ubicacion:"Estante A-1"},
+      {nombre:"Gorro tejido", recibidos:20, disponibles:8, vendidos:12, precio:7.00, ubicacion:"Estante A-2"}
+    ], historial:[{fecha:"02/07/2026 09:20", actor:"Administrador", accion:"Recepción de inventario", detalle:"+30 pulseras, +20 gorros"},{fecha:"02/07/2026 10:05", actor:"Sistema", accion:"Emprendedor activado", detalle:"Listo para publicar productos"}]},
+    {id:2, nombre:"Madera Creativa SV", propietario:"Luis Hernández", telefono:"7111-3344", correo:"luis@demo.com", estado:"Activo", fecha_ingreso:"2026-07-02", comision:5, productos:[
+      {nombre:"Llavero personalizado", recibidos:50, disponibles:50, vendidos:0, precio:2.00, ubicacion:"Caja B-4"},
+      {nombre:"Portavasos madera", recibidos:25, disponibles:17, vendidos:8, precio:4.25, ubicacion:"Estante B-1"}
+    ], historial:[{fecha:"02/07/2026 11:30", actor:"Administrador", accion:"Recepción de inventario", detalle:"+50 llaveros, +25 portavasos"}]},
+    {id:3, nombre:"Dulces La Abuela", propietario:"María López", telefono:"7222-5566", correo:"maria@demo.com", estado:"Pausado", fecha_ingreso:"2026-07-03", comision:5, productos:[
+      {nombre:"Dulce de leche artesanal", recibidos:40, disponibles:0, vendidos:40, precio:1.25, ubicacion:"Zona alimentos"}
+    ], historial:[{fecha:"03/07/2026 14:10", actor:"Administrador", accion:"Inventario agotado", detalle:"Se pausó por falta de stock disponible"}]}
+  ];
+
+  let emprendedores = cargarDatos();
+
+  function cargarDatos(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || demo; } catch(e){ return demo; }
+  }
+  function guardarDatos(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(emprendedores)); }
+  function calcEmp(emp){
+    const productos = Array.isArray(emp.productos) ? emp.productos : [];
+    const recibidos = productos.reduce((a,p)=>a+Number(p.recibidos||0),0);
+    const disponibles = productos.reduce((a,p)=>a+Number(p.disponibles||0),0);
+    const vendidos = productos.reduce((a,p)=>a+Number(p.vendidos||0),0);
+    const ventas = productos.reduce((a,p)=>a+(Number(p.vendidos||0)*Number(p.precio||0)),0);
+    return { productos: productos.length, recibidos, disponibles, vendidos, ventas };
+  }
+  function estadoClass(estado){ return norm(estado).includes("suspend") ? "suspendido" : norm(estado).includes("paus") ? "pausado" : "activo"; }
+
+  function actualizarStats(lista){
+    const total = lista.length;
+    const recibidos = lista.reduce((a,e)=>a+calcEmp(e).recibidos,0);
+    const disponibles = lista.reduce((a,e)=>a+calcEmp(e).disponibles,0);
+    const ventas = lista.reduce((a,e)=>a+calcEmp(e).ventas,0);
+    $("empStatTotal").innerText = total;
+    $("empStatAlmacenados").innerText = recibidos;
+    $("empStatDisponibles").innerText = disponibles;
+    $("empStatVentas").innerText = dinero(ventas);
+  }
+
+  function filtrar(){
+    const busqueda = norm($("empBuscar").value);
+    const estado = norm($("empFiltroEstado").value);
+    const inv = $("empFiltroInventario").value;
+    const productoFiltro = norm($("empFiltroProducto").value);
+
+    return emprendedores.filter(emp => {
+      const c = calcEmp(emp);
+      const productosTxt = (emp.productos||[]).map(p=>p.nombre).join(" ");
+      const texto = norm(`${emp.id} ${emp.nombre} ${emp.propietario} ${emp.telefono} ${emp.correo} ${productosTxt}`);
+      if (busqueda && !texto.includes(busqueda)) return false;
+      if (estado && norm(emp.estado) !== estado) return false;
+      if (inv === "con-stock" && c.disponibles <= 0) return false;
+      if (inv === "sin-stock" && c.disponibles > 0) return false;
+      if (productoFiltro && !norm(productosTxt).includes(productoFiltro)) return false;
+      return true;
+    });
+  }
+
+  function render(){
+    const lista = filtrar();
+    actualizarStats(lista);
+    $("empMeta").innerText = `Mostrando ${lista.length} de ${emprendedores.length} emprendedores`;
+    const tbody = $("empTabla");
+    if (!lista.length) {
+      tbody.innerHTML = `<tr><td colspan="9"><div class="emp-empty">No hay emprendedores que coincidan con los filtros.</div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = lista.map(emp => {
+      const c = calcEmp(emp);
+      return `<tr class="emp-row" onclick="window.verEmprendedor(${emp.id})">
+        <td>#${emp.id}</td>
+        <td class="emp-name"><strong>${escapeHtml(emp.nombre)}</strong><small>Ingreso: ${escapeHtml(emp.fecha_ingreso || "Sin fecha")}</small></td>
+        <td>${escapeHtml(emp.propietario || "Sin propietario")}</td>
+        <td>${c.productos}</td><td>${c.recibidos}</td><td>${c.disponibles}</td><td>${c.vendidos}</td>
+        <td class="emp-money">${dinero(c.ventas)}</td>
+        <td><span class="emp-status ${estadoClass(emp.estado)}">${escapeHtml(emp.estado || "Activo")}</span></td>
+      </tr>`;
+    }).join("");
+  }
+
+  window.verEmprendedor = function(id){
+    const emp = emprendedores.find(e => Number(e.id) === Number(id));
+    if (!emp) return;
+    const c = calcEmp(emp);
+    const productosHtml = (emp.productos||[]).length ? emp.productos.map(p=>`
+      <div class="emp-product">
+        <div><strong>${escapeHtml(p.nombre)}</strong><small>Ubicación: ${escapeHtml(p.ubicacion || "No definida")}</small></div>
+        <span class="emp-chip">Recibidos: ${Number(p.recibidos||0)}</span>
+        <span class="emp-chip">Disponibles: ${Number(p.disponibles||0)}</span>
+        <span class="emp-chip">Vendidos: ${Number(p.vendidos||0)}</span>
+        <span class="emp-chip">${dinero(p.precio)}</span>
+      </div>`).join("") : `<div class="emp-empty">Sin productos almacenados.</div>`;
+    const histHtml = (emp.historial||[]).slice(0,8).map(h=>`
+      <div class="emp-history-item"><small>${escapeHtml(h.fecha)}</small><div><strong>${escapeHtml(h.accion)} · ${escapeHtml(h.actor)}</strong><span>${escapeHtml(h.detalle)}</span></div></div>`).join("") || `<div class="emp-empty">Sin historial registrado.</div>`;
+
+    Swal.fire({
+      title:"", width:"1050px", background:"#020617", color:"white", confirmButtonText:"Cerrar", confirmButtonColor:"#3b82f6",
+      showDenyButton:true, denyButtonText:"Editar", denyButtonColor:"#2563eb",
+      html:`<div class="emp-detail">
+        <div class="emp-detail-hero"><div><h2>🤝 ${escapeHtml(emp.nombre)}</h2><p>${escapeHtml(emp.propietario)} · ${escapeHtml(emp.telefono)} · ${escapeHtml(emp.correo)}</p></div><span class="emp-status ${estadoClass(emp.estado)}">${escapeHtml(emp.estado)}</span></div>
+        <div class="emp-detail-grid">
+          <div class="emp-detail-card"><small>Productos</small><strong>${c.productos}</strong></div>
+          <div class="emp-detail-card"><small>Recibidos</small><strong>${c.recibidos}</strong></div>
+          <div class="emp-detail-card"><small>Disponibles</small><strong>${c.disponibles}</strong></div>
+          <div class="emp-detail-card"><small>Vendidos</small><strong>${c.vendidos}</strong></div>
+          <div class="emp-detail-card"><small>Ventas</small><strong>${dinero(c.ventas)}</strong></div>
+          <div class="emp-detail-card"><small>Comisión</small><strong>${Number(emp.comision||5)}%</strong></div>
+          <div class="emp-detail-card"><small>Fecha ingreso</small><strong>${escapeHtml(emp.fecha_ingreso || "Sin fecha")}</strong></div>
+          <div class="emp-detail-card"><small>Responsable</small><strong>Mi tienda</strong></div>
+        </div>
+        <div class="emp-section-title">Inventario recibido / almacenado</div>
+        <div class="emp-products">${productosHtml}</div>
+        <div class="emp-section-title">Historial de entregas, ventas y retiros</div>
+        <div class="emp-history">${histHtml}</div>
+      </div>`
+    }).then(r=>{ if(r.isDenied) editarEmprendedor(emp.id); });
+  };
+
+  async function editarEmprendedor(id=null){
+    const emp = id ? emprendedores.find(e=>Number(e.id)===Number(id)) : null;
+    const r = await Swal.fire({
+      title: emp ? "Editar emprendedor" : "Agregar emprendedor", width:"720px", background:"#1e293b", color:"white", showCancelButton:true, confirmButtonText: emp?"Actualizar":"Guardar", cancelButtonText:"Cancelar", confirmButtonColor:"#2563eb", cancelButtonColor:"#475569",
+      html:`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;">
+        <input id="swNombre" class="swal2-input" style="margin:0;width:100%;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.12);border-radius:12px;" placeholder="Nombre del emprendimiento" value="${escapeHtml(emp?.nombre||"")}">
+        <input id="swPropietario" class="swal2-input" style="margin:0;width:100%;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.12);border-radius:12px;" placeholder="Propietario" value="${escapeHtml(emp?.propietario||"")}">
+        <input id="swTelefono" class="swal2-input" style="margin:0;width:100%;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.12);border-radius:12px;" placeholder="Teléfono" value="${escapeHtml(emp?.telefono||"")}">
+        <input id="swCorreo" class="swal2-input" style="margin:0;width:100%;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.12);border-radius:12px;" placeholder="Correo" value="${escapeHtml(emp?.correo||"")}">
+        <select id="swEstado" class="swal2-select" style="margin:0;width:100%;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.12);border-radius:12px;"><option ${emp?.estado==='Activo'?'selected':''}>Activo</option><option ${emp?.estado==='Pausado'?'selected':''}>Pausado</option><option ${emp?.estado==='Suspendido'?'selected':''}>Suspendido</option></select>
+        <input id="swComision" type="number" class="swal2-input" style="margin:0;width:100%;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.12);border-radius:12px;" placeholder="Comisión %" value="${Number(emp?.comision||5)}">
+        <textarea id="swProductos" style="grid-column:1/-1;min-height:130px;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px;" placeholder="Productos, uno por línea: Producto | recibidos | disponibles | vendidos | precio | ubicación">${(emp?.productos||[]).map(p=>`${p.nombre} | ${p.recibidos} | ${p.disponibles} | ${p.vendidos} | ${p.precio} | ${p.ubicacion||''}`).join('\n')}</textarea>
+      </div>`,
+      preConfirm:()=>{
+        const nombre=$("swNombre").value.trim();
+        if(!nombre){ Swal.showValidationMessage("Escribe el nombre del emprendimiento"); return false; }
+        const productos=$("swProductos").value.split(/\n+/).map(line=>line.trim()).filter(Boolean).map(line=>{const [nombre,recibidos,disponibles,vendidos,precio,ubicacion]=line.split("|").map(x=>String(x||"").trim());return {nombre,recibidos:Number(recibidos||0),disponibles:Number(disponibles||0),vendidos:Number(vendidos||0),precio:Number(precio||0),ubicacion};});
+        return {nombre, propietario:$("swPropietario").value.trim(), telefono:$("swTelefono").value.trim(), correo:$("swCorreo").value.trim(), estado:$("swEstado").value, comision:Number($("swComision").value||5), productos};
+      }
+    });
+    if(!r.isConfirmed) return;
+    if(emp){ Object.assign(emp, r.value); emp.historial = emp.historial || []; emp.historial.unshift({fecha:new Date().toLocaleString('es-SV'), actor:'Administrador', accion:'Datos actualizados', detalle:'Se actualizó información del emprendimiento'}); }
+    else { const nuevo={id: Math.max(0,...emprendedores.map(e=>Number(e.id)||0))+1, fecha_ingreso:new Date().toISOString().slice(0,10), historial:[{fecha:new Date().toLocaleString('es-SV'), actor:'Administrador', accion:'Emprendedor creado', detalle:'Registro creado desde Mi Tienda'}], ...r.value}; emprendedores.unshift(nuevo); }
+    guardarDatos(); render();
+    Swal.fire({title:"Guardado", icon:"success", background:"#1e293b", color:"white", timer:1100, showConfirmButton:false});
+  }
+
+  $("empBtnNuevo").addEventListener("click",()=>editarEmprendedor());
+  $("empBtnDemo").addEventListener("click",()=>{ localStorage.setItem(STORAGE_KEY, JSON.stringify(demo)); emprendedores=cargarDatos(); render(); });
+  $("empBtnLimpiar").addEventListener("click",()=>{ $("empBuscar").value=""; $("empFiltroEstado").value=""; $("empFiltroInventario").value=""; $("empFiltroProducto").value=""; render(); });
+  ["empBuscar","empFiltroEstado","empFiltroInventario","empFiltroProducto"].forEach(id=>$(id).addEventListener("input",render));
+  ["empFiltroEstado","empFiltroInventario"].forEach(id=>$(id).addEventListener("change",render));
+  guardarDatos(); render();
+})();
+</script>

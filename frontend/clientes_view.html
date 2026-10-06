@@ -1,0 +1,127 @@
+<section class="clientes-panel">
+  <style>
+    .clientes-panel{display:grid;gap:18px}.clientes-hero{position:relative;overflow:hidden;padding:30px;border-radius:24px;background:linear-gradient(135deg,#3a4270,#2a3042);border:1px solid var(--line);box-shadow:var(--shadow)}.clientes-hero .eyebrow{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(85,110,230,.14);border:1px solid rgba(125,211,252,.22);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#dbeafe;margin-bottom:12px}.clientes-hero h2{font-size:clamp(30px,4vw,44px);line-height:1;margin-bottom:10px;color:#fff}.clientes-hero p{color:#c9d1f4;line-height:1.6;max-width:820px}.clientes-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}.clientes-kpi{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}.clientes-kpi::after{content:"";position:absolute;right:-35px;bottom:-42px;width:115px;height:115px;border-radius:999px;background:rgba(85,110,230,.15)}.clientes-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042)}.clientes-kpi span{display:block;color:#cbd5e1;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}.clientes-kpi strong{display:block;margin-top:9px;font-size:28px;color:#fff}.clientes-kpi small{display:block;margin-top:7px;color:#a6b0cf;font-weight:800}.clientes-filtros,.clientes-section{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}.clientes-filtros{display:grid;gap:14px}.clientes-filtros-top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}.clientes-search{min-width:min(420px,100%);flex:1;display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.35);border:1px solid rgba(166,176,207,.14);border-radius:14px;padding:11px 13px}.clientes-search input{width:100%;border:0;outline:0;background:transparent;color:#fff;font-weight:800}.clientes-selects{display:flex;gap:8px;flex-wrap:wrap}.clientes-selects select{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#fff;padding:11px 13px;border-radius:12px;font-weight:900;outline:0}.clientes-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:18px}.clientes-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}.clientes-title h3{font-size:20px;color:#fff}.clientes-title p{color:var(--muted);font-size:13px;margin-top:4px}.clientes-table-wrap{width:100%;overflow-x:auto}.clientes-table{width:100%;min-width:900px;border-collapse:separate;border-spacing:0}.clientes-table th,.clientes-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap}.clientes-table th{color:#8da0ff;background:rgba(15,23,42,.38);font-size:12px;text-transform:uppercase;letter-spacing:.04em}.clientes-table td{color:#e5e7eb;font-size:13px;font-weight:700}.clientes-table tr{cursor:pointer}.clientes-table tr:hover td{background:rgba(85,110,230,.10)}.cliente-pill{display:inline-flex;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid rgba(125,211,252,.18);background:rgba(56,189,248,.10);color:#dbeafe}.cliente-pill.activo{background:rgba(52,195,143,.12);color:#bbf7d0}.cliente-pill.bloqueado{background:rgba(244,106,106,.12);color:#fecaca}.cliente-pill.vip{background:rgba(241,180,76,.13);color:#fde68a}.cliente-detail{display:grid;gap:14px}.cliente-profile{display:flex;gap:13px;align-items:center;padding:14px;border-radius:16px;background:rgba(15,23,42,.32);border:1px solid rgba(166,176,207,.10)}.cliente-avatar{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:rgba(85,110,230,.20);font-weight:1000;color:#fff}.cliente-profile strong{display:block;color:#fff}.cliente-profile span{display:block;color:var(--muted);font-size:13px;margin-top:3px}.cliente-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cliente-info{padding:12px;border-radius:14px;background:rgba(15,23,42,.30);border:1px solid rgba(166,176,207,.10)}.cliente-info span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;font-weight:900}.cliente-info strong{display:block;color:#fff;margin-top:6px}.cliente-list{display:grid;gap:10px}.cliente-list-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px;border-radius:14px;background:rgba(15,23,42,.30);border:1px solid rgba(166,176,207,.10)}.cliente-list-item span{color:#fff;font-weight:900}.cliente-list-item small{display:block;color:var(--muted);margin-top:3px}.cliente-alertas{display:grid;gap:10px}.cliente-alerta{padding:13px;border-radius:14px;border:1px solid rgba(166,176,207,.12);background:rgba(15,23,42,.32)}.cliente-alerta strong{display:block;color:#fff}.cliente-alerta span{display:block;margin-top:4px;color:var(--muted);font-size:13px}.cliente-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.cliente-action{border:1px solid var(--line);background:rgba(15,23,42,.30);color:#fff;border-radius:14px;padding:14px;text-align:left;cursor:pointer;font-weight:900}.cliente-action small{display:block;color:var(--muted);margin-top:5px;font-weight:800}.cliente-action:hover{background:rgba(85,110,230,.16);border-color:rgba(85,110,230,.42)}@media(max-width:1250px){.clientes-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.clientes-grid{grid-template-columns:1fr}}@media(max-width:720px){.clientes-kpis,.cliente-actions{grid-template-columns:1fr}.clientes-filtros-top,.clientes-selects{align-items:stretch}.clientes-selects select{flex:1 1 100%}.cliente-info-grid{grid-template-columns:1fr}}
+  </style>
+
+  <div class="clientes-hero">
+    <span class="eyebrow">Usuarios / Clientes</span>
+    <h2>Clientes</h2>
+    <p>Administra las cuentas de compradores, actividad de compra, direcciones, reclamos, devoluciones, seguridad y señales de posible fraude.</p>
+  </div>
+
+  <div class="clientes-kpis">
+    <div class="clientes-kpi destacado"><span>Total clientes</span><strong>18,420</strong><small>+8.4% este mes</small></div>
+    <div class="clientes-kpi"><span>Activos</span><strong>15,890</strong><small>Compraron o iniciaron sesión</small></div>
+    <div class="clientes-kpi"><span>Bloqueados</span><strong>42</strong><small>Revisión de seguridad</small></div>
+    <div class="clientes-kpi"><span>Nuevos</span><strong>620</strong><small>Periodo seleccionado</small></div>
+    <div class="clientes-kpi"><span>Clientes VIP</span><strong>186</strong><small>Alto valor de compra</small></div>
+  </div>
+
+  <div class="clientes-filtros">
+    <div class="tiendapro-dashboard-filtros">
+      <div class="tiendapro-periodos">
+        <button class="tiendapro-filter-btn active" type="button">Día</button>
+        <button class="tiendapro-filter-btn" type="button">Mes</button>
+        <button class="tiendapro-filter-btn" type="button">Año</button>
+      </div>
+      <div class="tiendapro-rango-fechas">
+        <label class="tiendapro-date-field">Desde <input type="date"></label>
+        <label class="tiendapro-date-field">Hasta <input type="date"></label>
+      </div>
+      <div class="tiendapro-date-field">Filtro activo: <strong>Hoy</strong></div>
+    </div>
+
+    <div class="clientes-filtros-top">
+      <label class="clientes-search">🔎 <input id="buscarCliente" placeholder="Buscar cliente, correo, teléfono o ciudad..."></label>
+      <div class="clientes-selects">
+        <select><option>Estado: todos</option><option>Activo</option><option>Bloqueado</option><option>Inactivo</option><option>VIP</option></select>
+        <select><option>País: todos</option><option>El Salvador</option><option>Guatemala</option><option>Honduras</option></select>
+        <select><option>Departamento</option><option>San Salvador</option><option>La Libertad</option><option>Santa Ana</option></select>
+        <select><option>Ciudad</option><option>San Salvador</option><option>Soyapango</option><option>Santa Tecla</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="clientes-grid">
+    <div class="clientes-section">
+      <div class="clientes-title">
+        <div><h3>Lista de clientes</h3><p>Cuentas de compradores registradas en la plataforma.</p></div>
+        <span class="cliente-pill">18,420 registros</span>
+      </div>
+      <div class="clientes-table-wrap">
+        <table class="clientes-table">
+          <thead><tr><th>ID</th><th>Cliente</th><th>Correo</th><th>Teléfono</th><th>País</th><th>Estado</th><th>Pedidos</th><th>Última compra</th><th>Registro</th></tr></thead>
+          <tbody id="tablaClientes">
+            <tr data-cliente="Carlos Méndez|carlos.mendez@email.com|San Salvador|Activo|34|$1,245.80|$36.64|Tarjeta|Col. Escalón, San Salvador"><td>CLI-1001</td><td>Carlos Méndez</td><td>carlos.mendez@email.com</td><td>+503 7123-4421</td><td>El Salvador</td><td><span class="cliente-pill activo">Activo</span></td><td>34</td><td>2026-07-01</td><td>2025-11-18</td></tr>
+            <tr data-cliente="María López|maria.lopez@email.com|Santa Tecla|VIP|78|$4,980.25|$63.85|Tarjeta|Santa Tecla, La Libertad"><td>CLI-1002</td><td>María López</td><td>maria.lopez@email.com</td><td>+503 7788-1902</td><td>El Salvador</td><td><span class="cliente-pill vip">VIP</span></td><td>78</td><td>2026-07-02</td><td>2025-03-04</td></tr>
+            <tr data-cliente="José Ramírez|jose.ramirez@email.com|Soyapango|Activo|12|$389.90|$32.49|Efectivo|Soyapango, San Salvador"><td>CLI-1003</td><td>José Ramírez</td><td>jose.ramirez@email.com</td><td>+503 7011-2309</td><td>El Salvador</td><td><span class="cliente-pill activo">Activo</span></td><td>12</td><td>2026-06-28</td><td>2026-01-12</td></tr>
+            <tr data-cliente="Ana Castillo|ana.castillo@email.com|Santa Ana|Bloqueado|6|$210.00|$35.00|Tarjeta|Santa Ana"><td>CLI-1004</td><td>Ana Castillo</td><td>ana.castillo@email.com</td><td>+503 7599-8234</td><td>El Salvador</td><td><span class="cliente-pill bloqueado">Bloqueado</span></td><td>6</td><td>2026-06-12</td><td>2026-02-20</td></tr>
+            <tr data-cliente="Luis Hernández|luis.h@email.com|San Miguel|Activo|19|$875.45|$46.07|Transferencia|San Miguel"><td>CLI-1005</td><td>Luis Hernández</td><td>luis.h@email.com</td><td>+503 7333-1010</td><td>El Salvador</td><td><span class="cliente-pill activo">Activo</span></td><td>19</td><td>2026-06-30</td><td>2025-09-08</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="clientes-section cliente-detail">
+      <div class="clientes-title"><div><h3>Detalle del cliente</h3><p>Resumen de cuenta, compras, direcciones y alertas.</p></div></div>
+      <div class="cliente-profile"><div class="cliente-avatar" id="clienteAvatar">CM</div><div><strong id="clienteNombre">Carlos Méndez</strong><span id="clienteCorreo">carlos.mendez@email.com</span></div></div>
+      <div class="cliente-info-grid">
+        <div class="cliente-info"><span>Ciudad</span><strong id="clienteCiudad">San Salvador</strong></div>
+        <div class="cliente-info"><span>Estado</span><strong id="clienteEstado">Activo</strong></div>
+        <div class="cliente-info"><span>Total pedidos</span><strong id="clientePedidos">34</strong></div>
+        <div class="cliente-info"><span>Total gastado</span><strong id="clienteGastado">$1,245.80</strong></div>
+        <div class="cliente-info"><span>Ticket promedio</span><strong id="clienteTicket">$36.64</strong></div>
+        <div class="cliente-info"><span>Pago favorito</span><strong id="clientePago">Tarjeta</strong></div>
+      </div>
+      <div class="cliente-info"><span>Dirección principal</span><strong id="clienteDireccion">Col. Escalón, San Salvador</strong></div>
+      <div class="clientes-title"><div><h3>Historial reciente</h3><p>Últimos 5 movimientos visibles. El historial completo se descargará después.</p></div></div>
+      <div class="cliente-list">
+        <div class="cliente-list-item"><div><span>Pedido PED-2042</span><small>Compra entregada correctamente</small></div><b>$86.50</b></div>
+        <div class="cliente-list-item"><div><span>Reclamo REC-120</span><small>Consulta por retraso de envío</small></div><b>Resuelto</b></div>
+        <div class="cliente-list-item"><div><span>Dirección actualizada</span><small>Actualización de datos de entrega</small></div><b>Hoy</b></div>
+      </div>
+      <div class="clientes-title"><div><h3>Alertas</h3></div></div>
+      <div class="cliente-alertas">
+        <div class="cliente-alerta"><strong>Cliente VIP sin compra reciente</strong><span>Preparado para campañas o seguimiento.</span></div>
+        <div class="cliente-alerta"><strong>Posible cuenta duplicada</strong><span>Validación por teléfono/correo pendiente.</span></div>
+      </div>
+      <div class="cliente-actions">
+        <button class="cliente-action" type="button">Ver pedidos<small>Se conectará después</small></button>
+        <button class="cliente-action" type="button">Ver reclamos<small>Postventa</small></button>
+        <button class="cliente-action" type="button">Descargar bitácora<small>Pendiente</small></button>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    (() => {
+      const filas = document.querySelectorAll('#tablaClientes tr');
+      const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+      filas.forEach(fila => {
+        fila.addEventListener('click', () => {
+          const [nombre, correo, ciudad, estado, pedidos, gastado, ticket, pago, direccion] = fila.dataset.cliente.split('|');
+          const iniciales = nombre.split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
+          setText('clienteAvatar', iniciales);
+          setText('clienteNombre', nombre);
+          setText('clienteCorreo', correo);
+          setText('clienteCiudad', ciudad);
+          setText('clienteEstado', estado);
+          setText('clientePedidos', pedidos);
+          setText('clienteGastado', gastado);
+          setText('clienteTicket', ticket);
+          setText('clientePago', pago);
+          setText('clienteDireccion', direccion);
+        });
+      });
+      const buscar = document.getElementById('buscarCliente');
+      if (buscar) buscar.addEventListener('input', () => {
+        const q = buscar.value.toLowerCase().trim();
+        filas.forEach(fila => fila.style.display = fila.textContent.toLowerCase().includes(q) ? '' : 'none');
+      });
+      document.querySelectorAll('.tiendapro-filter-btn').forEach(btn => btn.addEventListener('click', () => {
+        document.querySelectorAll('.tiendapro-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }));
+    })();
+  </script>
+</section>

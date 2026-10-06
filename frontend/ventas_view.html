@@ -1,0 +1,123 @@
+<section class="ventas-pro">
+  <div class="analytics-hero ventas-hero">
+    <div>
+      <span class="eyebrow-mini">Reporte financiero</span>
+      <h2>Ventas</h2>
+      <p class="section-desc">
+        Navega por niveles: primero ves las ventas por año, luego haces clic en un año para ver los meses,
+        y finalmente haces clic en un mes para ver los productos vendidos y los pedidos de ese período.
+      </p>
+    </div>
+
+    <div class="analytics-period-pill">
+      <span>Vista actual</span>
+      <strong id="ventasVistaActual">Años</strong>
+    </div>
+  </div>
+
+  <div class="ventas-breadcrumb">
+    <button id="btnVentasAnios" class="crumb active">Años</button>
+    <button id="btnVentasMeses" class="crumb" disabled>Meses</button>
+    <button id="btnVentasProductos" class="crumb" disabled>Productos</button>
+  </div>
+
+  <div class="analytics-kpi-grid ventas-kpis">
+    <article class="kpi-card kpi-primary">
+      <div>
+        <span>Ventas generadas</span>
+        <strong id="ventasTotalGeneradas">$0.00</strong>
+        <small>Pedidos no cancelados</small>
+      </div>
+      <div class="kpi-icon">💵</div>
+    </article>
+
+    <article class="kpi-card">
+      <div>
+        <span>Ganancias confirmadas</span>
+        <strong id="ventasGananciasConfirmadas">$0.00</strong>
+        <small>Entregado / pagado</small>
+      </div>
+      <div class="kpi-icon">✅</div>
+    </article>
+
+    <article class="kpi-card">
+      <div>
+        <span>Pedidos válidos</span>
+        <strong id="ventasPedidosValidos">0</strong>
+        <small>Ventas registradas</small>
+      </div>
+      <div class="kpi-icon">🧾</div>
+    </article>
+
+    <article class="kpi-card">
+      <div>
+        <span>Productos vendidos</span>
+        <strong id="ventasProductosVendidos">0</strong>
+        <small>Unidades vendidas</small>
+      </div>
+      <div class="kpi-icon">📦</div>
+    </article>
+  </div>
+
+  <div class="ventas-layout">
+    <article class="analytics-panel ventas-panel-principal">
+      <div class="chart-title pro-title">
+        <div>
+          <h3 id="ventasTituloTabla">Ventas por año</h3>
+          <span id="ventasSubtituloTabla">Haz clic en un año para ver sus meses.</span>
+        </div>
+      </div>
+
+      <div class="tabla-wrapper">
+        <table class="tabla ventas-tabla">
+          <thead id="ventasTablaHead"></thead>
+          <tbody id="ventasTablaBody"></tbody>
+        </table>
+      </div>
+
+      <p id="ventasMensaje" class="chart-note"></p>
+    </article>
+
+    <article class="analytics-panel ventas-chart-card">
+      <div class="chart-title">
+        <div>
+          <h3 id="ventasTituloGrafica">Resumen visual</h3>
+          <span>Pasa el mouse sobre la gráfica para ver detalles.</span>
+        </div>
+      </div>
+
+      <div class="chart-box ventas-chart-box">
+        <canvas id="chartVentasNiveles"></canvas>
+      </div>
+    </article>
+  </div>
+
+  <div id="ventasDetalleMes" class="ventas-detalle-mes oculto">
+    <article class="analytics-panel">
+      <div class="chart-title">
+        <div>
+          <h3 id="ventasTituloPedidosMes">Pedidos del mes</h3>
+          <span>Detalle de ventas registradas.</span>
+        </div>
+      </div>
+
+      <div class="tabla-wrapper">
+        <table class="tabla ventas-tabla">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Método</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="ventasPedidosMesBody"></tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script src="js/ventas.js"></script>

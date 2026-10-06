@@ -1,0 +1,370 @@
+<!-- =====================================================
+     VENDEDORES DASHBOARD VIEW / Marketplace
+     Fase 7: Dashboard general del módulo Vendedores
+     ===================================================== -->
+
+<style>
+  .vendedores-dashboard-view { color:#f8fafc; }
+  .vendedores-dashboard-view * { box-sizing:border-box; }
+  .vendedores-hero {
+    background: linear-gradient(135deg, rgba(85,110,230,.96), rgba(15,23,42,.96));
+    border: 1px solid rgba(166,176,207,.14);
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: 0 18px 44px rgba(0,0,0,.22);
+    margin-bottom: 18px;
+  }
+  .vendedores-hero small {
+    display:inline-flex;
+    padding:7px 12px;
+    border-radius:999px;
+    background: rgba(15,23,42,.35);
+    border:1px solid rgba(255,255,255,.12);
+    color:#dbeafe;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-bottom:10px;
+  }
+  .vendedores-hero h2 { margin:0 0 8px; font-size:32px; letter-spacing:-.04em; }
+  .vendedores-hero p { margin:0; color:#cbd5e1; max-width:900px; line-height:1.55; }
+
+
+
+  .vendedores-filtros-panel {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    background:#2a3042;
+    border:1px solid rgba(166,176,207,.14);
+    border-radius:18px;
+    padding:14px;
+    box-shadow:0 12px 30px rgba(0,0,0,.16);
+    margin-bottom:18px;
+  }
+  .vendedores-periodos,
+  .vendedores-rango {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .vendedores-filter-btn {
+    border:1px solid rgba(166,176,207,.14);
+    background:rgba(15,23,42,.35);
+    color:#cbd5e1;
+    padding:10px 14px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:900;
+    transition:.2s ease;
+  }
+  .vendedores-filter-btn:hover,
+  .vendedores-filter-btn.active {
+    color:#fff;
+    background:#556ee6;
+    border-color:rgba(125,211,252,.24);
+  }
+  .vendedores-date-field {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 11px;
+    border-radius:12px;
+    background:rgba(15,23,42,.35);
+    border:1px solid rgba(166,176,207,.14);
+    color:#a6b0cf;
+    font-size:12px;
+    font-weight:900;
+    text-transform:uppercase;
+  }
+  .vendedores-date-field input {
+    border:none;
+    outline:none;
+    color:#fff;
+    background:transparent;
+    font-weight:900;
+    color-scheme:dark;
+  }
+  .vendedores-filter-meta {
+    color:#a6b0cf;
+    font-size:12px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    background:rgba(15,23,42,.35);
+    border:1px solid rgba(166,176,207,.12);
+    border-radius:999px;
+    padding:9px 12px;
+  }
+
+  .vendedores-kpis {
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .vendedores-kpi {
+    position:relative;
+    overflow:hidden;
+    background:#2a3042;
+    border:1px solid rgba(166,176,207,.14);
+    border-radius:18px;
+    padding:18px;
+    min-height:120px;
+    box-shadow:0 12px 30px rgba(0,0,0,.16);
+  }
+  .vendedores-kpi::after {
+    content:"";
+    position:absolute;
+    right:-34px;
+    bottom:-42px;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:rgba(80,165,241,.12);
+  }
+  .vendedores-kpi span { display:block; color:#a6b0cf; font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; }
+  .vendedores-kpi strong { display:block; margin-top:9px; font-size:30px; color:white; }
+  .vendedores-kpi small { display:block; margin-top:7px; color:#94a3b8; font-weight:800; }
+  .vendedores-kpi.destacado { background:linear-gradient(135deg,#34c38f,#2a3042); }
+
+  .vendedores-grid {
+    display:grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr);
+    gap:18px;
+  }
+  .vendedores-panel {
+    background:#2a3042;
+    border:1px solid rgba(166,176,207,.14);
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 12px 30px rgba(0,0,0,.16);
+    min-width:0;
+  }
+  .vendedores-panel-title {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+    margin-bottom:16px;
+  }
+  .vendedores-panel-title h3 { margin:0; font-size:19px; color:#fff; }
+  .vendedores-panel-title p { margin:5px 0 0; color:#a6b0cf; font-size:13px; }
+  .vendedores-table-wrap { overflow-x:auto; }
+  .vendedores-table { width:100%; border-collapse:collapse; min-width:720px; }
+  .vendedores-table th, .vendedores-table td { padding:13px 12px; border-bottom:1px solid rgba(166,176,207,.10); text-align:left; white-space:nowrap; }
+  .vendedores-table th { color:#8da0ff; font-size:12px; text-transform:uppercase; letter-spacing:.04em; background:rgba(15,23,42,.34); }
+  .vendedores-table td { color:#e5e7eb; font-size:13px; font-weight:700; }
+  .vendedores-badge { display:inline-flex; border-radius:999px; padding:5px 9px; font-size:11px; font-weight:900; border:1px solid rgba(166,176,207,.16); background:rgba(15,23,42,.38); color:#cbd5e1; }
+  .vendedores-badge.ok { color:#86efac; border-color:rgba(52,195,143,.32); background:rgba(52,195,143,.12); }
+  .vendedores-badge.warn { color:#fbbf24; border-color:rgba(241,180,76,.32); background:rgba(241,180,76,.12); }
+  .vendedores-badge.danger { color:#fca5a5; border-color:rgba(244,106,106,.32); background:rgba(244,106,106,.12); }
+
+  .vendedores-chart-placeholder {
+    min-height:310px;
+    display:grid;
+    place-items:center;
+    border:1px dashed rgba(166,176,207,.18);
+    border-radius:16px;
+    background:
+      linear-gradient(rgba(166,176,207,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(166,176,207,.07) 1px, transparent 1px);
+    background-size:100% 48px,72px 100%;
+    position:relative;
+    overflow:hidden;
+  }
+  .vendedores-chart-placeholder::after {
+    content:"";
+    position:absolute;
+    left:8%; right:8%; bottom:28%; height:42%;
+    border-bottom:3px solid rgba(80,165,241,.60);
+    border-left:3px solid rgba(52,195,143,.52);
+    transform:skewX(-18deg);
+    opacity:.70;
+  }
+  .vendedores-chart-placeholder span { z-index:1; color:#cbd5e1; font-weight:900; background:rgba(15,23,42,.78); border:1px solid rgba(166,176,207,.14); border-radius:999px; padding:10px 14px; }
+
+  .vendedores-alertas { display:grid; gap:12px; }
+  .vendedores-alerta {
+    display:grid;
+    grid-template-columns:42px 1fr auto;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    border-radius:16px;
+    background:rgba(15,23,42,.34);
+    border:1px solid rgba(166,176,207,.10);
+  }
+  .vendedores-alerta-icon { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; background:rgba(85,110,230,.16); }
+  .vendedores-alerta strong { display:block; color:white; font-size:14px; }
+  .vendedores-alerta small { display:block; color:#a6b0cf; margin-top:3px; }
+  .vendedores-alerta b { color:#34c38f; }
+
+  .vendedores-actions {
+    display:grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap:14px;
+    margin-top:18px;
+  }
+  .vendedores-action {
+    text-align:left;
+    border:1px solid rgba(166,176,207,.14);
+    border-radius:18px;
+    background:#2a3042;
+    color:white;
+    padding:18px;
+    min-height:130px;
+    cursor:pointer;
+    transition:.2s ease;
+  }
+  .vendedores-action:hover { transform:translateY(-2px); border-color:rgba(85,110,230,.46); background:rgba(85,110,230,.16); }
+  .vendedores-action span { display:grid; place-items:center; width:42px; height:42px; border-radius:14px; background:rgba(85,110,230,.18); margin-bottom:12px; }
+  .vendedores-action strong { display:block; margin-bottom:6px; }
+  .vendedores-action small { color:#a6b0cf; font-weight:800; }
+
+  @media(max-width:1200px){
+    .vendedores-kpis{grid-template-columns:repeat(2,1fr)}
+    .vendedores-grid,.vendedores-actions{grid-template-columns:1fr}
+  }
+  @media(max-width:680px){.vendedores-kpis{grid-template-columns:1fr}.vendedores-hero h2{font-size:26px}}
+</style>
+
+<div class="vendedores-dashboard-view">
+  <section class="vendedores-hero">
+    <small>Marketplace / Vendedores</small>
+    <h2>Dashboard de vendedores</h2>
+    <p>Vista general para controlar vendedores comerciales, emprendedores, solicitudes, ventas, comisiones, reclamos y comportamiento dentro de la plataforma.</p>
+  </section>
+
+
+
+  <section class="vendedores-filtros-panel" aria-label="Filtros del dashboard de vendedores">
+    <div class="vendedores-periodos">
+      <button class="vendedores-filter-btn active" type="button" data-vendedor-periodo="dia">Día</button>
+      <button class="vendedores-filter-btn" type="button" data-vendedor-periodo="mes">Mes</button>
+      <button class="vendedores-filter-btn" type="button" data-vendedor-periodo="anio">Año</button>
+    </div>
+
+    <div class="vendedores-rango">
+      <label class="vendedores-date-field">Desde <input type="date" id="vendedoresFechaDesde"></label>
+      <label class="vendedores-date-field">Hasta <input type="date" id="vendedoresFechaHasta"></label>
+      <button class="vendedores-filter-btn" type="button" id="btnAplicarRangoVendedores">Aplicar</button>
+      <button class="vendedores-filter-btn" type="button" id="btnLimpiarRangoVendedores">Limpiar</button>
+    </div>
+
+    <div class="vendedores-filter-meta" id="vendedoresFiltroActual">Filtro activo: Día</div>
+  </section>
+
+  <section class="vendedores-kpis">
+    <div class="vendedores-kpi destacado"><span>Ventas vendedores</span><strong id="vendKpiVentas">$12,850.00</strong><small>Ingresos generados por terceros</small></div>
+    <div class="vendedores-kpi"><span>Vendedores activos</span><strong id="vendKpiActivos">24</strong><small>Comerciales y emprendedores</small></div>
+    <div class="vendedores-kpi"><span>Solicitudes nuevas</span><strong id="vendKpiSolicitudes">7</strong><small>Pendientes de revisión</small></div>
+    <div class="vendedores-kpi"><span>Comisión plataforma</span><strong id="vendKpiComision">$642.50</strong><small>Estimado según ventas</small></div>
+  </section>
+
+  <section class="vendedores-grid">
+    <div class="vendedores-panel">
+      <div class="vendedores-panel-title">
+        <div><h3>Rendimiento de vendedores</h3><p>Gráfica preparada para ventas, comisiones y crecimiento.</p></div>
+        <span class="vendedores-badge ok">Datos demo</span>
+      </div>
+      <div class="vendedores-chart-placeholder"><span>Gráfica de ventas por vendedores</span></div>
+    </div>
+
+    <div class="vendedores-panel">
+      <div class="vendedores-panel-title">
+        <div><h3>Alertas importantes</h3><p>Problemas que requieren atención.</p></div>
+      </div>
+      <div class="vendedores-alertas">
+        <div class="vendedores-alerta"><div class="vendedores-alerta-icon">📝</div><div><strong>Solicitudes pendientes</strong><small>Vendedores esperando revisión</small></div><b>7</b></div>
+        <div class="vendedores-alerta"><div class="vendedores-alerta-icon">⚠️</div><div><strong>Vendedores con reclamos altos</strong><small>Revisar comportamiento postventa</small></div><b>3</b></div>
+        <div class="vendedores-alerta"><div class="vendedores-alerta-icon">💰</div><div><strong>Liquidaciones pendientes</strong><small>Pagos por liberar o retener</small></div><b>12</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="vendedores-panel" style="margin-top:18px;">
+    <div class="vendedores-panel-title">
+      <div><h3>Top vendedores</h3><p>Ranking temporal para validar el diseño. Luego cargará desde MySQL.</p></div>
+    </div>
+    <div class="vendedores-table-wrap">
+      <table class="vendedores-table">
+        <thead><tr><th>Vendedor</th><th>Tipo</th><th>Productos</th><th>Ventas</th><th>Comisión</th><th>Reclamos</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Tienda Demo SV</td><td><span class="vendedores-badge ok">Comercial</span></td><td>48</td><td>$4,250.00</td><td>$212.50</td><td>2</td><td><span class="vendedores-badge ok">Activo</span></td></tr>
+          <tr><td>Artesanías Ana</td><td><span class="vendedores-badge warn">Emprendedor</span></td><td>15</td><td>$980.00</td><td>$49.00</td><td>1</td><td><span class="vendedores-badge ok">Activo</span></td></tr>
+          <tr><td>Accesorios López</td><td><span class="vendedores-badge ok">Comercial</span></td><td>33</td><td>$2,100.00</td><td>$105.00</td><td>5</td><td><span class="vendedores-badge warn">Advertencia</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="vendedores-actions">
+    <button class="vendedores-action" type="button"><span>🏪</span><strong>Ver vendedores</strong><small>Administrar tiendas, documentos, estados y detalles.</small></button>
+    <button class="vendedores-action" type="button"><span>📝</span><strong>Revisar solicitudes</strong><small>Aprobar comercial o emprendedor.</small></button>
+    <button class="vendedores-action" type="button"><span>💰</span><strong>Liquidaciones</strong><small>Ver saldos disponibles, retenidos y pagados.</small></button>
+  </section>
+</div>
+
+<script>
+(function(){
+  const botonesPeriodo = [...document.querySelectorAll('[data-vendedor-periodo]')];
+  const desde = document.getElementById('vendedoresFechaDesde');
+  const hasta = document.getElementById('vendedoresFechaHasta');
+  const meta = document.getElementById('vendedoresFiltroActual');
+  const btnAplicar = document.getElementById('btnAplicarRangoVendedores');
+  const btnLimpiar = document.getElementById('btnLimpiarRangoVendedores');
+
+  const kpisDemo = {
+    dia: { ventas: '$1,250.00', activos: '24', solicitudes: '2', comision: '$62.50', texto: 'Filtro activo: Día' },
+    mes: { ventas: '$12,850.00', activos: '24', solicitudes: '7', comision: '$642.50', texto: 'Filtro activo: Mes' },
+    anio: { ventas: '$118,400.00', activos: '24', solicitudes: '46', comision: '$5,920.00', texto: 'Filtro activo: Año' }
+  };
+
+  function setKpis(data){
+    const ventas = document.getElementById('vendKpiVentas');
+    const activos = document.getElementById('vendKpiActivos');
+    const solicitudes = document.getElementById('vendKpiSolicitudes');
+    const comision = document.getElementById('vendKpiComision');
+    if (ventas) ventas.textContent = data.ventas;
+    if (activos) activos.textContent = data.activos;
+    if (solicitudes) solicitudes.textContent = data.solicitudes;
+    if (comision) comision.textContent = data.comision;
+    if (meta) meta.textContent = data.texto;
+  }
+
+  botonesPeriodo.forEach(btn => {
+    btn.addEventListener('click', () => {
+      botonesPeriodo.forEach(item => item.classList.remove('active'));
+      btn.classList.add('active');
+      if (desde) desde.value = '';
+      if (hasta) hasta.value = '';
+      setKpis(kpisDemo[btn.dataset.vendedorPeriodo] || kpisDemo.dia);
+    });
+  });
+
+  if (btnAplicar) {
+    btnAplicar.addEventListener('click', () => {
+      botonesPeriodo.forEach(item => item.classList.remove('active'));
+      const textoDesde = desde?.value || 'sin inicio';
+      const textoHasta = hasta?.value || 'sin fin';
+      setKpis({ ventas: '$8,430.00', activos: '24', solicitudes: '5', comision: '$421.50', texto: `Rango: ${textoDesde} → ${textoHasta}` });
+    });
+  }
+
+  if (btnLimpiar) {
+    btnLimpiar.addEventListener('click', () => {
+      if (desde) desde.value = '';
+      if (hasta) hasta.value = '';
+      botonesPeriodo.forEach(item => item.classList.remove('active'));
+      const primero = botonesPeriodo.find(item => item.dataset.vendedorPeriodo === 'dia');
+      if (primero) primero.classList.add('active');
+      setKpis(kpisDemo.dia);
+    });
+  }
+})();
+</script>
+

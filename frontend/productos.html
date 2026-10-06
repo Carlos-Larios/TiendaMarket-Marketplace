@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos</title>
+
+  <style>
+    /* =====================================================
+       STYLE / ESTILOS GENERALES DE LA PÁGINA
+       ===================================================== */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: white;
+      padding: 35px;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 34px;
+    }
+
+    .contenedor {
+      background: #1e293b;
+      padding: 24px;
+      border-radius: 20px;
+      max-width: 1200px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(0,0,0,.3);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 12px;
+      background: #334155;
+      color: white;
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      color: #cbd5e1;
+    }
+
+    button {
+      margin-top: 14px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: #3b82f6;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .btn-eliminar,
+    .btn-cancelar {
+      background: #ef4444;
+    }
+
+    .btn-eliminar:hover,
+    .btn-cancelar:hover {
+      background: #dc2626;
+    }
+
+    #mensaje {
+      margin-top: 18px;
+      font-size: 17px;
+      color: #4ade80;
+    }
+
+    #buscarProducto {
+      margin-top: 18px;
+    }
+
+    #listaProductos {
+      margin-top: 35px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #334155;
+      border-radius: 15px;
+      overflow: hidden;
+      padding: 15px;
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #1e293b;
+    }
+
+    .card h3 {
+      margin-top: 10px;
+    }
+
+    .card p {
+      margin-top: 5px;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .precio {
+      font-size: 22px;
+      color: #4ade80;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      background: #0f172a;
+      color: #dbeafe;
+      border: 1px solid #475569;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    .ayuda {
+      grid-column: 1 / -1;
+      color: #94a3b8;
+      font-size: 13px;
+      margin-top: -4px;
+    }
+
+
+
+    /* =====================================================
+       STYLE / MODAL DE EDICIÓN
+       ===================================================== */
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .modal-grid .swal2-input,
+    .modal-grid .swal2-select,
+    .input-modal {
+      width: 100% !important;
+      height: 38px !important;
+      margin: 0 !important;
+      padding: 8px 10px !important;
+      font-size: 14px !important;
+      border-radius: 10px !important;
+      background: #334155 !important;
+      color: white !important;
+      border: 1px solid #64748b !important;
+    }
+
+    .modal-full {
+      grid-column: 1 / -1;
+    }
+
+    .modal-preview {
+      width: 120px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #0f172a;
+      border: 1px solid #64748b;
+      justify-self: center;
+    }
+
+    .swal2-popup {
+      border-radius: 18px !important;
+    }
+
+    .swal2-actions button {
+      padding: 10px 20px !important;
+      font-size: 14px !important;
+      border-radius: 10px !important;
+    }
+
+    @media(max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 18px;
+      }
+    }
+
+    /* =====================================================
+       STYLE / TARJETAS DE PRODUCTOS ESTILO AMAZON
+       ===================================================== */
+
+    .card-amazon {
+  background: linear-gradient(180deg, #334155, #1e293b);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 14px;
+  transition: .25s ease;
+}
+
+.card-amazon:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  border-color: #38bdf8;
+}
+
+.card-img-box {
+  width: 100%;
+  height: 220px;
+  background: #0f172a;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-info {
+  padding-top: 12px;
+}
+
+.card-marca {
+  color: #38bdf8;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.descripcion {
+  color: #cbd5e1;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.precio-box {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.precio-final {
+  font-size: 26px;
+  font-weight: bold;
+  color: #22c55e;
+}
+
+.precio-normal {
+  color: #94a3b8;
+  text-decoration: line-through;
+  font-size: 14px;
+}
+
+.descuento {
+  background: #ef4444;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.stock {
+  color: #e2e8f0;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.categoria-card {
+  color: #facc15;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.tag {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+.tag-condicion {
+  background: #16a34a;
+  color: white;
+}
+
+.acciones-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.acciones-card button {
+  margin-top: 0;
+  padding: 11px;
+  font-size: 14px;
+}
+
+.btn-eliminar {
+  background: #ef4444;
+}
+
+.btn-eliminar:hover {
+  background: #dc2626;
+}
+/* =====================================================
+   STYLE / LAYOUT DE PRODUCTOS Y FILTROS LATERALES
+   ===================================================== */
+
+.layout-productos {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.filtros-amazon {
+  background: #1e293b;
+  padding: 18px;
+  border-radius: 18px;
+  height: fit-content;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.filtros-amazon h3 {
+  margin-bottom: 15px;
+}
+
+.filtros-amazon input,
+.filtros-amazon select,
+.filtros-amazon button {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 11px;
+  border-radius: 10px;
+}
+
+@media (max-width: 900px) {
+  /* =====================================================
+   STYLE / LAYOUT DE PRODUCTOS Y FILTROS LATERALES
+   ===================================================== */
+
+.layout-productos {
+    grid-template-columns: 1fr;
+  }
+}
+
+  </style>
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+
+<body>
+  <!-- =====================================================
+       HTML / CONTENEDOR PRINCIPAL
+       ===================================================== -->
+  <div class="contenedor">
+    <h1>📦 Administrar Productos</h1>
+
+    <!-- =====================================================
+         HTML / FORMULARIO PARA AGREGAR PRODUCTOS
+         ===================================================== -->
+    <form id="productoForm">
+      <div class="grid">
+        <input type="text" id="nombre" placeholder="Nombre del producto" required>
+        <input type="text" id="descripcion" placeholder="Descripción">
+        <input type="number" id="precio" placeholder="Precio" step="0.01" required>
+        <input type="number" id="descuento" placeholder="Descuento %">
+        <input type="text" id="imagen" placeholder="URL de imagen">
+        <input type="number" id="stock" placeholder="Stock">
+
+        <input type="text" id="marca" placeholder="Marca. Ej: Samsung, Asus">
+        <input type="text" id="modelo" placeholder="Modelo. Ej: Odyssey G5">
+
+        <select id="condicion">
+          <option value="Nuevo">Nuevo</option>
+          <option value="Renovado">Renovado</option>
+          <option value="Usado">Usado</option>
+        </select>
+
+        <input type="text" id="sku" placeholder="SKU / código interno">
+        <input type="text" id="codigo_barras" placeholder="Código de barras / QR">
+        <input type="text" id="color" placeholder="Color">
+
+        <input type="text" id="talla" placeholder="Talla / tamaño. Ej: M, 27 pulgadas">
+
+        <select id="disponibilidad">
+          <option value="Disponible">Disponible</option>
+          <option value="Agotado">Agotado</option>
+          <option value="Reservado">Reservado</option>
+          <option value="Próximamente">Próximamente</option>
+        </select>
+
+        <select id="genero">
+          <option value="">Género / tipo si aplica</option>
+          <option value="Hombre">Hombre</option>
+          <option value="Mujer">Mujer</option>
+          <option value="Unisex">Unisex</option>
+        </select>
+
+        <select id="categoriaPrincipal" required>
+          <option value="">Categoría principal</option>
+        </select>
+
+        <input type="text" id="subcategoriaTexto" list="listaSubcategorias" placeholder="Subcategoría. Ej: Hombre, Computadoras">
+        <datalist id="listaSubcategorias"></datalist>
+
+        <input type="text" id="tipoCategoriaTexto" list="listaTipos" placeholder="Tipo. Ej: Camisas, Laptops">
+        <datalist id="listaTipos"></datalist>
+
+        <p class="ayuda">
+          La subcategoría y el tipo se guardan automáticamente si no existen.
+          Ejemplo: Ropa, zapatos y joyería → Hombre → Camisas.
+        </p>
+      </div>
+
+      <button type="submit" id="btnGuardar">Agregar producto</button>
+      <button type="button" id="btnCancelar" class="btn-cancelar" style="display:none;">
+        Cancelar edición
+      </button>
+    </form>
+
+    <p id="mensaje"></p>
+
+    <!-- =====================================================
+         HTML / BUSCADOR GENERAL DE PRODUCTOS
+         ===================================================== -->
+    <input
+      type="text"
+      id="buscarProducto"
+      placeholder="Buscar producto por nombre, marca, modelo, SKU o código..."
+    >
+
+    <!-- =====================================================
+         HTML / FILTROS ESTILO AMAZON Y LISTA DE PRODUCTOS
+         ===================================================== -->
+    <div class="layout-productos">
+  <aside class="filtros-amazon">
+    <h3>Filtros</h3>
+
+    <input 
+      type="text" 
+      id="filtroMarca" 
+      placeholder="Filtrar por marca"
+    >
+
+    <select id="filtroCondicion">
+      <option value="">Condición</option>
+      <option value="Nuevo">Nuevo</option>
+      <option value="Renovado">Renovado</option>
+      <option value="Usado">Usado</option>
+    </select>
+
+    <select id="filtroPrecio">
+      <option value="">Precio</option>
+      <option value="0-25">Menos de $25</option>
+      <option value="25-50">$25 a $50</option>
+      <option value="50-100">$50 a $100</option>
+      <option value="100-200">$100 a $200</option>
+      <option value="200-999999">$200 y más</option>
+    </select>
+
+    <button type="button" id="limpiarFiltros">
+      Limpiar filtros
+    </button>
+  </aside>
+
+  <div id="listaProductos"></div>
+</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script type="module">
+    /* =====================================================
+       JAVASCRIPT / IMPORTACIONES Y CONFIGURACIÓN BASE
+       ===================================================== */
+
+    import axios from "https://cdn.jsdelivr.net/npm/axios@1.7.7/+esm";
+
+    const API = "http://localhost:3000/api";
+    const token = localStorage.getItem("token") || localStorage.getItem("adminToken") || "";
+
+    const authHeaders = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    /* =====================================================
+       JAVASCRIPT / REFERENCIAS A ELEMENTOS HTML
+       ===================================================== */
+
+    const form = document.getElementById("productoForm");
+    const listaProductos = document.getElementById("listaProductos");
+    const buscarProducto = document.getElementById("buscarProducto");
+    const btnGuardar = document.getElementById("btnGuardar");
+    const btnCancelar = document.getElementById("btnCancelar");
+
+    const categoriaPrincipal = document.getElementById("categoriaPrincipal");
+    const subcategoriaTexto = document.getElementById("subcategoriaTexto");
+    const tipoCategoriaTexto = document.getElementById("tipoCategoriaTexto");
+    const listaSubcategorias = document.getElementById("listaSubcategorias");
+    const listaTipos = document.getElementById("listaTipos");
+    const filtroMarca = document.getElementById("filtroMarca");
+    const filtroCondicion = document.getElementById("filtroCondicion");
+    const filtroPrecio = document.getElementById("filtroPrecio");
+    const limpiarFiltros = document.getElementById("limpiarFiltros");
+
+    /* =====================================================
+       JAVASCRIPT / VARIABLES GLOBALES
+       ===================================================== */
+
+    let productosGlobales = [];
+    let categoriasGlobales = [];
+
+    /* =====================================================
+       JAVASCRIPT / FUNCIONES DE AYUDA
+       ===================================================== */
+
+    function limpiarTexto(texto) {
+      return (texto || "").trim();
+    }
+
+    function obtenerCategoriaPorNombreYPadre(nombre, parentId) {
+      return categoriasGlobales.find(cat =>
+        cat.name.toLowerCase() === nombre.toLowerCase() &&
+        String(cat.parent_id || "") === String(parentId || "")
+      );
+    }
+
+    async function buscarOCrearCategoria(nombre, parentId) {
+      const texto = limpiarTexto(nombre);
+
+      if (!texto) return null;
+
+      const existente = obtenerCategoriaPorNombreYPadre(texto, parentId);
+
+      if (existente) return existente;
+
+      const res = await axios.post(`${API}/categorias/buscar-o-crear`, {
+        name: texto,
+        parent_id: parentId || null
+      }, authHeaders);
+
+      await cargarCategorias();
+
+      return res.data.categoria;
+    }
+
+    function activarModoNormal() {
+      form.reset();
+
+      btnGuardar.innerText = "Agregar producto";
+      btnCancelar.style.display = "none";
+      buscarProducto.style.display = "block";
+      buscarProducto.value = "";
+
+      listaSubcategorias.innerHTML = "";
+      listaTipos.innerHTML = "";
+
+      mostrarProductos(productosGlobales);
+    }
+
+    function precioFinal(producto) {
+      const p = parseFloat(producto.precio) || 0;
+      const d = parseFloat(producto.descuento) || 0;
+
+      return (p - (p * d / 100)).toFixed(2);
+    }
+
+    /* =====================================================
+       JAVASCRIPT / MOSTRAR PRODUCTOS EN TARJETAS
+       ===================================================== */
+
+    function mostrarProductos(productos) {
+  listaProductos.innerHTML = "";
+
+  productos.forEach(producto => {
+    const precioOriginal = parseFloat(producto.precio || 0).toFixed(2);
+    const descuento = Number(producto.descuento || 0);
+
+    listaProductos.innerHTML += `
+      <div class="card card-amazon">
+
+        <div class="card-img-box">
+          <img 
+            src="${producto.imagen || ""}" 
+            onerror="this.src='https://via.placeholder.com/300x220?text=Sin+imagen'"
+          >
+        </div>
+
+        <div class="card-info">
+
+          <div class="card-marca">
+            ${producto.marca || "Sin marca"}
+          </div>
+
+          <h3>${producto.nombre}</h3>
+
+          <p class="descripcion">
+            ${producto.descripcion || ""}
+          </p>
+
+          <div class="precio-box">
+            <span class="precio-final">
+              $${precioFinal(producto)}
+            </span>
+
+            ${descuento > 0 ? `
+              <span class="precio-normal">
+                $${precioOriginal}
+              </span>
+
+              <span class="descuento">
+                -${descuento}%
+              </span>
+            ` : ""}
+          </div>
+
+          <p class="stock">
+            Stock: ${producto.stock || 0} · ${producto.disponibilidad || "Disponible"}
+          </p>
+
+          <p class="categoria-card">
+            ${producto.categoria || "Sin categoría"}
+          </p>
+
+          <div class="tags">
+            ${producto.condicion ? `<span class="tag tag-condicion">${producto.condicion}</span>` : ""}
+            ${producto.modelo ? `<span class="tag">Modelo: ${producto.modelo}</span>` : ""}
+            ${producto.color ? `<span class="tag">Color: ${producto.color}</span>` : ""}
+            ${producto.talla ? `<span class="tag">Talla/Tamaño: ${producto.talla}</span>` : ""}
+            ${producto.genero ? `<span class="tag">${producto.genero}</span>` : ""}
+            ${producto.sku ? `<span class="tag">SKU: ${producto.sku}</span>` : ""}
+            ${producto.codigo_barras ? `<span class="tag">Código: ${producto.codigo_barras}</span>` : ""}
+          </div>
+
+          <div class="acciones-card">
+            <button onclick="editarProducto(${producto.id})">
+              Editar
+            </button>
+
+            <button 
+              class="btn-eliminar" 
+              onclick="eliminarProducto(${producto.id})">
+              Eliminar
+            </button>
+          </div>
+
+        </div>
+      </div>
+    `;
+  });
+}
+
+    /* =====================================================
+       JAVASCRIPT / CARGAR PRODUCTOS DESDE EL BACKEND
+       ===================================================== */
+
+    async function cargarProductos() {
+      try {
+        const res = await axios.get(`${API}/productos`, authHeaders);
+
+        productosGlobales = Array.isArray(res.data.productos) ? res.data.productos : (Array.isArray(res.data) ? res.data : []);
+
+        aplicarFiltros();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    /* =====================================================
+       JAVASCRIPT / CARGAR CATEGORÍAS DESDE MYSQL
+       ===================================================== */
+
+    async function cargarCategorias() {
+      try {
+        const res = await axios.get(`${API}/categorias`, authHeaders);
+
+        categoriasGlobales = res.data;
+
+        categoriaPrincipal.innerHTML = `<option value="">Categoría principal</option>`;
+
+        const principales = categoriasGlobales.filter(cat => cat.parent_id == null);
+
+        principales.forEach(cat => {
+          categoriaPrincipal.innerHTML += `
+            <option value="${cat.id}">
+              ${cat.name}
+            </option>
+          `;
+        });
+      } catch (error) {
+        console.log("Error al cargar categorías", error);
+      }
+    }
+
+    /* =====================================================
+       JAVASCRIPT / AUTOCOMPLETADO DE SUBCATEGORÍAS Y TIPOS
+       ===================================================== */
+
+    function actualizarSugerenciasSubcategorias() {
+      listaSubcategorias.innerHTML = "";
+      listaTipos.innerHTML = "";
+      tipoCategoriaTexto.value = "";
+
+      const hijas = categoriasGlobales.filter(
+        cat => cat.parent_id == categoriaPrincipal.value
+      );
+
+      hijas.forEach(cat => {
+        listaSubcategorias.innerHTML += `
+          <option value="${cat.name}"></option>
+        `;
+      });
+    }
+
+    function actualizarSugerenciasTipos() {
+      listaTipos.innerHTML = "";
+
+      const sub = obtenerCategoriaPorNombreYPadre(
+        limpiarTexto(subcategoriaTexto.value),
+        categoriaPrincipal.value
+      );
+
+      if (!sub) return;
+
+      const hijas = categoriasGlobales.filter(cat => cat.parent_id == sub.id);
+
+      hijas.forEach(cat => {
+        listaTipos.innerHTML += `
+          <option value="${cat.name}"></option>
+        `;
+      });
+    }
+
+    categoriaPrincipal.addEventListener("change", actualizarSugerenciasSubcategorias);
+    subcategoriaTexto.addEventListener("input", actualizarSugerenciasTipos);
+
+    /* =====================================================
+       JAVASCRIPT / FILTROS ESTILO AMAZON
+       ===================================================== */
+
+    function normalizarTexto(texto) {
+      return (texto || "")
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    }
+
+    function aplicarFiltros() {
+      let productosFiltrados = [...productosGlobales];
+
+      const textoBusqueda = normalizarTexto(buscarProducto.value);
+      const marcaFiltro = normalizarTexto(filtroMarca.value);
+      const condicionFiltro = normalizarTexto(filtroCondicion.value);
+      const precioFiltro = filtroPrecio.value;
+
+      // CONDICIÓN: búsqueda general por nombre, marca, modelo, SKU o código
+      if (textoBusqueda) {
+        productosFiltrados = productosFiltrados.filter(producto => {
+          const textoProducto = normalizarTexto(`
+            ${producto.nombre || ""}
+            ${producto.marca || ""}
+            ${producto.modelo || ""}
+            ${producto.sku || ""}
+            ${producto.codigo_barras || ""}
+            ${producto.categoria || ""}
+            ${producto.color || ""}
+            ${producto.talla || ""}
+          `);
+
+          return textoProducto.includes(textoBusqueda);
+        });
+      }
+
+      // CONDICIÓN: filtro lateral por marca
+      if (marcaFiltro) {
+        productosFiltrados = productosFiltrados.filter(producto =>
+          normalizarTexto(producto.marca).includes(marcaFiltro)
+        );
+      }
+
+      // CONDICIÓN: filtro lateral por condición
+      if (condicionFiltro) {
+        productosFiltrados = productosFiltrados.filter(producto =>
+          normalizarTexto(producto.condicion) === condicionFiltro
+        );
+      }
+
+      // CONDICIÓN: filtro lateral por precio final con descuento
+      if (precioFiltro) {
+        const [min, max] = precioFiltro.split("-").map(Number);
+
+        productosFiltrados = productosFiltrados.filter(producto => {
+          const precio = Number(precioFinal(producto));
+          return precio >= min && precio <= max;
+        });
+      }
+
+      mostrarProductos(productosFiltrados);
+    }
+
+    buscarProducto.addEventListener("input", aplicarFiltros);
+    filtroMarca.addEventListener("input", aplicarFiltros);
+    filtroCondicion.addEventListener("change", aplicarFiltros);
+    filtroPrecio.addEventListener("change", aplicarFiltros);
+
+    limpiarFiltros.addEventListener("click", () => {
+      buscarProducto.value = "";
+      filtroMarca.value = "";
+      filtroCondicion.value = "";
+      filtroPrecio.value = "";
+
+      aplicarFiltros();
+    });
+
+    /* =====================================================
+       JAVASCRIPT / CREAR PRODUCTO
+       ===================================================== */
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // CONDICIÓN: no permite guardar si no se selecciona categoría principal
+      if (!categoriaPrincipal.value) {
+        Swal.fire({
+          title: "Categoría requerida",
+          text: "Selecciona una categoría principal",
+          icon: "warning",
+          background: "#1e293b",
+          color: "white"
+        });
+
+        return;
+      }
+
+      try {
+        let categoriaFinal = categoriaPrincipal.options[categoriaPrincipal.selectedIndex].text;
+        let subcategoriaCreada = null;
+
+        // CONDICIÓN: si escribes una subcategoría, se busca o se crea automáticamente
+        if (limpiarTexto(subcategoriaTexto.value)) {
+          subcategoriaCreada = await buscarOCrearCategoria(
+            subcategoriaTexto.value,
+            categoriaPrincipal.value
+          );
+
+          categoriaFinal = subcategoriaCreada.name;
+        }
+
+        // CONDICIÓN: si escribes un tipo, primero debe existir una subcategoría
+        if (limpiarTexto(tipoCategoriaTexto.value)) {
+          if (!subcategoriaCreada) {
+            Swal.fire({
+              title: "Falta subcategoría",
+              text: "Para crear un tipo primero escribe una subcategoría",
+              icon: "warning",
+              background: "#1e293b",
+              color: "white"
+            });
+
+            return;
+          }
+
+          const tipoCreado = await buscarOCrearCategoria(
+            tipoCategoriaTexto.value,
+            subcategoriaCreada.id
+          );
+
+          categoriaFinal = tipoCreado.name;
+        }
+
+        const producto = {
+          nombre: document.getElementById("nombre").value,
+          descripcion: document.getElementById("descripcion").value,
+          precio: document.getElementById("precio").value,
+          descuento: document.getElementById("descuento").value || 0,
+          imagen: document.getElementById("imagen").value,
+          stock: document.getElementById("stock").value || 0,
+          categoria: categoriaFinal,
+          genero: document.getElementById("genero").value,
+          marca: document.getElementById("marca").value,
+          modelo: document.getElementById("modelo").value,
+          condicion: document.getElementById("condicion").value,
+          sku: document.getElementById("sku").value,
+          codigo_barras: document.getElementById("codigo_barras").value,
+          color: document.getElementById("color").value,
+          talla: document.getElementById("talla").value,
+          disponibilidad: document.getElementById("disponibilidad").value
+        };
+
+        const res = await axios.post(`${API}/productos`, producto, authHeaders);
+
+        document.getElementById("mensaje").innerText = res.data.mensaje;
+
+        activarModoNormal();
+
+        await cargarCategorias();
+        await cargarProductos();
+      } catch (error) {
+        console.log(error);
+
+        document.getElementById("mensaje").innerText =
+          "Error al guardar producto";
+      }
+    });
+
+    /* =====================================================
+       JAVASCRIPT / EDITAR PRODUCTO EN MODAL
+       ===================================================== */
+
+    window.editarProducto = async function(id) {
+      try {
+        const res = await axios.get(`${API}/productos/${id}`, authHeaders);
+        const producto = res.data;
+
+        const opcionesCategorias = categoriasGlobales.map(cat =>
+          `<option value="${cat.name}" ${producto.categoria === cat.name ? "selected" : ""}>${cat.name}</option>`
+        ).join("");
+
+        const { value: datos } = await Swal.fire({
+          title: "Editar producto",
+          width: "780px",
+          background: "#1e293b",
+          color: "white",
+          showCancelButton: true,
+          confirmButtonText: "Actualizar",
+          cancelButtonText: "Cancelar",
+          confirmButtonColor: "#3b82f6",
+          cancelButtonColor: "#ef4444",
+          html: `
+            <div class="modal-grid">
+              <input id="editNombre" class="swal2-input input-modal" placeholder="Nombre" value="${producto.nombre || ""}">
+              <input id="editDescripcion" class="swal2-input input-modal" placeholder="Descripción" value="${producto.descripcion || ""}">
+
+              <input id="editPrecio" type="number" step="0.01" class="swal2-input input-modal" placeholder="Precio" value="${producto.precio || ""}">
+              <input id="editDescuento" type="number" class="swal2-input input-modal" placeholder="Descuento %" value="${producto.descuento || 0}">
+
+              <p id="precioFinalTexto" class="modal-full" style="color:#4ade80;margin:0;text-align:center;font-size:14px;">
+                Precio final: $0.00
+              </p>
+
+              <input id="editImagen" class="swal2-input input-modal" placeholder="URL imagen" value="${producto.imagen || ""}">
+
+              <div style="
+                grid-column: 1 / -1;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                margin:20px 0;
+                order:-1;">
+              <img
+                id="previewImagen"
+                class="modal-preview"
+                src="${producto.imagen || ''}">
+              </div>
+
+              <input id="editStock" type="number" class="swal2-input input-modal" placeholder="Stock" value="${producto.stock || 0}">
+              <input id="editMarca" class="swal2-input input-modal" placeholder="Marca" value="${producto.marca || ""}">
+
+              <input id="editModelo" class="swal2-input input-modal" placeholder="Modelo" value="${producto.modelo || ""}">
+
+              <select id="editCategoria" class="swal2-input input-modal">
+                <option value="">Categoría</option>
+                ${opcionesCategorias}
+              </select>
+
+              <select id="editCondicion" class="swal2-input input-modal">
+                <option value="Nuevo" ${producto.condicion === "Nuevo" ? "selected" : ""}>Nuevo</option>
+                <option value="Renovado" ${producto.condicion === "Renovado" ? "selected" : ""}>Renovado</option>
+                <option value="Usado" ${producto.condicion === "Usado" ? "selected" : ""}>Usado</option>
+              </select>
+
+              <input id="editSku" class="swal2-input input-modal" placeholder="SKU" value="${producto.sku || ""}">
+              <input id="editCodigo" class="swal2-input input-modal" placeholder="Código de barras / QR" value="${producto.codigo_barras || ""}">
+
+              <input id="editColor" class="swal2-input input-modal" placeholder="Color" value="${producto.color || ""}">
+              <input id="editTalla" class="swal2-input input-modal" placeholder="Talla / tamaño" value="${producto.talla || ""}">
+
+              <select id="editGenero" class="swal2-input input-modal">
+                <option value="">Género</option>
+                <option value="Hombre" ${producto.genero === "Hombre" ? "selected" : ""}>Hombre</option>
+                <option value="Mujer" ${producto.genero === "Mujer" ? "selected" : ""}>Mujer</option>
+                <option value="Unisex" ${producto.genero === "Unisex" ? "selected" : ""}>Unisex</option>
+              </select>
+
+              <select id="editDisponibilidad" class="swal2-input input-modal">
+                <option value="Disponible" ${producto.disponibilidad === "Disponible" ? "selected" : ""}>Disponible</option>
+                <option value="Agotado" ${producto.disponibilidad === "Agotado" ? "selected" : ""}>Agotado</option>
+                <option value="Reservado" ${producto.disponibilidad === "Reservado" ? "selected" : ""}>Reservado</option>
+                <option value="Próximamente" ${producto.disponibilidad === "Próximamente" ? "selected" : ""}>Próximamente</option>
+              </select>
+            </div>
+          `,
+          didOpen: () => {
+            const precio = document.getElementById("editPrecio");
+            const descuento = document.getElementById("editDescuento");
+            const imagen = document.getElementById("editImagen");
+            const preview = document.getElementById("previewImagen");
+            const precioFinalTexto = document.getElementById("precioFinalTexto");
+
+            function actualizarPrecioFinal() {
+              const p = parseFloat(precio.value) || 0;
+              const d = parseFloat(descuento.value) || 0;
+
+              precioFinalTexto.innerText =
+                `Precio final: $${(p - (p * d / 100)).toFixed(2)}`;
+            }
+
+            precio.addEventListener("input", actualizarPrecioFinal);
+            descuento.addEventListener("input", actualizarPrecioFinal);
+            imagen.addEventListener("input", () => preview.src = imagen.value);
+
+            actualizarPrecioFinal();
+          },
+          preConfirm: () => {
+            const nombre = document.getElementById("editNombre").value.trim();
+            const precio = document.getElementById("editPrecio").value;
+            const categoria = document.getElementById("editCategoria").value;
+
+            // CONDICIÓN: validar nombre obligatorio antes de actualizar
+            if (!nombre) {
+              Swal.showValidationMessage("El nombre es obligatorio");
+              return false;
+            }
+
+            // CONDICIÓN: validar precio mayor a cero
+            if (!precio || precio <= 0) {
+              Swal.showValidationMessage("El precio debe ser mayor a 0");
+              return false;
+            }
+
+            // CONDICIÓN: validar categoría obligatoria
+            if (!categoria) {
+              Swal.showValidationMessage("Selecciona una categoría");
+              return false;
+            }
+
+            return {
+              nombre,
+              descripcion: document.getElementById("editDescripcion").value.trim(),
+              precio,
+              descuento: document.getElementById("editDescuento").value || 0,
+              imagen: document.getElementById("editImagen").value.trim(),
+              stock: document.getElementById("editStock").value || 0,
+              categoria,
+              marca: document.getElementById("editMarca").value.trim(),
+              modelo: document.getElementById("editModelo").value.trim(),
+              condicion: document.getElementById("editCondicion").value,
+              sku: document.getElementById("editSku").value.trim(),
+              codigo_barras: document.getElementById("editCodigo").value.trim(),
+              color: document.getElementById("editColor").value.trim(),
+              talla: document.getElementById("editTalla").value.trim(),
+              genero: document.getElementById("editGenero").value,
+              disponibilidad: document.getElementById("editDisponibilidad").value
+            };
+          }
+        });
+
+        // CONDICIÓN: si el usuario cancela el modal, no se actualiza nada
+        if (!datos) return;
+
+        await axios.put(`${API}/productos/${id}`, datos, authHeaders);
+
+        Swal.fire({
+          title: "Actualizado",
+          text: "Producto actualizado correctamente",
+          icon: "success",
+          background: "#1e293b",
+          color: "white",
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        cargarProductos();
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo editar el producto",
+          icon: "error",
+          background: "#1e293b",
+          color: "white"
+        });
+      }
+    };
+
+    /* =====================================================
+       JAVASCRIPT / ELIMINAR PRODUCTO
+       ===================================================== */
+
+    window.eliminarProducto = async function(id) {
+      const resultado = await Swal.fire({
+        title: "¿Eliminar producto?",
+        text: "Esta acción no se puede deshacer",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ef4444",
+        cancelButtonColor: "#334155",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+        background: "#1e293b",
+        color: "white"
+      });
+
+      // CONDICIÓN: si cancela la alerta, no se elimina el producto
+      if (!resultado.isConfirmed) return;
+
+      try {
+        await axios.delete(`${API}/productos/${id}`, authHeaders);
+
+        Swal.fire({
+          title: "Eliminado",
+          text: "Producto eliminado correctamente",
+          icon: "success",
+          background: "#1e293b",
+          color: "white",
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        cargarProductos();
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo eliminar",
+          icon: "error",
+          background: "#1e293b",
+          color: "white"
+        });
+      }
+    };
+
+    /* =====================================================
+       JAVASCRIPT / CANCELAR Y CARGA INICIAL
+       ===================================================== */
+
+    btnCancelar.addEventListener("click", activarModoNormal);
+
+    await cargarCategorias();
+    await cargarProductos();
+  </script>
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

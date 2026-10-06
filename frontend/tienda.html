@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Perfil del vendedor | TiendaPro</title><link rel="stylesheet" href="css/tienda_publica.css"><link rel="stylesheet" href="css/public-header-pages.css"><link rel="stylesheet" href="css/public-theme.css"><link rel="stylesheet" href="css/perfil-tienda-publica.css?v=129"><script>document.documentElement.setAttribute('data-public-theme',localStorage.getItem('tiendapro_public_theme')==='dark'?'dark':'light')</script><link rel="stylesheet" href="css/ubicacion-mapa.css?v=130">  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head><body><header class="site-header public-shared-header">
+<div class="header-main">
+<button aria-label="Abrir categorías" class="mobile-menu-trigger" id="sharedCategoriasMobile" type="button">☰</button>
+<a aria-label="TiendaPro inicio" class="brand" href="tienda_publica.html">
+<span class="brand-bag">M</span><span class="brand-name">Market</span>
+</a>
+<div class="header-search">
+<input autocomplete="off" id="sharedBuscarPublico" placeholder="Buscar productos, marcas o tiendas..." type="search"/>
+<button aria-label="Buscar" id="sharedBtnBuscar" type="button">⌕</button>
+</div>
+<div class="account-actions" hidden="" id="sharedAccionesInvitado">
+<a class="seller-link" href="login-vendedor.html">Vender en TiendaPro</a>
+<a class="text-link" href="login-cliente.html">Iniciar sesión</a>
+<a class="btn-signup" href="registro_cliente.html">Registrarse</a>
+<button aria-label="Carrito" class="cart-icon" id="sharedBtnCarrito" type="button">🛒<span id="sharedCartCount">0</span></button>
+</div>
+<div class="account-actions" hidden="" id="sharedAccionesCliente">
+<span class="user-greeting" id="sharedSaludoCliente"></span>
+<div class="account-menu-wrap" id="sharedAccountMenu">
+<button aria-expanded="false" class="account-menu-trigger" id="sharedAccountMenuTrigger" type="button">Mi cuenta <span class="chev">▼</span></button>
+<div class="account-dropdown" hidden="" id="sharedAccountDropdown">
+<a href="cuenta_cliente.html">👤 Mi cuenta</a>
+<a href="cuenta_cliente.html#pedidos">📦 Mis pedidos</a>
+<a href="cuenta_cliente.html#favoritos">♥ Favoritos</a>
+<a href="ajustes-cliente.html">⚙ Ajustes</a>
+<button id="sharedCerrarSesion" type="button">↪ Cerrar sesión</button>
+</div>
+</div>
+<button aria-label="Carrito" class="cart-icon" id="sharedBtnCarritoCliente" type="button">🛒<span id="sharedCartCountCliente">0</span></button>
+</div>
+</div>
+<nav aria-label="Categorías" class="category-bar">
+<button aria-label="Todas las categorías" class="category-trigger" id="sharedTodasCategorias" title="Todas las categorías" type="button"><span class="category-trigger-icon">☰</span></button>
+<div aria-label="Accesos rápidos de categorías" class="category-links">
+<button data-shared-cat="Electrónica" type="button">Electrónica</button>
+<button data-shared-cat="Hogar" type="button">Hogar</button>
+<button data-shared-cat="Moda" type="button">Moda</button>
+<button data-shared-cat="Belleza" type="button">Belleza</button>
+<button data-shared-cat="Deportes" type="button">Deportes</button>
+<button data-shared-cat="Juguetes" type="button">Juguetes</button>
+<button data-shared-cat="Automotriz" type="button">Automotriz</button>
+<button data-shared-cat="Mascotas" type="button">Mascotas</button>
+<button class="offers-link" id="sharedOfertas" type="button">Ofertas</button>
+</div>
+</nav>
+</header><main class="seller-page"><p id="tiendaPublicaEstado" role="status">Cargando tienda…</p><div id="perfilPublico" hidden><section id="sellerHero" class="seller-hero"></section><div class="seller-layout"><aside><section id="sellerInfo" class="seller-box"></section><section id="sellerReviews" class="seller-box"></section></aside><div class="seller-content"><nav class="seller-tabs" aria-label="Perfil de tienda"><button data-tab="informacion" class="active">⌂ Información</button><button data-tab="comentarios">♧ Comentarios</button><button data-tab="vendidos">♜ Más vendidos</button><button data-tab="productos">▦ Todos los productos</button></nav><section id="bestSection" class="seller-box"><div class="seller-section-heading"><h2>🏆 Productos más vendidos</h2><button id="verTodos">Ver todos</button></div><div id="bestGrid" class="seller-grid"></div></section><section id="allSection" class="seller-box"><div class="seller-section-heading"><h2>▦ Todos los productos</h2><div class="seller-filters"><input id="buscarTienda" type="search" placeholder="Buscar en esta tienda…" aria-label="Buscar productos de esta tienda"><select id="ordenTienda" aria-label="Ordenar productos"><option value="relevantes">Más relevantes</option><option value="ventas">Más vendidos</option><option value="menor">Menor precio</option><option value="mayor">Mayor precio</option><option value="nuevos">Más recientes</option></select></div></div><div id="sellerCategories" class="seller-categories"></div><div id="allGrid" class="seller-grid"></div><button id="cargarProductos" class="seller-more" hidden>Ver más productos</button></section><section id="commentsSection" class="seller-box" hidden><h2>Comentarios de clientes</h2><p>Reseñas de compras verificadas de los productos de esta tienda.</p><div id="commentsList"></div><div id="reviewsPagination" class="seller-pagination"></div></section><section id="policiesSection" class="seller-box"></section></div></div></div></main><footer aria-label="Información de TiendaPro" class="site-footer marketplace-footer">
+<div class="footer-frame">
+<div class="footer-shell">
+<section aria-label="Market" class="footer-brand-block">
+<a aria-label="Market inicio" class="brand footer-brand" href="tienda_publica.html">
+<span class="brand-bag">M</span><span>Market</span>
+</a>
+<strong class="footer-tagline">Grandes marcas. Mejores historias.</strong>
+<p>Compras seguras, entregas rápidas y las mejores ofertas, siempre contigo.</p>
+<div class="footer-app">
+<strong>Descarga nuestra app</strong>
+<small>Compra desde donde estés.</small>
+<div aria-label="Aplicación móvil próximamente" class="app-buttons">
+<button data-footer-action="app-store" type="button">
+<span aria-hidden="true" class="app-market-icon apple-mark"></span>
+<span class="app-market-copy"><small>Descárgala en el</small><b>App Store</b></span>
+</button>
+<button data-footer-action="google-play" type="button">
+<span aria-hidden="true" class="app-market-icon play-mark"></span>
+<span class="app-market-copy"><small>Disponible en</small><b>Google Play</b></span>
+</button>
+</div>
+</div>
+</section>
+<section aria-label="Beneficios y enlaces" class="footer-center-block">
+<div class="footer-benefits">
+<button data-footer-info="envios" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M10 17h4V5H2v12h3m9-8h4l4 4v4h-3M7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path></svg>
+<span><strong>Envíos rápidos</strong><small>A todo el país</small></span>
+</button>
+<button data-footer-info="seguridad" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3v8Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+<span><strong>Compra 100%</strong><small>segura</small></span>
+</button>
+<button data-footer-info="devoluciones" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="m21 8-9-5-9 5 9 5 9-5Z"></path><path d="m3 8 9 5v9l9-5V8M12 13v9"></path></svg>
+<span><strong>Devoluciones</strong><small>fáciles</small></span>
+</button>
+<button data-footer-info="soporte" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2M18 19c0 1.7-1.3 3-3 3h-3"></path><path d="M4 14a2 2 0 0 1 2-2h1v6H6a2 2 0 0 1-2-2v-2Zm16 0a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2v-2Z"></path></svg>
+<span><strong>Soporte</strong><small>cuando lo necesites</small></span>
+</button>
+</div>
+<nav aria-label="Enlaces de TiendaPro" class="footer-links-grid">
+<div class="footer-link-column">
+<h3>Enlaces</h3>
+<a href="ofertas.html">Ofertas</a>
+<a data-footer-action="tiendas" href="#catalogo">Tiendas</a>
+<a data-footer-action="promociones" href="#catalogo">Promociones</a>
+<a data-footer-action="novedades" href="#catalogo">Novedades</a>
+<a data-footer-action="vendidos" href="#masVendidos">Más vendidos</a>
+</div>
+<div class="footer-link-column">
+<h3>Ayuda</h3>
+<a data-footer-info="ayuda" href="#ayuda">Centro de ayuda</a>
+<a data-footer-info="envios" href="#envios">Envíos y entregas</a>
+<a data-footer-info="devoluciones" href="#devoluciones">Cambios y devoluciones</a>
+<a data-footer-info="pagos" href="#pagos">Formas de pago</a>
+<a data-footer-info="seguimiento" href="#seguimiento">Seguimiento de pedido</a>
+</div>
+<div class="footer-link-column">
+<h3>Sobre nosotros</h3>
+<a data-footer-info="historia" href="#historia">Nuestra historia</a>
+<a data-footer-info="trabaja" href="#trabaja">Trabaja con nosotros</a>
+<a data-footer-info="terminos" href="#terminos">Términos y condiciones</a>
+<a data-footer-info="privacidad" href="#privacidad">Política de privacidad</a>
+<a data-footer-info="contacto" href="#contacto">Contacto</a>
+</div>
+</nav>
+</section>
+<section aria-label="Suscripción a promociones" class="footer-subscribe">
+<div aria-hidden="true" class="footer-promo-art"><span>%</span></div>
+<h2>¡No te pierdas<br/>nuestras promociones!</h2>
+<p>Recibe ofertas exclusivas en tu correo.</p>
+<form class="footer-subscribe-form" id="footerPromoForm">
+<label class="sr-only" for="footerPromoEmail">Tu correo electrónico</label>
+<div class="footer-email-row">
+<input autocomplete="email" id="footerPromoEmail" placeholder="Tu correo electrónico" required="" type="email"/>
+<button aria-label="Suscribirme a promociones" type="submit">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
+</button>
+</div>
+<small aria-live="polite" id="footerPromoStatus" role="status"></small>
+</form>
+</section>
+</div>
+<div class="footer-bottom">
+<span>© 2026 TiendaPro. Todos los derechos reservados.</span>
+<span>Métodos de pago disponibles: se habilitarán cuando TiendaPro configure pagos en línea.</span>
+<span class="footer-country">El Salvador</span>
+</div>
+</div>
+</footer><p id="sellerToast" role="status" class="seller-toast" hidden></p><script src="js/public-theme.js"></script><script src="js/public-header-pages.js"></script><script src="js/ubicacion-mapa.js?v=130"></script><script src="js/horario-12h.js?v=131"></script><script src="js/tienda_publica_detalle.js?v=131"></script>  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body></html>

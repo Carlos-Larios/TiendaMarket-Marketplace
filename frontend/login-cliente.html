@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión | TiendaPro</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    :root{
+      --green:#22b455;
+      --green-dark:#169447;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --soft:#f7f8fa;
+      --white:#ffffff;
+      --danger:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:var(--soft);
+      display:grid;
+      place-items:center;
+      padding:28px 18px;
+    }
+    .page{width:100%;max-width:440px}
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      margin-bottom:22px;
+      color:var(--text);
+      text-decoration:none;
+      font-weight:800;
+      font-size:27px;
+      letter-spacing:-.7px;
+    }
+    .brand-mark{
+      width:36px;height:36px;
+      display:grid;place-items:center;
+      border-radius:10px;
+      background:var(--green);
+      color:white;
+      font-size:22px;
+      font-weight:900;
+      box-shadow:0 8px 20px rgba(34,180,85,.18);
+    }
+    .card{
+      background:var(--white);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:34px;
+      box-shadow:0 16px 45px rgba(17,24,39,.07);
+    }
+    h1{
+      margin:0 0 8px;
+      text-align:center;
+      font-size:27px;
+      letter-spacing:-.5px;
+    }
+    .subtitle{
+      margin:0 0 28px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+    .field{margin-bottom:17px}
+    label{
+      display:block;
+      margin-bottom:7px;
+      font-size:13px;
+      font-weight:650;
+      color:#374151;
+    }
+    .input-wrap{position:relative}
+    input{
+      width:100%;
+      height:48px;
+      padding:0 14px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      background:#fff;
+      color:var(--text);
+      font-size:14px;
+      outline:none;
+      transition:border-color .18s, box-shadow .18s;
+    }
+    input:focus{
+      border-color:var(--green);
+      box-shadow:0 0 0 4px rgba(34,180,85,.10);
+    }
+    input::placeholder{color:#a3a8b2}
+    .password input{padding-right:72px}
+    .show-pass{
+      position:absolute;
+      right:12px;top:50%;transform:translateY(-50%);
+      border:0;background:transparent;
+      color:var(--muted);
+      font-size:12px;font-weight:700;
+      cursor:pointer;
+      padding:6px;
+    }
+    .helper-row{
+      display:flex;
+      justify-content:flex-end;
+      margin:-3px 0 18px;
+    }
+    .helper-row a,
+    .links a{color:var(--green-dark);text-decoration:none}
+    .helper-row a{font-size:12px;font-weight:650}
+    .btn-login{
+      width:100%;height:49px;
+      border:0;border-radius:11px;
+      background:var(--green);
+      color:white;
+      font-size:14px;
+      font-weight:750;
+      cursor:pointer;
+      transition:transform .15s, background .15s, box-shadow .15s;
+      box-shadow:0 8px 18px rgba(34,180,85,.18);
+    }
+    .btn-login:hover{background:var(--green-dark);transform:translateY(-1px)}
+    #mensaje{
+      min-height:20px;
+      margin:14px 0 0;
+      text-align:center;
+      color:var(--danger);
+      font-size:13px;
+    }
+    .divider{
+      display:flex;align-items:center;gap:12px;
+      color:#9ca3af;
+      font-size:12px;
+      margin:19px 0;
+    }
+    .divider::before,.divider::after{content:"";height:1px;background:var(--line);flex:1}
+    .links{text-align:center;font-size:13px;line-height:1.9;color:var(--muted)}
+    .links a{font-weight:700}
+    .back{
+      display:inline-block;
+      margin-top:12px;
+      color:#6b7280!important;
+      font-weight:600!important;
+    }
+    .secure-note{
+      text-align:center;
+      margin-top:16px;
+      color:#9ca3af;
+      font-size:11px;
+    }
+    @media(max-width:520px){
+      body{padding:18px 14px}
+      .card{padding:28px 22px;border-radius:18px}
+      h1{font-size:24px}
+    }
+  </style>
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+<body>
+  <main class="page">
+    <a class="brand" href="tienda_publica.html" aria-label="Volver a Market">
+      <span class="brand-mark">M</span>
+      <span>Market</span>
+    </a>
+
+    <section class="card">
+      <h1>Bienvenido de nuevo</h1>
+      <p class="subtitle">Inicia sesión para continuar con tus compras y ver tus pedidos.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" placeholder="tu@correo.com" autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <div class="input-wrap password">
+            <input type="password" id="password" placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
+            <button class="show-pass" type="button" id="togglePassword">Mostrar</button>
+          </div>
+        </div>
+
+        <div class="helper-row">
+          <a href="#" aria-label="Recuperar contraseña">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="btn-login">Iniciar sesión</button>
+      </form>
+
+      <p id="mensaje"></p>
+
+      <div class="divider">o</div>
+
+      <div class="links">
+        ¿Aún no tienes cuenta? <a href="registro_cliente.html">Crear cuenta</a><br>
+        ¿Quieres vender? <a href="registro_vendedor.html">Registrarse como vendedor</a><br>
+        <a class="back" href="tienda_publica.html">← Volver a la tienda</a>
+      </div>
+    </section>
+
+    <div class="secure-note">Acceso seguro de clientes · TiendaPro</div>
+  </main>
+
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    togglePassword.addEventListener('click', () => {
+      const visible = passwordInput.type === 'text';
+      passwordInput.type = visible ? 'password' : 'text';
+      togglePassword.textContent = visible ? 'Mostrar' : 'Ocultar';
+    });
+  </script>
+  <script src="js/login-cliente.js"></script>
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

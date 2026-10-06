@@ -1,0 +1,427 @@
+
+:root{
+  --public-bg:#ffffff;--public-surface:#ffffff;--public-surface-2:#f8fafc;
+  --public-text:#111827;--public-text-2:#5f6b7a;--public-muted:#8a94a3;
+  --public-border:#e5e7eb;--public-accent:#22b455;--public-accent-strong:#16a34a;
+  --public-shadow:0 14px 32px rgba(15,23,42,.08);
+}
+html[data-public-theme="dark"]{
+  --public-bg:#07111f;--public-surface:#0d192a;--public-surface-2:#091524;
+  --public-text:#f8fafc;--public-text-2:#c5d0df;--public-muted:#8fa5c0;
+  --public-border:#20324b;--public-accent:#22b455;--public-accent-strong:#39c96b;
+  --public-shadow:0 14px 34px rgba(0,0,0,.28);
+}
+html,body{background:var(--public-bg)!important;color:var(--public-text)!important}
+html[data-public-theme="dark"] .site-header,
+html[data-public-theme="dark"] .product-header{background:rgba(7,17,31,.97)!important;border-color:var(--public-border)!important}
+html[data-public-theme="dark"] .brand,
+html[data-public-theme="dark"] .text-link,
+html[data-public-theme="dark"] .text-button,
+html[data-public-theme="dark"] .category-bar button,
+html[data-public-theme="dark"] .category-select-wrap select,
+html[data-public-theme="dark"] .header-search input,
+html[data-public-theme="dark"] .product-header a,
+html[data-public-theme="dark"] .detail-logout{color:var(--public-text)!important}
+html[data-public-theme="dark"] .user-greeting,
+html[data-public-theme="dark"] .detail-user-greeting{color:var(--public-text-2)!important}
+html[data-public-theme="dark"] .header-search,
+html[data-public-theme="dark"] .product-search,
+html[data-public-theme="dark"] .product-card,
+html[data-public-theme="dark"] .promo-row article,
+html[data-public-theme="dark"] .modal-card,
+html[data-public-theme="dark"] .category-drawer-panel,
+html[data-public-theme="dark"] .profile-card,
+html[data-public-theme="dark"] .orders-section,
+html[data-public-theme="dark"] .order-card,
+html[data-public-theme="dark"] .detail-box{
+  background:var(--public-surface)!important;border-color:var(--public-border)!important;color:var(--public-text)!important
+}
+html[data-public-theme="dark"] .product-image,
+html[data-public-theme="dark"] .hero-minimal,
+html[data-public-theme="dark"] .category-drawer-list,
+html[data-public-theme="dark"] .product-actions .view{background:var(--public-surface-2)!important;color:var(--public-text)!important}
+html[data-public-theme="dark"] .product-title,
+html[data-public-theme="dark"] .section-title-row h2,
+html[data-public-theme="dark"] .hero-copy h1,
+html[data-public-theme="dark"] .orders-head h2,
+html[data-public-theme="dark"] .account-hero h1{color:var(--public-text)!important}
+html[data-public-theme="dark"] .product-category,
+html[data-public-theme="dark"] .product-brand,
+html[data-public-theme="dark"] .section-title-row p,
+html[data-public-theme="dark"] .hero-copy p,
+html[data-public-theme="dark"] .benefits small,
+html[data-public-theme="dark"] .muted,
+html[data-public-theme="dark"] .orders-head p{color:var(--public-muted)!important}
+html[data-public-theme="dark"] .benefits,
+html[data-public-theme="dark"] .benefits>div{border-color:var(--public-border)!important}
+.account-menu-wrap{position:relative}
+.account-menu-trigger{border:0;background:none;color:inherit;font:inherit;font-weight:800;cursor:pointer;padding:8px 4px;display:flex;align-items:center;gap:6px}
+.account-menu-trigger .chev{font-size:11px;transition:.18s}
+.account-menu-wrap.open .chev{transform:rotate(180deg)}
+.account-dropdown{position:absolute;right:0;top:calc(100% + 12px);min-width:220px;padding:8px;background:var(--public-surface);border:1px solid var(--public-border);border-radius:14px;box-shadow:0 18px 50px rgba(15,23,42,.18);z-index:120}
+.account-dropdown a,.account-dropdown button{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;border:0;border-radius:9px;background:none;color:var(--public-text);text-decoration:none;font:inherit;font-size:13px;font-weight:700;cursor:pointer;text-align:left}
+.account-dropdown a:hover,.account-dropdown button:hover{background:var(--public-surface-2)}
+.account-dropdown .pending{opacity:.48;cursor:not-allowed}
+.theme-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+.theme-choice{position:relative;border:2px solid var(--public-border);background:var(--public-surface);border-radius:16px;padding:14px;cursor:pointer;text-align:left;color:var(--public-text)}
+.theme-choice.active{border-color:var(--public-accent);box-shadow:0 0 0 3px rgba(34,180,85,.13)}
+.theme-preview{height:120px;border-radius:11px;border:1px solid var(--public-border);padding:12px;margin-bottom:12px}
+.theme-preview.light{background:#f7f9fc}.theme-preview.dark{background:#081321}
+.theme-preview .bar{height:16px;border-radius:5px;background:#22b455;margin-bottom:10px}
+.theme-preview .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.theme-preview .box{height:62px;border-radius:8px;background:#fff;border:1px solid #e5e7eb}
+.theme-preview.dark .box{background:#0d192a;border-color:#20324b}
+.settings-shell{width:min(1100px,calc(100% - 40px));margin:40px auto 80px}
+.settings-layout{display:grid;grid-template-columns:250px 1fr;gap:22px}
+.settings-nav,.settings-card{background:var(--public-surface);border:1px solid var(--public-border);border-radius:18px;padding:16px}
+.settings-nav button{width:100%;text-align:left;border:0;background:none;color:var(--public-text);padding:12px;border-radius:10px;font-weight:750}
+.settings-nav button.active{background:var(--public-surface-2);color:var(--public-accent-strong)}
+.settings-nav button[disabled]{opacity:.45}
+.settings-card h2{margin-top:0}.settings-card p{color:var(--public-text-2)}
+@media(max-width:760px){.settings-layout{grid-template-columns:1fr}.theme-choice-grid{grid-template-columns:1fr}}
+
+/* FASE 72 — contraste integral de la tienda pública (claro/oscuro)
+   Regla: el tema controla superficies/textos/bordes; los colores semánticos se conservan. */
+html[data-public-theme="dark"]{
+  color-scheme:dark;
+}
+
+/* Tienda pública: superficies estructurales */
+html[data-public-theme="dark"] .filters-panel,
+html[data-public-theme="dark"] .mini-card,
+html[data-public-theme="dark"] .cart-modal,
+html[data-public-theme="dark"] .checkout-modal,
+html[data-public-theme="dark"] .checkout-form,
+html[data-public-theme="dark"] .checkout-summary,
+html[data-public-theme="dark"] .cart-item,
+html[data-public-theme="dark"] .mobile-sheet-panel,
+html[data-public-theme="dark"] .mobile-flash-card,
+html[data-public-theme="dark"] .mobile-stores,
+html[data-public-theme="dark"] .access-modal,
+html[data-public-theme="dark"] .category-menu,
+html[data-public-theme="dark"] .category-menu-list,
+html[data-public-theme="dark"] .sort-select,
+html[data-public-theme="dark"] .price-filter input,
+html[data-public-theme="dark"] .filters-panel select,
+html[data-public-theme="dark"] .checkout-form input,
+html[data-public-theme="dark"] .checkout-form select,
+html[data-public-theme="dark"] .checkout-form textarea{
+  background:var(--public-surface)!important;
+  color:var(--public-text)!important;
+  border-color:var(--public-border)!important;
+}
+
+html[data-public-theme="dark"] .product-body,
+html[data-public-theme="dark"] .mini-img,
+html[data-public-theme="dark"] .cart-thumb,
+html[data-public-theme="dark"] .detail-image,
+html[data-public-theme="dark"] .mobile-quick,
+html[data-public-theme="dark"] .filter-summary,
+html[data-public-theme="dark"] .category-menu-item:hover,
+html[data-public-theme="dark"] .category-drawer-item:hover{
+  background:var(--public-surface-2)!important;
+}
+
+/* Tienda pública: tipografía segura */
+html[data-public-theme="dark"] .filters-panel,
+html[data-public-theme="dark"] .filters-panel label,
+html[data-public-theme="dark"] .filter-head,
+html[data-public-theme="dark"] .mini-card,
+html[data-public-theme="dark"] .mini-card h3,
+html[data-public-theme="dark"] .mini-card .price,
+html[data-public-theme="dark"] .cart-name,
+html[data-public-theme="dark"] .cart-footer,
+html[data-public-theme="dark"] .checkout-head,
+html[data-public-theme="dark"] .checkout-summary,
+html[data-public-theme="dark"] .checkout-summary strong,
+html[data-public-theme="dark"] .summary-line,
+html[data-public-theme="dark"] .category-menu-item,
+html[data-public-theme="dark"] .category-drawer-item,
+html[data-public-theme="dark"] .mobile-sheet-panel,
+html[data-public-theme="dark"] .mobile-section-head,
+html[data-public-theme="dark"] .mobile-flash-card{
+  color:var(--public-text)!important;
+}
+html[data-public-theme="dark"] .mini-card small,
+html[data-public-theme="dark"] .cart-meta,
+html[data-public-theme="dark"] .filter-summary,
+html[data-public-theme="dark"] .checkout-message,
+html[data-public-theme="dark"] .category-drawer-empty{
+  color:var(--public-text-2)!important;
+}
+
+/* Detalle de producto: todas las tarjetas deben seguir el tema */
+html[data-public-theme="dark"] .product-detail,
+html[data-public-theme="dark"] .gallery-thumb,
+html[data-public-theme="dark"] .variant-tile,
+html[data-public-theme="dark"] .choice,
+html[data-public-theme="dark"] .size-choice,
+html[data-public-theme="dark"] .purchase-card,
+html[data-public-theme="dark"] .quick-specs>div,
+html[data-public-theme="dark"] .product-accordions,
+html[data-public-theme="dark"] .care-row,
+html[data-public-theme="dark"] .policy-grid>div,
+html[data-public-theme="dark"] .store-section,
+html[data-public-theme="dark"] .recommend-section,
+html[data-public-theme="dark"] .recommend-card,
+html[data-public-theme="dark"] .product-highlights>div,
+html[data-public-theme="dark"] .purchase-side,
+html[data-public-theme="dark"] .qty-control,
+html[data-public-theme="dark"] .product-summary-card,
+html[data-public-theme="dark"] .summary-facts>div,
+html[data-public-theme="dark"] .product-info-modal__panel,
+html[data-public-theme="dark"] .modal-spec-grid>div,
+html[data-public-theme="dark"] .modal-presentation,
+html[data-public-theme="dark"] .modal-care-item,
+html[data-public-theme="dark"] .store-button{
+  background:var(--public-surface)!important;
+  color:var(--public-text)!important;
+  border-color:var(--public-border)!important;
+}
+
+html[data-public-theme="dark"] .gallery-main,
+html[data-public-theme="dark"] .variant-tile img,
+html[data-public-theme="dark"] .variant-tile>span,
+html[data-public-theme="dark"] .rec-img,
+html[data-public-theme="dark"] .qty-control button,
+html[data-public-theme="dark"] .product-info-modal__close,
+html[data-public-theme="dark"] .side-icon{
+  background:var(--public-surface-2)!important;
+  color:var(--public-text)!important;
+  border-color:var(--public-border)!important;
+}
+
+/* Detalle de producto: textos principales */
+html[data-public-theme="dark"] .breadcrumb strong,
+html[data-public-theme="dark"] .product-info h1,
+html[data-public-theme="dark"] .final-price,
+html[data-public-theme="dark"] .quick-specs strong,
+html[data-public-theme="dark"] .product-highlights strong,
+html[data-public-theme="dark"] .seller-name,
+html[data-public-theme="dark"] .side-line strong,
+html[data-public-theme="dark"] .quantity-block strong,
+html[data-public-theme="dark"] .info-accordion summary,
+html[data-public-theme="dark"] .spec-table strong,
+html[data-public-theme="dark"] .care-row strong,
+html[data-public-theme="dark"] .policy-grid strong,
+html[data-public-theme="dark"] .store-info h3,
+html[data-public-theme="dark"] .section-head h2,
+html[data-public-theme="dark"] .rec-body h4,
+html[data-public-theme="dark"] .rec-price,
+html[data-public-theme="dark"] .summary-head>strong,
+html[data-public-theme="dark"] .summary-facts strong,
+html[data-public-theme="dark"] .product-info-modal__header h2,
+html[data-public-theme="dark"] .modal-info-section h3,
+html[data-public-theme="dark"] .modal-spec-grid strong,
+html[data-public-theme="dark"] .modal-presentation h4,
+html[data-public-theme="dark"] .modal-care-item strong{
+  color:var(--public-text)!important;
+}
+
+/* Detalle de producto: textos secundarios */
+html[data-public-theme="dark"] .breadcrumb,
+html[data-public-theme="dark"] .breadcrumb a,
+html[data-public-theme="dark"] .pill,
+html[data-public-theme="dark"] .option-title span,
+html[data-public-theme="dark"] .variant-tile small,
+html[data-public-theme="dark"] .quick-specs span,
+html[data-public-theme="dark"] .product-highlights span,
+html[data-public-theme="dark"] .side-label,
+html[data-public-theme="dark"] .side-line small,
+html[data-public-theme="dark"] .quantity-block small,
+html[data-public-theme="dark"] .accordion-body,
+html[data-public-theme="dark"] .care-row small,
+html[data-public-theme="dark"] .store-info p,
+html[data-public-theme="dark"] .section-head p,
+html[data-public-theme="dark"] .product-summary-card>p,
+html[data-public-theme="dark"] .summary-facts span,
+html[data-public-theme="dark"] .modal-info-section p,
+html[data-public-theme="dark"] .modal-spec-grid span,
+html[data-public-theme="dark"] .modal-variant-row small,
+html[data-public-theme="dark"] .modal-care-item small,
+html[data-public-theme="dark"] .modal-empty{
+  color:var(--public-text-2)!important;
+}
+
+/* Separadores y bordes internos */
+html[data-public-theme="dark"] .price-box,
+html[data-public-theme="dark"] .option-block,
+html[data-public-theme="dark"] .info-accordion,
+html[data-public-theme="dark"] .spec-table>div,
+html[data-public-theme="dark"] .side-divider,
+html[data-public-theme="dark"] .product-info-modal__header,
+html[data-public-theme="dark"] .modal-info-section+.modal-info-section,
+html[data-public-theme="dark"] .modal-variant-row{
+  border-color:var(--public-border)!important;
+}
+html[data-public-theme="dark"] .side-divider{background:var(--public-border)!important}
+
+/* Controles: no dejar texto oscuro sobre fondo oscuro */
+html[data-public-theme="dark"] .product-search input,
+html[data-public-theme="dark"] .qty-control span,
+html[data-public-theme="dark"] .back-shop,
+html[data-public-theme="dark"] .side-back{
+  color:var(--public-text)!important;
+}
+html[data-public-theme="dark"] .back-shop,
+html[data-public-theme="dark"] .side-back{
+  background:var(--public-surface)!important;
+  border-color:var(--public-border)!important;
+}
+
+/* Estados activos: conservar verde TiendaPro y asegurar legibilidad */
+html[data-public-theme="dark"] .variant-tile.active{
+  background:rgba(34,180,85,.12)!important;
+  border-color:var(--public-accent)!important;
+}
+html[data-public-theme="dark"] .choice.active,
+html[data-public-theme="dark"] .size-choice.active{
+  background:var(--public-accent)!important;
+  border-color:var(--public-accent)!important;
+  color:#fff!important;
+}
+
+/* FASE 73 — correcciones finas de contraste: tags de producto + disparador de categorías */
+html[data-public-theme="dark"] .pill{
+  background:var(--public-surface-2)!important;
+  color:var(--public-text-2)!important;
+  border:1px solid var(--public-border)!important;
+}
+html[data-public-theme="dark"] .meta-row .pill{
+  box-shadow:none!important;
+}
+
+html[data-public-theme="dark"] .category-trigger{
+  background:var(--public-surface)!important;
+  color:var(--public-text)!important;
+  border-color:var(--public-border)!important;
+}
+html[data-public-theme="dark"] .category-trigger:hover,
+html[data-public-theme="dark"] .category-select-wrap.open .category-trigger{
+  background:var(--public-surface-2)!important;
+  color:var(--public-text)!important;
+  border-color:var(--public-accent)!important;
+  box-shadow:0 0 0 3px rgba(34,180,85,.10)!important;
+}
+html[data-public-theme="dark"] .category-trigger-icon,
+html[data-public-theme="dark"] .category-trigger #categoriaTriggerText,
+html[data-public-theme="dark"] #categoriaTriggerText{
+  color:var(--public-text)!important;
+}
+
+/* FASE 74 — drawer de categorías: contraste completo en tema oscuro */
+html[data-public-theme="dark"] .category-drawer-panel,
+html[data-public-theme="dark"] .category-drawer-top,
+html[data-public-theme="dark"] .category-drawer-nav,
+html[data-public-theme="dark"] .category-drawer-backrow,
+html[data-public-theme="dark"] .category-drawer-heading,
+html[data-public-theme="dark"] .category-drawer-list{
+  background:var(--public-surface)!important;
+  color:var(--public-text)!important;
+  border-color:var(--public-border)!important;
+}
+html[data-public-theme="dark"] .category-drawer-brand,
+html[data-public-theme="dark"] .category-drawer-heading h2,
+html[data-public-theme="dark"] .category-drawer-item,
+html[data-public-theme="dark"] .category-back-btn{
+  color:var(--public-text)!important;
+}
+html[data-public-theme="dark"] .category-drawer-close{
+  background:var(--public-surface-2)!important;
+  color:var(--public-text)!important;
+  border:1px solid var(--public-border)!important;
+}
+html[data-public-theme="dark"] .category-drawer-close:hover,
+html[data-public-theme="dark"] .category-drawer-item:hover{
+  background:#132238!important;
+  color:var(--public-text)!important;
+  border-color:#2a405d!important;
+}
+html[data-public-theme="dark"] .category-drawer-item,
+html[data-public-theme="dark"] .category-drawer-all{
+  background:transparent!important;
+  border-color:transparent!important;
+}
+html[data-public-theme="dark"] .category-drawer-item b{
+  background:var(--public-surface-2)!important;
+  color:var(--public-muted)!important;
+}
+html[data-public-theme="dark"] .category-drawer-item:hover b{
+  background:rgba(34,180,85,.14)!important;
+  color:var(--public-accent-strong)!important;
+}
+html[data-public-theme="dark"] .category-drawer-all.root{
+  background:rgba(34,180,85,.12)!important;
+  color:#63e394!important;
+  border-color:rgba(34,180,85,.25)!important;
+}
+html[data-public-theme="dark"] .category-drawer-all:not(.root){
+  background:var(--public-surface-2)!important;
+  color:#63e394!important;
+  border-color:var(--public-border)!important;
+}
+html[data-public-theme="dark"] .category-drawer-empty{
+  background:var(--public-surface-2)!important;
+  color:var(--public-text-2)!important;
+  border-color:var(--public-border)!important;
+}
+html[data-public-theme="dark"] .product-rating-text{color:var(--public-muted)!important}
+
+
+/* FASE102 — Más vendidos sobre el fondo neutro general.
+   El contenedor de la sección no crea una superficie propia; solo las tarjetas. */
+.more-section,
+html[data-public-theme="dark"] .more-section,
+html[data-public-theme="light"] .more-section{
+  background:transparent!important;
+  box-shadow:none!important;
+  border-left:0!important;
+  border-right:0!important;
+  border-bottom:0!important;
+}
+
+
+/* FASE110 · Categoría horizontal activa: solo cambia el color del texto.
+   No agrega fondo, borde, sombra, caja ni modifica tipografía/geometría. */
+.category-links button.active{
+  color:#15803d!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  font-weight:inherit!important;
+}
+html[data-public-theme="dark"] .category-links button.active{
+  color:#52dc7d!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.category-links .offers-link.active{
+  color:#dc2626!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+html[data-public-theme="dark"] .category-links .offers-link.active{
+  color:#f87171!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+/* FASE111 — Ofertas siempre identificada con cuadro rojo */
+.category-links .offers-link,
+.public-shared-header .category-links .offers-link{
+  color:#dc2626!important;background:#fff5f5!important;border:1px solid #ef4444!important;
+  border-radius:8px!important;padding:7px 12px!important;font-weight:700!important;
+  box-shadow:none!important;transition:background .18s ease,color .18s ease,border-color .18s ease!important;
+}
+.category-links .offers-link:hover,.category-links .offers-link.active,
+.public-shared-header .category-links .offers-link:hover,.public-shared-header .category-links .offers-link.active{
+  color:#b91c1c!important;background:#fee2e2!important;border-color:#dc2626!important;box-shadow:none!important;
+}
+html[data-public-theme="dark"] .category-links .offers-link,
+html[data-public-theme="dark"] .public-shared-header .category-links .offers-link{
+  color:#fca5a5!important;background:rgba(127,29,29,.22)!important;border-color:#ef4444!important;
+}
+html[data-public-theme="dark"] .category-links .offers-link:hover,html[data-public-theme="dark"] .category-links .offers-link.active,
+html[data-public-theme="dark"] .public-shared-header .category-links .offers-link:hover,html[data-public-theme="dark"] .public-shared-header .category-links .offers-link.active{
+  color:#fecaca!important;background:rgba(153,27,27,.38)!important;border-color:#f87171!important;
+}

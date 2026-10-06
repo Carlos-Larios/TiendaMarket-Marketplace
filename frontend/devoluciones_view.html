@@ -1,0 +1,1106 @@
+<section class="section devoluciones-section">
+  <div class="dev-header-card">
+    <div>
+      <h2>Devoluciones</h2>
+      <p>Postventa para devoluciones, reembolsos, revisión de unidades físicas y reclamos al proveedor.</p>
+    </div>
+    <button class="btn-primary" id="btnNuevaDevolucion">+ Nueva devolución</button>
+  </div>
+
+  <div class="dev-stats-grid">
+    <div class="dev-stat-card"><span>Total</span><strong id="statDevTotal">0</strong></div>
+    <div class="dev-stat-card pendiente"><span>Pendientes</span><strong id="statDevPendientes">0</strong></div>
+    <div class="dev-stat-card revision"><span>En revisión</span><strong id="statDevRevision">0</strong></div>
+    <div class="dev-stat-card proveedor"><span>Reclamo proveedor</span><strong id="statDevProveedor">0</strong></div>
+  </div>
+
+  <div class="dev-toolbar">
+    <div class="search-box">
+      <span>🔎</span>
+      <input type="text" id="buscarDevoluciones" placeholder="Buscar por ID devolución, pedido, cliente, producto o motivo...">
+    </div>
+    <button class="btn-filter" id="btnAbrirFiltrosDev">⚙ Filtros</button>
+  </div>
+
+  <div class="dev-overlay" id="filtrosDevOverlay"></div>
+  <aside class="dev-filtros-panel" id="filtrosDevPanel">
+    <div class="dev-panel-header">
+      <h3>Filtros</h3>
+      <button class="btn-icon" id="btnCerrarFiltrosDev">×</button>
+    </div>
+
+    <label>Estado</label>
+    <select id="filtroDevEstado">
+      <option value="">Todos</option>
+      <option value="pendiente">Pendiente</option>
+      <option value="recibida">Recibida</option>
+      <option value="en_revision">En revisión</option>
+      <option value="aprobada">Aprobada</option>
+      <option value="rechazada">Rechazada</option>
+      <option value="reclamo_proveedor">Reclamo proveedor</option>
+      <option value="finalizada">Finalizada</option>
+    </select>
+
+    <label>Resolución</label>
+    <select id="filtroDevResolucion">
+      <option value="">Todas</option>
+      <option value="sin_resolver">Sin resolver</option>
+      <option value="volver_a_stock">Volver a stock</option>
+      <option value="marcar_dañado">Marcar dañado</option>
+      <option value="reembolso_cliente">Reembolso cliente</option>
+      <option value="cambio_producto">Cambio producto</option>
+      <option value="devolucion_proveedor">Devolución proveedor</option>
+      <option value="reembolso_proveedor">Reembolso proveedor</option>
+    </select>
+
+    <label>Fecha desde</label>
+    <input type="date" id="filtroDevDesde">
+
+    <label>Fecha hasta</label>
+    <input type="date" id="filtroDevHasta">
+
+    <div class="dev-actions-row">
+      <button class="btn-primary" id="btnAplicarFiltrosDev">Aplicar</button>
+      <button class="btn-secondary" id="btnLimpiarFiltrosDev">Limpiar</button>
+    </div>
+  </aside>
+
+  <div class="tabla-card">
+    <div class="tabla-scroll">
+      <table class="tabla-dev">
+        <thead>
+          <tr>
+            <th data-sort="id">ID Devolución ↕</th>
+            <th data-sort="codigo_pedido">Pedido ↕</th>
+            <th data-sort="cliente">Cliente ↕</th>
+            <th data-sort="estado">Estado ↕</th>
+            <th data-sort="resolucion">Resolución ↕</th>
+            <th data-sort="fecha_creacion">Fecha ↕</th>
+          </tr>
+        </thead>
+        <tbody id="tablaDevolucionesBody">
+          <tr><td colspan="6" class="empty-table">Cargando devoluciones...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dev-overlay" id="modalDevOverlay"></div>
+
+  <div class="dev-modal" id="modalNuevaDev">
+    <div class="dev-panel-header">
+      <h3>Nueva devolución</h3>
+      <button class="btn-icon" id="btnCerrarNuevaDev">×</button>
+    </div>
+
+    <label>Código de unidad vendida</label>
+    <div class="codigo-row">
+      <input type="text" id="codigoUnidadDev" placeholder="Ejemplo: ASUS-515-0001">
+      <button class="btn-secondary" id="btnBuscarUnidadDev">Buscar</button>
+    </div>
+
+    <div class="unidad-preview" id="unidadPreviewDev">
+      Busca el código exacto vendido para validar pedido, cliente, proveedor y garantía.
+    </div>
+
+    <label>Motivo de devolución</label>
+    <textarea id="motivoDev" placeholder="Ejemplo: Producto llegó dañado, no enciende, pantalla defectuosa..."></textarea>
+
+    <label>Observaciones internas</label>
+    <textarea id="observacionesDev" placeholder="Notas del administrador, evidencia, estado de la caja, accesorios recibidos..."></textarea>
+
+    <div class="dev-actions-row">
+      <button class="btn-secondary" id="btnCancelarNuevaDev">Cancelar</button>
+      <button class="btn-primary" id="btnGuardarNuevaDev">Crear devolución</button>
+    </div>
+  </div>
+
+
+  <div class="dev-modal dev-modal-detalle" id="modalDetalleDev">
+    <div class="dev-panel-header">
+      <h3>Detalle de devolución</h3>
+      <button class="btn-icon" id="btnCerrarDetalleDev">×</button>
+    </div>
+
+    <div class="detalle-dev-grid" id="detalleDevContenido"></div>
+
+    <div class="detalle-actions-card">
+      <h4>Acciones de la devolución</h4>
+      <p>Selecciona una acción según el estado real del producto devuelto.</p>
+
+      <div class="detalle-actions-grid">
+        <button class="btn-secondary" id="btnDetalleRecibida">📦 Marcar recibida</button>
+        <button class="btn-secondary" id="btnDetalleRevision">🔍 En revisión</button>
+        <button class="btn-primary" id="btnDetalleResolver">✅ Resolver devolución</button>
+        <button class="btn-danger" id="btnDetalleRechazar">✖ Rechazar devolución</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dev-modal" id="modalResolverDev">
+    <div class="dev-panel-header">
+      <h3>Resolver devolución</h3>
+      <button class="btn-icon" id="btnCerrarResolverDev">×</button>
+    </div>
+
+    <div class="unidad-preview" id="resolverPreviewDev"></div>
+
+    <div class="resolver-flow-grid">
+      <div class="resolver-block">
+        <h4>1. Estado real del producto</h4>
+        <p>Marca cómo llegó la unidad después de revisarla.</p>
+        <label class="cyber-check"><input type="checkbox" name="revisionProductoDev" value="producto_bueno"> <span>✅ Producto bueno</span><small>Puede venderse otra vez si aplica.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="revisionProductoDev" value="danio_reparable"> <span>🛠️ Daño reparable</span><small>Requiere revisión o reparación.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="revisionProductoDev" value="producto_danado"> <span>⛔ Producto dañado</span><small>No debe volver a venta normal.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="revisionProductoDev" value="defecto_fabrica"> <span>🏭 Defecto de fábrica</span><small>Puede necesitar reclamo al proveedor.</small></label>
+      </div>
+
+      <div class="resolver-block" id="bloqueAccionInventarioDev">
+        <h4>2. Acción sobre inventario</h4>
+        <p>Define el destino de esa unidad física.</p>
+        <label class="cyber-check"><input type="checkbox" name="accionInventarioDev" value="volver_a_stock"> <span>📦 Volver a stock</span><small>Regresa como disponible.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="accionInventarioDev" value="enviar_reparacion"> <span>🔧 Enviar a reparación</span><small>Queda en revisión.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="accionInventarioDev" value="devolver_proveedor"> <span>🚚 Devolver al proveedor</span><small>Queda como reclamo proveedor.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="accionInventarioDev" value="dar_baja"> <span>🗑️ Dar de baja / descarte</span><small>No vuelve al inventario vendible.</small></label>
+      </div>
+
+      <div class="resolver-block">
+        <h4>3. Solución para el cliente</h4>
+        <p>Esta decisión es independiente del estado físico.</p>
+        <label class="cyber-check"><input type="checkbox" name="solucionClienteDev" value="solicitud_rechazada"> <span>✖ Rechazar devolución</span><small>La unidad queda vendida y vuelve al cliente.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="solucionClienteDev" value="reembolso_cliente"> <span>💸 Reembolso al cliente</span><small>Se marca la factura como reembolsada.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="solucionClienteDev" value="cambio_producto"> <span>🔁 Cambio de producto</span><small>Se entrega otro producto al cliente.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="solucionClienteDev" value="credito_tienda"> <span>🎟️ Crédito en tienda</span><small>Se deja saldo para próxima compra.</small></label>
+      </div>
+
+      <div class="resolver-block">
+        <h4>4. Proveedor / garantía</h4>
+        <p>Solo si necesitas reclamar al proveedor.</p>
+        <label class="cyber-check"><input type="checkbox" name="gestionProveedorDev" value="sin_reclamo" checked> <span>Sin reclamo proveedor</span><small>No se contactará al proveedor.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="gestionProveedorDev" value="abrir_reclamo"> <span>Abrir reclamo</span><small>Crear caso con proveedor.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="gestionProveedorDev" value="solicitar_reemplazo"> <span>Solicitar reemplazo</span><small>Pedir unidad nueva.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="gestionProveedorDev" value="solicitar_reembolso"> <span>Solicitar reembolso</span><small>Pedir devolución de dinero.</small></label>
+        <label class="cyber-check"><input type="checkbox" name="gestionProveedorDev" value="devolver_producto"> <span>Devolver producto</span><small>Enviar físicamente al proveedor.</small></label>
+      </div>
+    </div>
+
+    <label>Respuesta / reclamo del proveedor</label>
+    <textarea id="proveedorRespuestaDev" placeholder="Número de caso, respuesta del proveedor, condiciones de garantía..."></textarea>
+
+    <label>Observaciones finales</label>
+    <textarea id="observacionesResolverDev" placeholder="Resultado de la revisión, evidencias, decisión final..."></textarea>
+
+    <div class="dev-actions-row">
+      <button class="btn-secondary" id="btnCancelarResolverDev">Cancelar</button>
+      <button class="btn-primary" id="btnGuardarResolverDev">Guardar resolución</button>
+    </div>
+  </div>
+
+  <div class="dev-modal dev-product-detail-modal" id="modalProductoResolverDev">
+    <div class="dev-panel-header product-ficha-header">
+      <div>
+        <h3 id="productoResolverTituloDev">Ficha completa de unidad</h3>
+        <p id="productoResolverSubtituloDev">Detalle del producto devuelto</p>
+      </div>
+      <button class="btn-icon" id="btnCerrarProductoResolverDev">×</button>
+    </div>
+    <div class="producto-ficha-contenido" id="productoResolverContenidoDev"></div>
+    <div class="dev-actions-row">
+      <button class="btn-secondary" id="btnCerrarProductoResolverDev2">Cerrar</button>
+    </div>
+  </div>
+
+</section>
+
+<style>
+  .devoluciones-section { display: flex; flex-direction: column; gap: 22px; }
+  .dev-header-card, .dev-stat-card, .dev-toolbar, .tabla-card {
+    background: rgba(30, 41, 59, 0.76); border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+  }
+  .dev-header-card { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px; }
+  .dev-header-card h2 { margin: 0 0 6px; color: #f8fafc; font-size: 30px; }
+  .dev-header-card p { margin: 0; color: #cbd5e1; }
+  .dev-stats-grid { display: grid; grid-template-columns: repeat(4, minmax(160px, 1fr)); gap: 16px; }
+  .dev-stat-card { padding: 18px; }
+  .dev-stat-card span { display: block; color: #cbd5e1; font-size: 14px; margin-bottom: 10px; }
+  .dev-stat-card strong { color: #f8fafc; font-size: 28px; }
+  .dev-stat-card.pendiente strong { color: #facc15; }
+  .dev-stat-card.revision strong { color: #38bdf8; }
+  .dev-stat-card.proveedor strong { color: #fb7185; }
+  .dev-toolbar { display: flex; justify-content: space-between; gap: 14px; padding: 16px; }
+  .search-box { flex: 1; display: flex; align-items: center; gap: 10px; background: rgba(15, 23, 42, 0.78); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 14px; padding: 0 14px; }
+  .search-box input, .dev-filtros-panel input, .dev-filtros-panel select, .dev-modal input, .dev-modal select, .dev-modal textarea {
+    width: 100%; background: rgba(15, 23, 42, 0.9); color: #f8fafc; border: 1px solid rgba(148, 163, 184, 0.24); border-radius: 12px; padding: 12px 14px; outline: none;
+  }
+  .search-box input { border: none; background: transparent; }
+  .btn-primary, .btn-secondary, .btn-filter { border: none; border-radius: 13px; padding: 12px 18px; font-weight: 800; cursor: pointer; transition: transform .15s ease, opacity .15s ease; }
+  .btn-primary { color: #082f49; background: linear-gradient(135deg, #22d3ee, #60a5fa); }
+  .btn-secondary { color: #f8fafc; background: rgba(100, 116, 139, 0.5); }
+  .btn-filter { color: #e0f2fe; background: rgba(14, 165, 233, 0.22); border: 1px solid rgba(56, 189, 248, 0.35); }
+  .btn-primary:hover, .btn-secondary:hover, .btn-filter:hover { transform: translateY(-1px); opacity: .92; }
+  .tabla-card { overflow: hidden; }
+  .tabla-scroll { overflow-x: auto; }
+  .tabla-dev { width: 100%; border-collapse: collapse; min-width: 850px; }
+  .tabla-dev th, .tabla-dev td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(148, 163, 184, 0.12); color: #e2e8f0; vertical-align: top; }
+  .tabla-dev th { background: rgba(15, 23, 42, 0.86); color: #f8fafc; cursor: pointer; user-select: none; white-space: nowrap; }
+  .tabla-dev tbody tr:hover { background: rgba(59, 130, 246, 0.08); }
+  .tabla-dev tbody tr { cursor: pointer; }
+  .empty-table { text-align: center !important; color: #94a3b8 !important; padding: 34px !important; }
+  .badge { display: inline-flex; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 900; white-space: nowrap; text-transform: capitalize; }
+  .badge-pendiente { background: rgba(250, 204, 21, .15); color: #fde68a; }
+  .badge-recibida, .badge-en_revision { background: rgba(56, 189, 248, .15); color: #7dd3fc; }
+  .badge-aprobada, .badge-finalizada { background: rgba(34, 197, 94, .15); color: #86efac; }
+  .badge-rechazada, .badge-reclamo_proveedor { background: rgba(244, 63, 94, .15); color: #fda4af; }
+  .dev-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.55); z-index: 90; }
+  .dev-overlay.activo { display: block; }
+  .dev-filtros-panel { position: fixed; top: 0; right: -380px; width: 360px; height: 100vh; background: #0f172a; border-left: 1px solid rgba(148, 163, 184, .2); box-shadow: -20px 0 50px rgba(0,0,0,.35); z-index: 100; padding: 22px; display: flex; flex-direction: column; gap: 12px; transition: right .25s ease; }
+  .dev-filtros-panel.abierto { right: 0; }
+  .dev-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .dev-panel-header h3 { color: #f8fafc; margin: 0; }
+  .dev-filtros-panel label, .dev-modal label { color: #cbd5e1; font-weight: 800; font-size: 14px; margin-top: 6px; }
+  .dev-actions-row { display: flex; gap: 10px; margin-top: 16px; }
+  .dev-actions-row button { flex: 1; }
+  .btn-icon { width: 36px; height: 36px; border-radius: 10px; border: none; color: #f8fafc; background: rgba(148, 163, 184, .18); font-size: 22px; cursor: pointer; }
+  .dev-modal { display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(720px, calc(100vw - 30px)); background: #0f172a; border: 1px solid rgba(148, 163, 184, .22); border-radius: 20px; box-shadow: 0 30px 70px rgba(0,0,0,.42); z-index: 110; padding: 24px; max-height: 92vh; overflow-y: auto; }
+  .dev-modal.activo { display: block; }
+  .dev-modal input, .dev-modal select, .dev-modal textarea { margin-bottom: 12px; }
+  .dev-modal textarea { min-height: 90px; resize: vertical; }
+  .dev-modal::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; background: linear-gradient(135deg, rgba(34,211,238,.22), transparent 38%, rgba(96,165,250,.20)); opacity: .75; }
+  .dev-modal > * { position: relative; z-index: 1; }
+  .resolver-flow-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 14px 0 16px; }
+  .resolver-block { background: radial-gradient(circle at top left, rgba(34,211,238,.12), rgba(15,23,42,.74) 42%); border: 1px solid rgba(56,189,248,.20); border-radius: 18px; padding: 14px; box-shadow: inset 0 0 24px rgba(14,165,233,.05); }
+  .resolver-block h4 { color: #e0f2fe; margin: 0 0 5px; }
+  .resolver-block p { color: #94a3b8; margin: 0 0 10px; font-size: 12px; }
+  .cyber-check { display: grid !important; grid-template-columns: auto 1fr; gap: 3px 10px; align-items: start; margin: 9px 0 !important; padding: 10px; border: 1px solid rgba(148,163,184,.14); border-radius: 14px; background: rgba(2,6,23,.38); cursor: pointer; transition: .16s ease; }
+  .cyber-check:hover { border-color: rgba(56,189,248,.48); transform: translateY(-1px); }
+  .cyber-check input { width: 18px !important; height: 18px; margin: 2px 0 0 !important; accent-color: #22d3ee; }
+  .cyber-check span { color: #f8fafc; font-weight: 900; }
+  .cyber-check small { grid-column: 2; color: #94a3b8; font-weight: 600; line-height: 1.35; }
+  .cyber-check.activo { border-color: rgba(34,211,238,.85); box-shadow: 0 0 0 1px rgba(34,211,238,.22), 0 0 26px rgba(34,211,238,.12); background: rgba(14,165,233,.13); }
+  .resolver-block.bloque-deshabilitado { opacity: .45; filter: grayscale(.4); }
+  @media (max-width: 760px) { .resolver-flow-grid { grid-template-columns: 1fr; } }
+
+  .codigo-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+  .unidad-preview { color: #cbd5e1; background: rgba(14, 165, 233, .10); border: 1px solid rgba(56, 189, 248, .18); border-radius: 14px; padding: 14px; margin: 10px 0 14px; line-height: 1.6; }
+  .action-mini { border: none; border-radius: 10px; padding: 8px 10px; margin: 2px; cursor: pointer; color: #e0f2fe; background: rgba(14,165,233,.18); font-weight: 800; }
+  .action-danger { background: rgba(244,63,94,.18); color: #fecdd3; }
+  .btn-danger { border: none; border-radius: 13px; padding: 12px 18px; font-weight: 900; cursor: pointer; color: #fecdd3; background: rgba(244,63,94,.20); border: 1px solid rgba(244,63,94,.35); }
+  .dev-modal-detalle { width: min(860px, calc(100vw - 30px)); }
+
+  /* Modal principal de resolver devolución más ancho */
+  #modalResolverDev {
+    width: min(1220px, calc(100vw - 34px));
+    max-height: 90vh;
+  }
+
+  #modalResolverDev .resolver-flow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  #modalResolverDev .resolver-product-table {
+    min-width: 760px;
+  }
+
+  @media (min-width: 1250px) {
+    #modalResolverDev { width: min(1320px, calc(100vw - 60px)); }
+  }
+
+  @media (max-width: 760px) {
+    #modalResolverDev .resolver-flow-grid { grid-template-columns: 1fr; }
+  }
+  .detalle-dev-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .detalle-item { background: rgba(15, 23, 42, .72); border: 1px solid rgba(148, 163, 184, .18); border-radius: 14px; padding: 13px; color: #e2e8f0; }
+  .detalle-item.full { grid-column: 1 / -1; }
+  .detalle-item span { display: block; color: #94a3b8; font-size: 12px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+  .detalle-item strong { color: #f8fafc; }
+  .detalle-actions-card { margin-top: 16px; background: rgba(14, 165, 233, .08); border: 1px solid rgba(56, 189, 248, .18); border-radius: 16px; padding: 16px; }
+  .detalle-actions-card h4 { margin: 0 0 6px; color: #f8fafc; }
+  .detalle-actions-card p { margin: 0 0 12px; color: #94a3b8; }
+  .detalle-actions-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+  .dev-productos-lista { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 12px; }
+  .dev-producto-card { background: rgba(15, 23, 42, .72); border: 1px solid rgba(148, 163, 184, .18); border-radius: 16px; padding: 14px; color: #e2e8f0; }
+  .dev-producto-card h4 { margin: 0 0 10px; color: #f8fafc; }
+  .dev-producto-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; font-size: 14px; }
+  .dev-producto-grid span { color: #94a3b8; font-weight: 800; }
+
+  .resolver-product-summary {
+    background: linear-gradient(135deg, rgba(14,165,233,.16), rgba(37,99,235,.10));
+    border: 1px solid rgba(34,211,238,.28);
+    border-radius: 16px;
+    padding: 14px;
+    margin-top: 12px;
+  }
+  .resolver-product-summary h4 { margin: 0 0 10px; color: #f8fafc; }
+  .resolver-product-table-wrap { overflow-x: auto; border-radius: 13px; border: 1px solid rgba(148,163,184,.16); }
+  .resolver-product-table { width: 100%; border-collapse: collapse; min-width: 620px; background: rgba(2,6,23,.35); }
+  .resolver-product-table th, .resolver-product-table td { padding: 10px 12px; border-bottom: 1px solid rgba(148,163,184,.12); color: #e2e8f0; text-align: left; font-size: 13px; }
+  .resolver-product-table th { color: #67e8f9; background: rgba(2,6,23,.48); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .resolver-product-table tr:last-child td { border-bottom: none; }
+  .btn-ver-detalle-producto {
+    border: 1px solid rgba(34,211,238,.38);
+    border-radius: 10px;
+    background: rgba(14,165,233,.20);
+    color: #e0f2fe;
+    font-weight: 900;
+    cursor: pointer;
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+  .btn-ver-detalle-producto:hover { background: rgba(14,165,233,.32); }
+  .dev-product-detail-modal {
+    width: min(1180px, calc(100vw - 34px));
+    z-index: 140;
+    max-height: 90vh;
+    padding: 0;
+    overflow: hidden;
+  }
+  .dev-product-detail-modal.activo { animation: fichaZoomDev .18s ease both; }
+  @keyframes fichaZoomDev { from { opacity: 0; transform: translate(-50%, -48%) scale(.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+  .product-ficha-header {
+    margin: 0;
+    padding: 22px 24px;
+    background:
+      radial-gradient(circle at top left, rgba(34,211,238,.24), transparent 34%),
+      linear-gradient(135deg, #020617, #0f172a 58%, #172554);
+    border-bottom: 1px solid rgba(56,189,248,.22);
+  }
+  .product-ficha-header h3 { font-size: 24px; margin-bottom: 6px; }
+  .product-ficha-header p { margin: 0; color: #94a3b8; font-size: 13px; font-weight: 800; }
+  .producto-ficha-contenido {
+    padding: 22px 24px 4px;
+    max-height: calc(90vh - 150px);
+    overflow-y: auto;
+  }
+  .producto-ficha-hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(14,165,233,.18), rgba(37,99,235,.10));
+    border: 1px solid rgba(34,211,238,.25);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .producto-ficha-hero h4 { margin: 0 0 6px; color: #f8fafc; font-size: 20px; }
+  .producto-ficha-hero p { margin: 0; color: #cbd5e1; }
+  .producto-codigo-pill {
+    border: 1px solid rgba(34,211,238,.36);
+    background: rgba(2,6,23,.50);
+    color: #67e8f9;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 950;
+    white-space: nowrap;
+  }
+  .producto-ficha-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .producto-ficha-section {
+    background: rgba(15,23,42,.72);
+    border: 1px solid rgba(148,163,184,.16);
+    border-radius: 18px;
+    padding: 15px;
+  }
+  .producto-ficha-section.full { grid-column: 1 / -1; }
+  .producto-ficha-section h4 { margin: 0 0 12px; color: #38bdf8; font-size: 15px; }
+  .producto-info-table { width: 100%; border-collapse: collapse; }
+  .producto-info-table td { padding: 9px 7px; border-bottom: 1px solid rgba(148,163,184,.10); color: #e2e8f0; vertical-align: top; }
+  .producto-info-table tr:last-child td { border-bottom: none; }
+  .producto-info-table td:first-child { color: #94a3b8; width: 38%; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .producto-ficha-texto { color: #e2e8f0; background: rgba(2,6,23,.34); border: 1px solid rgba(148,163,184,.10); border-radius: 14px; padding: 13px; white-space: pre-wrap; min-height: 54px; }
+  .producto-timeline-dev { display: flex; flex-wrap: wrap; gap: 8px; }
+  .producto-timeline-dev span { background: rgba(14,165,233,.14); border: 1px solid rgba(56,189,248,.20); color: #e0f2fe; border-radius: 999px; padding: 8px 10px; font-weight: 900; font-size: 12px; }
+  .dev-product-detail-modal .dev-actions-row { padding: 0 24px 22px; }
+  @media (max-width: 820px) {
+    .producto-ficha-hero, .producto-ficha-grid { grid-template-columns: 1fr; }
+    .producto-codigo-pill { white-space: normal; }
+  }
+
+  @media (max-width: 900px) { .dev-header-card, .dev-toolbar { flex-direction: column; align-items: stretch; } .dev-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .dev-stats-grid { grid-template-columns: 1fr; } .dev-filtros-panel { width: 100%; right: -100%; } .codigo-row { grid-template-columns: 1fr; } .detalle-dev-grid, .detalle-actions-grid { grid-template-columns: 1fr; } }
+
+
+  /* =====================================================
+     STYLE / COPIAR CÓDIGO DE DEVOLUCIÓN
+     Igual al botón de copiar código de Pedidos
+     ===================================================== */
+  .codigo-devolucion .codigo-copy-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+  }
+
+  .codigo-devolucion .codigo-texto {
+    color: #facc15;
+    font-weight: 950;
+  }
+
+  .btn-copiar-codigo {
+    width: 26px;
+    height: 26px;
+    border: 1px solid rgba(56,189,248,.26);
+    border-radius: 9px;
+    display: inline-grid;
+    place-items: center;
+    background: rgba(14,165,233,.10);
+    color: #7dd3fc;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateX(-5px) scale(.94);
+    transition: opacity .18s ease, transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .codigo-devolucion:hover .btn-copiar-codigo,
+  .tabla-dev tbody tr:hover .codigo-devolucion .btn-copiar-codigo,
+  .btn-copiar-codigo:focus-visible {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+
+  .btn-copiar-codigo:hover {
+    background: rgba(56,189,248,.20);
+    border-color: rgba(56,189,248,.52);
+    color: #e0f2fe;
+    box-shadow: 0 0 18px rgba(56,189,248,.18);
+  }
+
+  .btn-copiar-codigo.copiado {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    color: #86efac;
+    background: rgba(34,197,94,.16);
+    border-color: rgba(34,197,94,.38);
+  }
+
+  .toast-codigo-copiado {
+    position: fixed !important;
+    top: 22px;
+    right: 22px;
+    left: auto;
+    z-index: 99999;
+    min-width: 250px;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 13px 15px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(15,23,42,.96), rgba(30,41,59,.94));
+    border: 1px solid rgba(56,189,248,.28);
+    box-shadow: 0 20px 50px rgba(0,0,0,.38), 0 0 28px rgba(56,189,248,.12);
+    color: #e2e8f0;
+    opacity: 0;
+    transform: translateY(-10px) scale(.98);
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+    box-sizing: border-box;
+  }
+
+  .toast-codigo-copiado.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .toast-codigo-copiado strong {
+    display: block;
+    color: #86efac;
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+
+  .toast-codigo-copiado span {
+    display: block;
+    color: #bfdbfe;
+    font-size: 12px;
+    font-weight: 800;
+    word-break: break-word;
+  }
+
+  @media (max-width: 760px) {
+    .btn-copiar-codigo {
+      opacity: 1;
+      transform: none;
+    }
+
+    .toast-codigo-copiado {
+      top: 14px;
+      right: 14px;
+      left: 14px;
+      max-width: none;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  const API_BASE = 'http://localhost:3000/api';
+  const token = localStorage.getItem('token') || localStorage.getItem('adminToken') || '';
+  const $ = (id) => document.getElementById(id);
+
+function obtenerDestinoPendienteVista(vista, acciones = []) {
+  let destino = window.TIENDAPRO_DESTINO_PENDIENTE || null;
+  if (!destino) {
+    try { destino = JSON.parse(localStorage.getItem('tiendapro_destino_pendiente') || 'null'); } catch { destino = null; }
+  }
+  if (!destino) return null;
+  if (vista && destino.vista && destino.vista !== vista) return null;
+  if (acciones.length && !acciones.includes(destino.accion)) return null;
+  return destino;
+}
+function limpiarDestinoPendienteVista() {
+  window.TIENDAPRO_DESTINO_PENDIENTE = null;
+  try { localStorage.removeItem('tiendapro_destino_pendiente'); } catch {}
+}
+function resaltarRegistroPendiente(selector) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.style.outline = '2px solid #38bdf8';
+  el.style.boxShadow = '0 0 0 6px rgba(56,189,248,.16)';
+  setTimeout(() => { el.style.outline = ''; el.style.boxShadow = ''; }, 2400);
+}
+
+  async function procesarDestinoPendienteDevoluciones() {
+    if (destinoPendienteDevolucionesProcesado) return;
+    const destino = obtenerDestinoPendienteVista('devoluciones_view.html', ['abrirDevolucion','filtrarRegistro']);
+    if (!destino) return;
+    destinoPendienteDevolucionesProcesado = true;
+    const registro = String(destino.registro || destino.idVisible || '').trim();
+    const soloFiltrarDestino = destino.soloFiltrar === true || destino.abrirDetalle === false || destino.accion === 'filtrarRegistro';
+    if (!registro) return limpiarDestinoPendienteVista();
+    let dev = devoluciones.find(d => String(d.id) === registro || String(d.numero_caso_cliente || '') === registro);
+    if (!dev) {
+      try {
+        if ($('buscarDevoluciones')) $('buscarDevoluciones').value = registro;
+        await cargarDevoluciones();
+        dev = devoluciones.find(d => String(d.id) === registro || String(d.numero_caso_cliente || '') === registro) || devoluciones[0];
+      } catch (error) { console.error('No se pudo preparar la devolución buscada:', error); }
+    }
+    if (dev) {
+      limpiarDestinoPendienteVista();
+      setTimeout(() => { resaltarRegistroPendiente(`tr[data-id="${dev.id}"]`); if (!soloFiltrarDestino) abrirDetalle(dev.id); }, 260);
+    } else limpiarDestinoPendienteVista();
+  }
+
+  const headers = () => ({ 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) });
+
+  let devoluciones = [];
+  let filtradas = [];
+  let unidadEncontrada = null;
+  let devolucionResolver = null;
+  let devolucionDetalle = null;
+  let sortKey = 'id';
+  let sortDir = 'desc';
+  let destinoPendienteDevolucionesProcesado = false;
+  let filtros = { estado: '', resolucion: '', desde: '', hasta: '' };
+
+  function escapeHtml(v) { return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+  function fecha(v) { if (!v) return '—'; const d = new Date(v); return Number.isNaN(d.getTime()) ? v : d.toLocaleDateString('es-SV'); }
+  function dinero(v) { const n = Number(v || 0); return n ? `$${n.toFixed(2)}` : '—'; }
+  function textoEstado(v) { return String(v || '').replaceAll('_', ' '); }
+  function badge(v) { return `<span class="badge badge-${escapeHtml(v || '')}">${escapeHtml(textoEstado(v || 'sin estado'))}</span>`; }
+  function idDevTexto(d) { return d.numero_caso_cliente || `DEV-${String(d.id).padStart(6, '0')}`; }
+  function idDev(d) { return escapeHtml(idDevTexto(d)); }
+
+
+  function mostrarToastCodigoCopiado(codigo) {
+    let toast = document.getElementById("toastCodigoCopiado");
+
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "toastCodigoCopiado";
+      toast.className = "toast-codigo-copiado";
+      document.body.appendChild(toast);
+    }
+
+    toast.innerHTML = `
+      <strong>✓ Código copiado</strong>
+      <span>${escapeHtml(codigo)}</span>
+    `;
+
+    toast.classList.add("visible");
+    clearTimeout(window.toastCodigoCopiadoTimer);
+    window.toastCodigoCopiadoTimer = setTimeout(() => {
+      toast.classList.remove("visible");
+      setTimeout(() => {
+        if (toast && !toast.classList.contains("visible")) toast.remove();
+      }, 220);
+    }, 2000);
+  }
+
+  window.copiarCodigoDevolucion = async function(event, codigo) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    const texto = String(codigo || "").trim();
+    if (!texto) return;
+
+    const boton = event?.currentTarget || null;
+    const icono = boton?.querySelector(".copy-icon");
+    const iconoOriginal = icono ? icono.textContent : "⧉";
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(texto);
+      } else {
+        const inputTemporal = document.createElement("textarea");
+        inputTemporal.value = texto;
+        inputTemporal.setAttribute("readonly", "");
+        inputTemporal.style.position = "fixed";
+        inputTemporal.style.left = "-9999px";
+        document.body.appendChild(inputTemporal);
+        inputTemporal.select();
+        document.execCommand("copy");
+        document.body.removeChild(inputTemporal);
+      }
+
+      if (boton) boton.classList.add("copiado");
+      if (icono) icono.textContent = "✓";
+      mostrarToastCodigoCopiado(texto);
+
+      setTimeout(() => {
+        if (boton) boton.classList.remove("copiado");
+        if (icono) icono.textContent = iconoOriginal;
+      }, 1000);
+    } catch (error) {
+      console.log("No se pudo copiar el código:", error);
+      alert("No se pudo copiar. Copia el código manualmente: " + texto);
+    }
+  };
+
+  async function cargarDevoluciones() {
+    const params = new URLSearchParams();
+    if (filtros.estado) params.set('estado', filtros.estado);
+    if (filtros.resolucion) params.set('resolucion', filtros.resolucion);
+    if (filtros.desde) params.set('fecha_desde', filtros.desde);
+    if (filtros.hasta) params.set('fecha_hasta', filtros.hasta);
+
+    const res = await fetch(`${API_BASE}/devoluciones?${params.toString()}`, { headers: headers() });
+    if (!res.ok) throw new Error('No se pudieron cargar devoluciones');
+    devoluciones = await res.json();
+    aplicarBusquedaYOrden();
+  }
+
+  function aplicarBusquedaYOrden() {
+    const q = ($('buscarDevoluciones').value || '').toLowerCase().trim();
+    filtradas = devoluciones.filter(d => {
+      const detallesTxt = (d.detalles || []).map(x => [x.codigo_producto, x.nombre_producto, x.motivo, x.proveedor].join(' ')).join(' ');
+      const txt = [d.id, d.numero_caso_cliente, d.cliente, d.codigo_pedido, d.estado, d.resolucion, d.motivo, d.productos_resumen, detallesTxt].join(' ').toLowerCase();
+      return !q || txt.includes(q);
+    });
+    filtradas.sort((a,b) => comparar(a,b,sortKey,sortDir));
+    renderTabla();
+    renderStats();
+    procesarDestinoPendienteDevoluciones();
+  }
+
+  function comparar(a,b,key,dir) {
+    let av = a[key] ?? '';
+    let bv = b[key] ?? '';
+    if (['id','pedido_id','pedido_total','detalle_count'].includes(key)) { av = Number(av || 0); bv = Number(bv || 0); }
+    else { av = String(av).toLowerCase(); bv = String(bv).toLowerCase(); }
+    if (av < bv) return dir === 'asc' ? -1 : 1;
+    if (av > bv) return dir === 'asc' ? 1 : -1;
+    return 0;
+  }
+
+  function renderStats() {
+    $('statDevTotal').textContent = devoluciones.length;
+    $('statDevPendientes').textContent = devoluciones.filter(d => d.estado === 'pendiente').length;
+    $('statDevRevision').textContent = devoluciones.filter(d => ['recibida','en_revision'].includes(d.estado)).length;
+    $('statDevProveedor').textContent = devoluciones.filter(d => d.estado === 'reclamo_proveedor' || Number(d.reclamo_proveedor) === 1).length;
+  }
+
+  function renderTabla() {
+    const tbody = $('tablaDevolucionesBody');
+    if (!filtradas.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty-table">No hay devoluciones para mostrar.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = filtradas.map(d => `
+      <tr data-id="${d.id}" title="Haz clic para ver los productos devueltos y acciones">
+        <td class="codigo-devolucion">
+          <span class="codigo-copy-wrap">
+            <span class="codigo-texto">${idDev(d)}</span>
+            <button
+              type="button"
+              class="btn-copiar-codigo"
+              title="Copiar código"
+              aria-label="Copiar código ${idDev(d)}"
+              onclick="copiarCodigoDevolucion(event, '${escapeHtml(idDevTexto(d))}')"
+            >
+              <span class="copy-icon">⧉</span>
+            </button>
+          </span>
+          <br><small>${Number(d.detalle_count || (d.detalles || []).length)} producto(s)</small>
+        </td>
+        <td>${d.codigo_pedido ? escapeHtml(d.codigo_pedido) : '#' + d.pedido_id}</td>
+        <td>${escapeHtml(d.cliente || '—')}</td>
+        <td>${badge(d.estado)}</td>
+        <td>${escapeHtml(textoEstado(d.resolucion || 'sin_resolver'))}</td>
+        <td>${fecha(d.fecha_creacion)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function abrirFiltros() { $('filtrosDevOverlay').classList.add('activo'); $('filtrosDevPanel').classList.add('abierto'); }
+  function cerrarFiltros() { $('filtrosDevOverlay').classList.remove('activo'); $('filtrosDevPanel').classList.remove('abierto'); }
+  function abrirNueva() { unidadEncontrada = null; $('modalDevOverlay').classList.add('activo'); $('modalNuevaDev').classList.add('activo'); $('codigoUnidadDev').focus(); }
+  function cerrarModales() {
+    $('modalDevOverlay').classList.remove('activo');
+    $('modalNuevaDev').classList.remove('activo');
+    $('modalDetalleDev').classList.remove('activo');
+    $('modalResolverDev').classList.remove('activo');
+    $('modalProductoResolverDev')?.classList.remove('activo');
+    $('codigoUnidadDev').value = ''; $('motivoDev').value = ''; $('observacionesDev').value = '';
+    $('unidadPreviewDev').innerHTML = 'Busca el código exacto vendido para validar pedido, cliente, proveedor y garantía.';
+  }
+
+  async function buscarUnidad() {
+    const codigo = $('codigoUnidadDev').value.trim();
+    if (!codigo) return alert('Escribe el código de la unidad vendida.');
+    try {
+      const res = await fetch(`${API_BASE}/devoluciones/unidad/${encodeURIComponent(codigo)}`, { headers: headers() });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { unidadEncontrada = null; $('unidadPreviewDev').innerHTML = escapeHtml(data.mensaje || 'No se encontró la unidad.'); return; }
+      unidadEncontrada = data;
+      const u = data.unidad;
+      $('unidadPreviewDev').innerHTML = `
+        <strong>${escapeHtml(u.codigo_producto)}</strong><br>
+        Producto: ${escapeHtml(u.producto_nombre || '—')}<br>
+        Cliente: ${escapeHtml(u.cliente || '—')} | Pedido: ${escapeHtml(u.codigo_pedido || ('#' + (u.pedido_id || '—')))}<br>
+        Estado inventario: ${escapeHtml(u.estado)} | Proveedor: ${escapeHtml(u.proveedor || '—')}<br>
+        Orden proveedor: ${escapeHtml(u.numero_orden || '—')} | Costo compra: ${dinero(u.precio_compra)}<br>
+        Fecha compra: ${fecha(u.fecha_compra)} | Garantía hasta: ${fecha(u.garantia_hasta)}<br>
+        ${data.puede_devolver ? '✅ Esta unidad puede iniciar devolución.' : '⚠️ No se puede crear devolución: ya tiene devolución activa o no está vendida.'}
+      `;
+    } catch (e) {
+      alert('Error buscando unidad.');
+    }
+  }
+
+  async function crearDevolucion() {
+    const codigo_producto = $('codigoUnidadDev').value.trim();
+    const motivo = $('motivoDev').value.trim();
+    const observaciones = $('observacionesDev').value.trim();
+    if (!codigo_producto || !motivo) return alert('Completa código y motivo.');
+
+    const res = await fetch(`${API_BASE}/devoluciones`, {
+      method: 'POST', headers: headers(), body: JSON.stringify({ codigo_producto, motivo, observaciones })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return alert(data.mensaje || 'No se pudo crear la devolución.');
+    cerrarModales();
+    await cargarDevoluciones();
+    alert(data.mensaje || 'Devolución creada correctamente.');
+  }
+
+  async function cambiarEstado(id, estado) {
+    const res = await fetch(`${API_BASE}/devoluciones/${id}/estado`, { method: 'PUT', headers: headers(), body: JSON.stringify({ estado }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return alert(data.mensaje || 'No se pudo actualizar.');
+    await cargarDevoluciones();
+  }
+
+  function detalleItem(titulo, valor, extraClass = '') {
+    return `<div class="detalle-item ${extraClass}"><span>${escapeHtml(titulo)}</span><strong>${valor}</strong></div>`;
+  }
+
+  function renderProductoDev(item, index) {
+    const proveedor = item.proveedor_url
+      ? `<a class="proveedor-link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(item.proveedor_url)}">${escapeHtml(item.proveedor || 'Proveedor')}</a>`
+      : escapeHtml(item.proveedor || '—');
+
+    return `
+      <div class="dev-producto-card">
+        <h4>${index + 1}. ${escapeHtml(item.nombre_producto || item.producto_nombre || 'Producto')}</h4>
+        <div class="dev-producto-grid">
+          <div><span>Código unidad:</span> ${escapeHtml(item.codigo_producto || '—')}</div>
+          <div><span>Estado revisión:</span> ${escapeHtml(textoEstado(item.estado_revision || '—'))}</div>
+          <div><span>Estado inventario:</span> ${escapeHtml(textoEstado(item.estado_inventario || '—'))}</div>
+          <div><span>Resolución:</span> ${escapeHtml(textoEstado(item.resolucion || 'sin_resolver'))}</div>
+          <div><span>Proveedor:</span> ${proveedor}</div>
+          <div><span>Orden:</span> ${escapeHtml(item.numero_orden || '—')}</div>
+          <div><span>Costo:</span> ${dinero(item.precio_compra)}</div>
+          <div><span>Garantía:</span> ${fecha(item.garantia_hasta)}</div>
+          <div style="grid-column:1/-1"><span>Motivo:</span> ${escapeHtml(item.motivo || '—')}</div>
+          <div style="grid-column:1/-1"><span>Observaciones:</span> ${escapeHtml(item.observaciones || '—')}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function abrirDetalle(id) {
+    devolucionDetalle = devoluciones.find(d => Number(d.id) === Number(id));
+    if (!devolucionDetalle) return;
+
+    const d = devolucionDetalle;
+    const detalles = d.detalles || [];
+
+    $('detalleDevContenido').innerHTML = [
+      detalleItem('ID devolución', idDev(d)),
+      detalleItem('Pedido', escapeHtml(d.codigo_pedido || ('#' + (d.pedido_id || '—')))),
+      detalleItem('Cliente', escapeHtml(d.cliente || '—')),
+      detalleItem('Total pedido', dinero(d.pedido_total)),
+      detalleItem('Estado devolución', badge(d.estado)),
+      detalleItem('Resolución general', escapeHtml(textoEstado(d.resolucion || 'sin_resolver'))),
+      detalleItem('Fecha creación', fecha(d.fecha_creacion)),
+      detalleItem('Fecha recepción', fecha(d.fecha_recepcion)),
+      detalleItem('Fecha resolución', fecha(d.fecha_resolucion)),
+      detalleItem('Motivo general', escapeHtml(d.motivo || '—'), 'full'),
+      detalleItem('Observaciones generales', escapeHtml(d.observaciones || '—'), 'full'),
+      detalleItem('Respuesta proveedor', escapeHtml(d.proveedor_respuesta || '—'), 'full'),
+      `<div class="dev-productos-lista"><h3 style="color:#f8fafc;margin:8px 0 0;">Productos devueltos (${detalles.length})</h3>${detalles.map(renderProductoDev).join('') || '<div class="empty-table">Sin productos en esta devolución.</div>'}</div>`
+    ].join('');
+
+    $('modalDevOverlay').classList.add('activo');
+    $('modalDetalleDev').classList.add('activo');
+  }
+
+  async function accionDetalleEstado(estado) {
+    if (!devolucionDetalle) return;
+    await cambiarEstado(devolucionDetalle.id, estado);
+    const actualizada = devoluciones.find(d => Number(d.id) === Number(devolucionDetalle.id));
+    if (actualizada) abrirDetalle(actualizada.id);
+  }
+
+  function valorCheckGrupo(nombre) {
+    return document.querySelector(`input[name="${nombre}"]:checked`)?.value || '';
+  }
+
+  function configurarChecksExclusivos(scope = document) {
+    ['revisionProductoDev', 'accionInventarioDev', 'solucionClienteDev', 'gestionProveedorDev'].forEach(nombre => {
+      scope.querySelectorAll(`input[name="${nombre}"]`).forEach(chk => {
+        chk.addEventListener('change', () => {
+          if (chk.checked) {
+            scope.querySelectorAll(`input[name="${nombre}"]`).forEach(otro => { if (otro !== chk) otro.checked = false; });
+          }
+          pintarChecksResolucion();
+        });
+      });
+    });
+  }
+
+  function pintarChecksResolucion() {
+    document.querySelectorAll('.cyber-check').forEach(label => label.classList.toggle('activo', !!label.querySelector('input')?.checked));
+    const rechazada = valorCheckGrupo('solucionClienteDev') === 'solicitud_rechazada';
+    const bloqueInventario = $('bloqueAccionInventarioDev');
+    if (bloqueInventario) bloqueInventario.classList.toggle('bloque-deshabilitado', rechazada);
+    if (rechazada) document.querySelectorAll('input[name="accionInventarioDev"]').forEach(chk => chk.checked = false);
+  }
+
+  function renderTablaProductosResolver(detalles = []) {
+    if (!detalles.length) return '<div class="resolver-product-summary">No hay productos registrados en esta devolución.</div>';
+    const filas = detalles.map((x, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${escapeHtml(x.nombre_producto || x.producto_nombre || 'Producto')}</strong></td>
+        <td>${escapeHtml(x.codigo_producto || 'sin código')}</td>
+        <td>${escapeHtml(textoEstado(x.estado_inventario || x.estado_revision || '—'))}</td>
+        <td><button type="button" class="btn-ver-detalle-producto" onclick="verDetalleProductoResolverDev(${i})">Ver detalles</button></td>
+      </tr>
+    `).join('');
+    return `
+      <div class="resolver-product-summary">
+        <h4>Productos devueltos</h4>
+        <div class="resolver-product-table-wrap">
+          <table class="resolver-product-table">
+            <thead><tr><th>#</th><th>Producto</th><th>Código unidad</th><th>Estado</th><th>Acción</th></tr></thead>
+            <tbody>${filas}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function filaInfoProducto(label, value) {
+    return `<tr><td>${escapeHtml(label)}</td><td>${value}</td></tr>`;
+  }
+
+  window.verDetalleProductoResolverDev = function(index) {
+    const item = (devolucionResolver?.detalles || [])[Number(index)];
+    if (!item) return;
+
+    const nombre = item.nombre_producto || item.producto_nombre || 'Producto';
+    const codigo = item.codigo_producto || '—';
+    const proveedor = item.proveedor_url
+      ? `<a class="proveedor-link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(item.proveedor_url)}">${escapeHtml(item.proveedor || 'Proveedor')}</a>`
+      : escapeHtml(item.proveedor || '—');
+
+    $('productoResolverTituloDev').textContent = nombre;
+    $('productoResolverSubtituloDev').textContent = `Unidad física: ${codigo}`;
+
+    $('productoResolverContenidoDev').innerHTML = `
+      <div class="producto-ficha-hero">
+        <div>
+          <h4>📦 ${escapeHtml(nombre)}</h4>
+          <p>Ficha completa de la unidad devuelta dentro del caso ${idDev(devolucionResolver)}.</p>
+        </div>
+        <div class="producto-codigo-pill">${escapeHtml(codigo)}</div>
+      </div>
+
+      <div class="producto-ficha-grid">
+        <div class="producto-ficha-section">
+          <h4>Información general</h4>
+          <table class="producto-info-table"><tbody>
+            ${filaInfoProducto('Producto', escapeHtml(nombre))}
+            ${filaInfoProducto('Código unidad', escapeHtml(codigo))}
+            ${filaInfoProducto('Estado revisión', escapeHtml(textoEstado(item.estado_revision || '—')))}
+            ${filaInfoProducto('Estado inventario', escapeHtml(textoEstado(item.estado_inventario || '—')))}
+            ${filaInfoProducto('Resolución', escapeHtml(textoEstado(item.resolucion || 'sin resolver')))}
+          </tbody></table>
+        </div>
+
+        <div class="producto-ficha-section">
+          <h4>Compra / proveedor</h4>
+          <table class="producto-info-table"><tbody>
+            ${filaInfoProducto('Proveedor', proveedor)}
+            ${filaInfoProducto('Orden proveedor', escapeHtml(item.numero_orden || '—'))}
+            ${filaInfoProducto('Costo compra', dinero(item.precio_compra))}
+            ${filaInfoProducto('Fecha compra', fecha(item.fecha_compra))}
+            ${filaInfoProducto('Garantía hasta', fecha(item.garantia_hasta))}
+          </tbody></table>
+        </div>
+
+        <div class="producto-ficha-section full">
+          <h4>Motivo de devolución</h4>
+          <div class="producto-ficha-texto">${escapeHtml(item.motivo || devolucionResolver?.motivo || '—')}</div>
+        </div>
+
+        <div class="producto-ficha-section full">
+          <h4>Observaciones</h4>
+          <div class="producto-ficha-texto">${escapeHtml(item.observaciones || devolucionResolver?.observaciones || '—')}</div>
+        </div>
+
+        <div class="producto-ficha-section full">
+          <h4>Historial rápido</h4>
+          <div class="producto-timeline-dev">
+            <span>Ingresó</span>
+            <span>Vendido</span>
+            <span>Entregado</span>
+            <span>Devolución</span>
+            <span>${escapeHtml(textoEstado(item.estado_revision || devolucionResolver?.estado || 'en revisión'))}</span>
+          </div>
+        </div>
+      </div>
+    `;
+    $('modalProductoResolverDev').classList.add('activo');
+  };
+
+  function cerrarDetalleProductoResolver() {
+    $('modalProductoResolverDev').classList.remove('activo');
+  }
+
+  function abrirResolver(id) {
+    devolucionResolver = devoluciones.find(d => Number(d.id) === Number(id));
+    if (!devolucionResolver) return;
+    $('resolverPreviewDev').innerHTML = `
+      <strong>${idDev(devolucionResolver)}</strong><br>
+      Cliente: ${escapeHtml(devolucionResolver.cliente || '—')} | Pedido: ${escapeHtml(devolucionResolver.codigo_pedido || ('#' + devolucionResolver.pedido_id))}<br>
+      Motivo: ${escapeHtml(devolucionResolver.motivo || '—')}
+      ${renderTablaProductosResolver(devolucionResolver.detalles || [])}
+    `;
+    document.querySelectorAll('input[name="revisionProductoDev"], input[name="accionInventarioDev"], input[name="solucionClienteDev"], input[name="gestionProveedorDev"]').forEach(chk => chk.checked = false);
+    const revisionGuardada = devolucionResolver.revision_producto || '';
+    const accionGuardada = devolucionResolver.accion_inventario || '';
+    const solucionGuardada = devolucionResolver.solucion_cliente || '';
+    const gestionGuardada = devolucionResolver.gestion_proveedor || 'sin_reclamo';
+    if (revisionGuardada && revisionGuardada !== 'sin_revision') { const chk = document.querySelector(`input[name="revisionProductoDev"][value="${revisionGuardada}"]`); if (chk) chk.checked = true; }
+    if (accionGuardada && accionGuardada !== 'sin_accion') { const chk = document.querySelector(`input[name="accionInventarioDev"][value="${accionGuardada}"]`); if (chk) chk.checked = true; }
+    if (solucionGuardada && solucionGuardada !== 'sin_solucion') { const chk = document.querySelector(`input[name="solucionClienteDev"][value="${solucionGuardada}"]`); if (chk) chk.checked = true; }
+    { const chk = document.querySelector(`input[name="gestionProveedorDev"][value="${gestionGuardada}"]`) || document.querySelector('input[name="gestionProveedorDev"][value="sin_reclamo"]'); if (chk) chk.checked = true; }
+    configurarChecksExclusivos($('modalResolverDev'));
+    pintarChecksResolucion();
+    $('proveedorRespuestaDev').value = devolucionResolver.proveedor_respuesta || '';
+    $('observacionesResolverDev').value = devolucionResolver.observaciones || '';
+    $('modalDetalleDev').classList.remove('activo');
+    $('modalDevOverlay').classList.add('activo');
+    $('modalResolverDev').classList.add('activo');
+  }
+
+  async function resolverDevolucion() {
+    if (!devolucionResolver) return;
+    const revision_producto = valorCheckGrupo('revisionProductoDev');
+    const accion_inventario = valorCheckGrupo('accionInventarioDev');
+    const solucion_cliente = valorCheckGrupo('solucionClienteDev');
+    const gestion_proveedor = valorCheckGrupo('gestionProveedorDev') || 'sin_reclamo';
+    const proveedor_respuesta = $('proveedorRespuestaDev').value.trim();
+    const observaciones = $('observacionesResolverDev').value.trim();
+    if (!revision_producto) return alert('Selecciona el estado real del producto.');
+    if (!solucion_cliente) return alert('Selecciona la solución para el cliente.');
+    if (solucion_cliente !== 'solicitud_rechazada' && !accion_inventario) return alert('Selecciona la acción sobre el inventario.');
+    const res = await fetch(`${API_BASE}/devoluciones/${devolucionResolver.id}/resolver`, {
+      method: 'PUT', headers: headers(), body: JSON.stringify({ revision_producto, accion_inventario, solucion_cliente, gestion_proveedor, proveedor_respuesta, observaciones })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return alert(data.mensaje || 'No se pudo resolver.');
+    cerrarModales();
+    await cargarDevoluciones();
+    alert(data.mensaje || 'Devolución resuelta.');
+  }
+
+  function configurarEventos() {
+    $('buscarDevoluciones').addEventListener('input', aplicarBusquedaYOrden);
+    $('btnAbrirFiltrosDev').addEventListener('click', abrirFiltros);
+    $('btnCerrarFiltrosDev').addEventListener('click', cerrarFiltros);
+    $('filtrosDevOverlay').addEventListener('click', cerrarFiltros);
+    $('btnAplicarFiltrosDev').addEventListener('click', async () => {
+      filtros.estado = $('filtroDevEstado').value;
+      filtros.resolucion = $('filtroDevResolucion').value;
+      filtros.desde = $('filtroDevDesde').value;
+      filtros.hasta = $('filtroDevHasta').value;
+      cerrarFiltros(); await cargarDevoluciones();
+    });
+    $('btnLimpiarFiltrosDev').addEventListener('click', async () => {
+      $('filtroDevEstado').value = ''; $('filtroDevResolucion').value = ''; $('filtroDevDesde').value = ''; $('filtroDevHasta').value = '';
+      filtros = { estado: '', resolucion: '', desde: '', hasta: '' };
+      await cargarDevoluciones();
+    });
+    document.querySelectorAll('.tabla-dev th[data-sort]').forEach(th => th.addEventListener('click', () => {
+      const key = th.dataset.sort; if (sortKey === key) sortDir = sortDir === 'asc' ? 'desc' : 'asc'; else { sortKey = key; sortDir = 'asc'; }
+      aplicarBusquedaYOrden();
+    }));
+    $('btnNuevaDevolucion').addEventListener('click', abrirNueva);
+    $('btnCerrarNuevaDev').addEventListener('click', cerrarModales);
+    $('btnCancelarNuevaDev').addEventListener('click', cerrarModales);
+    $('modalDevOverlay').addEventListener('click', cerrarModales);
+    $('btnBuscarUnidadDev').addEventListener('click', buscarUnidad);
+    $('btnGuardarNuevaDev').addEventListener('click', crearDevolucion);
+    $('btnCerrarDetalleDev').addEventListener('click', cerrarModales);
+    $('btnDetalleRecibida').addEventListener('click', () => accionDetalleEstado('recibida'));
+    $('btnDetalleRevision').addEventListener('click', () => accionDetalleEstado('en_revision'));
+    $('btnDetalleResolver').addEventListener('click', () => devolucionDetalle && abrirResolver(devolucionDetalle.id));
+    $('btnDetalleRechazar').addEventListener('click', () => {
+      if (devolucionDetalle && confirm('¿Rechazar esta devolución?')) accionDetalleEstado('rechazada');
+    });
+
+    $('btnCerrarResolverDev').addEventListener('click', cerrarModales);
+    $('btnCancelarResolverDev').addEventListener('click', cerrarModales);
+    $('btnGuardarResolverDev').addEventListener('click', resolverDevolucion);
+    $('btnCerrarProductoResolverDev')?.addEventListener('click', cerrarDetalleProductoResolver);
+    $('btnCerrarProductoResolverDev2')?.addEventListener('click', cerrarDetalleProductoResolver);
+    $('tablaDevolucionesBody').addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      const fila = e.target.closest('tr[data-id]');
+      if (!fila) return;
+      abrirDetalle(fila.dataset.id);
+    });
+  }
+
+  async function iniciar() {
+    configurarEventos();
+    try { await cargarDevoluciones(); }
+    catch (e) { console.error(e); $('tablaDevolucionesBody').innerHTML = '<tr><td colspan="6" class="empty-table">No se pudo cargar Devoluciones. Revisa servidor, token y ruta /api/devoluciones.</td></tr>'; }
+  }
+
+  iniciar();
+})();
+</script>

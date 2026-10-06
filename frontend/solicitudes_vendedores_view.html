@@ -1,0 +1,127 @@
+<!-- =====================================================
+     SOLICITUDES VENDEDORES VIEW / Marketplace
+     Fase 7: Solicitudes de registro de vendedores
+     ===================================================== -->
+
+<section class="solicitudes-vendedores-view">
+  <style>
+    .solicitudes-vendedores-view{display:grid;gap:18px;color:#f8fafc;max-width:100%;overflow-x:hidden}
+    .solicitudes-hero{background:linear-gradient(135deg,rgba(85,110,230,.96),rgba(15,23,42,.96));border:1px solid rgba(166,176,207,.14);border-radius:22px;padding:24px;box-shadow:0 18px 44px rgba(0,0,0,.22)}
+    .solicitudes-hero small{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.12);color:#dbeafe;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+    .solicitudes-hero h2{margin:0 0 8px;font-size:32px;letter-spacing:-.04em}.solicitudes-hero p{margin:0;color:#cbd5e1;max-width:900px;line-height:1.55}
+    .solicitudes-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.solicitud-kpi{position:relative;overflow:hidden;background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:18px;min-height:112px;box-shadow:0 12px 30px rgba(0,0,0,.16)}.solicitud-kpi::after{content:"";position:absolute;right:-34px;bottom:-42px;width:120px;height:120px;border-radius:50%;background:rgba(80,165,241,.12)}.solicitud-kpi span{display:block;color:#a6b0cf;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}.solicitud-kpi strong{display:block;margin-top:9px;font-size:30px;color:white}.solicitud-kpi small{display:block;margin-top:7px;color:#94a3b8;font-weight:800}.solicitud-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042)}
+    .solicitudes-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:14px;box-shadow:0 12px 30px rgba(0,0,0,.16)}
+    .solicitudes-search{min-width:min(360px,100%);flex:1;display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.35);border:1px solid rgba(166,176,207,.14);border-radius:14px;padding:0 12px}.solicitudes-search input{width:100%;border:none;outline:none;background:transparent;color:#fff;padding:12px 0;font-weight:800}.solicitudes-filtros{display:flex;gap:8px;flex-wrap:wrap}.solicitud-select{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#fff;border-radius:12px;padding:11px 12px;font-weight:900;outline:none}
+    .solicitudes-panel{background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:18px;padding:20px;box-shadow:0 12px 30px rgba(0,0,0,.16);min-width:0}.solicitudes-panel-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}.solicitudes-panel-title h3{margin:0;color:#fff;font-size:19px}.solicitudes-panel-title p{margin:5px 0 0;color:#a6b0cf;font-size:13px}.solicitudes-table-wrap{overflow-x:auto}.solicitudes-table{width:100%;border-collapse:collapse;min-width:980px}.solicitudes-table th,.solicitudes-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap}.solicitudes-table th{color:#8da0ff;font-size:12px;text-transform:uppercase;letter-spacing:.04em;background:rgba(15,23,42,.34)}.solicitudes-table td{color:#e5e7eb;font-size:13px;font-weight:700}.fila-solicitud{cursor:pointer;transition:.18s ease}.fila-solicitud:hover td{background:rgba(85,110,230,.12)}
+    .solicitud-badge{display:inline-flex;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:900;border:1px solid rgba(166,176,207,.16);background:rgba(15,23,42,.38);color:#cbd5e1}.solicitud-badge.ok{color:#86efac;border-color:rgba(52,195,143,.32);background:rgba(52,195,143,.12)}.solicitud-badge.warn{color:#fbbf24;border-color:rgba(241,180,76,.32);background:rgba(241,180,76,.12)}.solicitud-badge.danger{color:#fca5a5;border-color:rgba(244,106,106,.32);background:rgba(244,106,106,.12)}.solicitud-badge.info{color:#93c5fd;border-color:rgba(80,165,241,.32);background:rgba(80,165,241,.12)}
+    .solicitud-drawer{position:fixed;inset:0;z-index:10000;display:none}.solicitud-drawer.visible{display:block}.solicitud-backdrop{position:absolute;inset:0;background:rgba(2,6,23,.68);backdrop-filter:blur(3px)}.solicitud-panel-detalle{position:absolute;top:0;right:0;width:min(760px,96vw);height:100%;overflow:auto;background:#202637;border-left:1px solid rgba(166,176,207,.18);box-shadow:-24px 0 70px rgba(0,0,0,.42);padding:22px}.detalle-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:18px}.detalle-head h3{font-size:24px;margin:0 0 6px}.detalle-head p{margin:0;color:#a6b0cf}.btn-cerrar-detalle{border:1px solid rgba(166,176,207,.16);background:rgba(15,23,42,.35);color:#fff;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer}.detalle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.detalle-card{background:#2a3042;border:1px solid rgba(166,176,207,.14);border-radius:16px;padding:16px}.detalle-card h4{margin:0 0 12px;color:#fff}.detalle-item{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(166,176,207,.10)}.detalle-item:last-child{border-bottom:0}.detalle-item span{color:#a6b0cf}.detalle-item strong{color:#fff;text-align:right}.documentos-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.documento-card{border:1px dashed rgba(166,176,207,.24);border-radius:14px;padding:14px;background:rgba(15,23,42,.25);text-align:center;color:#cbd5e1;font-weight:900}.detalle-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.detalle-actions button{border:none;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer;color:#fff}.btn-aprobar{background:#34c38f}.btn-rechazar{background:#f46a6a}.btn-corregir{background:#f1b44c;color:#111827!important}.btn-nota{background:#556ee6}
+    @media(max-width:1100px){.solicitudes-kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.solicitudes-kpis,.detalle-grid{grid-template-columns:1fr}.documentos-grid{grid-template-columns:1fr}.solicitudes-hero h2{font-size:26px}.solicitud-panel-detalle{width:100vw}}
+  </style>
+
+  <section class="solicitudes-hero">
+    <small>Vendedores / Solicitudes</small>
+    <h2>Solicitudes de vendedores</h2>
+    <p>Control de registro, revisión documental y aprobación de nuevos vendedores comerciales o emprendedores dentro del marketplace.</p>
+  </section>
+
+  <section class="solicitudes-kpis">
+    <div class="solicitud-kpi destacado"><span>Pendientes</span><strong id="kpiPendientes">4</strong><small>Esperan primera revisión</small></div>
+    <div class="solicitud-kpi"><span>En revisión</span><strong id="kpiRevision">3</strong><small>Documentos en validación</small></div>
+    <div class="solicitud-kpi"><span>Aprobadas</span><strong id="kpiAprobadas">12</strong><small>Este período</small></div>
+    <div class="solicitud-kpi"><span>Correcciones</span><strong id="kpiCorrecciones">2</strong><small>Información incompleta</small></div>
+  </section>
+
+  <section class="solicitudes-toolbar">
+    <label class="solicitudes-search">🔎 <input id="buscarSolicitudVendedor" type="search" placeholder="Buscar por tienda, solicitante, documento o ID..."></label>
+    <div class="solicitudes-filtros">
+      <select id="filtroTipoSolicitud" class="solicitud-select"><option value="todos">Todos los tipos</option><option value="Comercial">Comercial</option><option value="Emprendedor">Emprendedor</option></select>
+      <select id="filtroEstadoSolicitud" class="solicitud-select"><option value="todos">Todos los estados</option><option value="Pendiente">Pendiente</option><option value="En revisión">En revisión</option><option value="Aprobada">Aprobada</option><option value="Rechazada">Rechazada</option><option value="Corrección">Corrección</option></select>
+    </div>
+  </section>
+
+  <section class="solicitudes-panel">
+    <div class="solicitudes-panel-title"><div><h3>Lista de solicitudes</h3><p>Datos temporales para validar el flujo. Luego cargará desde MySQL.</p></div><span class="solicitud-badge info" id="contadorSolicitudes">0 solicitudes</span></div>
+    <div class="solicitudes-table-wrap">
+      <table class="solicitudes-table">
+        <thead><tr><th>ID</th><th>Nombre de tienda</th><th>Tipo</th><th>Solicitante</th><th>Documento</th><th>Cuenta bancaria</th><th>Estado</th><th>Fecha solicitud</th></tr></thead>
+        <tbody id="tablaSolicitudesVendedores"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="solicitud-drawer" id="drawerSolicitudVendedor" aria-hidden="true">
+    <div class="solicitud-backdrop" data-cerrar-detalle></div>
+    <aside class="solicitud-panel-detalle">
+      <div class="detalle-head"><div><h3 id="detalleTiendaSolicitud">Solicitud</h3><p id="detalleSubtituloSolicitud">Detalle de verificación</p></div><button class="btn-cerrar-detalle" type="button" data-cerrar-detalle>✕</button></div>
+      <div id="contenidoDetalleSolicitud"></div>
+    </aside>
+  </div>
+
+  <script>
+  (() => {
+    const solicitudes = [
+      {id:'SOL-0001', tienda:'Tienda Demo SV', tipo:'Comercial', solicitante:'Juan Pérez', documento:'DUI verificado', cuenta:'Banco Agrícola ****2841', estado:'Pendiente', fecha:'02/07/2026', dui:'04567890-1', nit:'0614-010190-101-3', ncr:'Pendiente', selfie:'Recibida', negocio:'Accesorios y tecnología', correo:'ventas@demo.sv', telefono:'7000-1122'},
+      {id:'SOL-0002', tienda:'Artesanías Ana', tipo:'Emprendedor', solicitante:'Ana López', documento:'DUI recibido', cuenta:'BAC ****9120', estado:'En revisión', fecha:'01/07/2026', dui:'03888123-4', nit:'No posee', ncr:'No posee', selfie:'Recibida', negocio:'Artesanías', correo:'ana@artesanias.sv', telefono:'7555-4422'},
+      {id:'SOL-0003', tienda:'Moda Central', tipo:'Comercial', solicitante:'Carlos Méndez', documento:'NIT/NCR recibido', cuenta:'Davivienda ****1200', estado:'Corrección', fecha:'30/06/2026', dui:'02223344-5', nit:'0614-090292-102-8', ncr:'121245-7', selfie:'Falta selfie clara', negocio:'Ropa y calzado', correo:'moda@central.sv', telefono:'7222-8899'},
+      {id:'SOL-0004', tienda:'Dulces La Esquina', tipo:'Emprendedor', solicitante:'Rosa Martínez', documento:'DUI recibido', cuenta:'Banco Cuscatlán ****4511', estado:'Aprobada', fecha:'29/06/2026', dui:'01458796-0', nit:'No posee', ncr:'No posee', selfie:'Recibida', negocio:'Alimentos artesanales', correo:'dulces@esquina.sv', telefono:'7111-9090'},
+      {id:'SOL-0005', tienda:'Repuestos Express', tipo:'Comercial', solicitante:'Miguel Castro', documento:'Documentos incompletos', cuenta:'Pendiente', estado:'Rechazada', fecha:'28/06/2026', dui:'09870011-2', nit:'Pendiente', ncr:'Pendiente', selfie:'No recibida', negocio:'Repuestos', correo:'repuestos@express.sv', telefono:'7666-1188'}
+    ];
+
+    const tbody = document.getElementById('tablaSolicitudesVendedores');
+    const buscar = document.getElementById('buscarSolicitudVendedor');
+    const filtroTipo = document.getElementById('filtroTipoSolicitud');
+    const filtroEstado = document.getElementById('filtroEstadoSolicitud');
+    const contador = document.getElementById('contadorSolicitudes');
+    const drawer = document.getElementById('drawerSolicitudVendedor');
+    const detalleTitulo = document.getElementById('detalleTiendaSolicitud');
+    const detalleSub = document.getElementById('detalleSubtituloSolicitud');
+    const detalle = document.getElementById('contenidoDetalleSolicitud');
+
+    function badgeEstado(estado){
+      if(estado==='Aprobada') return 'ok';
+      if(estado==='Pendiente' || estado==='En revisión' || estado==='Corrección') return 'warn';
+      if(estado==='Rechazada') return 'danger';
+      return '';
+    }
+    function badgeTipo(tipo){ return tipo==='Emprendedor' ? 'warn' : 'ok'; }
+
+    function render(){
+      const q = (buscar.value || '').toLowerCase().trim();
+      const tipo = filtroTipo.value;
+      const estado = filtroEstado.value;
+      const filtradas = solicitudes.filter(s => {
+        const coincideTexto = [s.id,s.tienda,s.tipo,s.solicitante,s.documento,s.cuenta,s.estado].join(' ').toLowerCase().includes(q);
+        const coincideTipo = tipo==='todos' || s.tipo===tipo;
+        const coincideEstado = estado==='todos' || s.estado===estado;
+        return coincideTexto && coincideTipo && coincideEstado;
+      });
+      contador.textContent = `${filtradas.length} solicitudes`;
+      tbody.innerHTML = filtradas.map(s => `
+        <tr class="fila-solicitud" data-id="${s.id}">
+          <td>${s.id}</td><td>${s.tienda}</td><td><span class="solicitud-badge ${badgeTipo(s.tipo)}">${s.tipo}</span></td><td>${s.solicitante}</td><td>${s.documento}</td><td>${s.cuenta}</td><td><span class="solicitud-badge ${badgeEstado(s.estado)}">${s.estado}</span></td><td>${s.fecha}</td>
+        </tr>`).join('');
+      tbody.querySelectorAll('.fila-solicitud').forEach(tr => tr.addEventListener('click', () => abrirDetalle(tr.dataset.id)));
+    }
+
+    function abrirDetalle(id){
+      const s = solicitudes.find(x => x.id === id);
+      if(!s) return;
+      detalleTitulo.textContent = s.tienda;
+      detalleSub.textContent = `${s.id} · ${s.tipo} · ${s.estado}`;
+      detalle.innerHTML = `
+        <div class="detalle-grid">
+          <div class="detalle-card"><h4>Datos personales</h4><div class="detalle-item"><span>Solicitante</span><strong>${s.solicitante}</strong></div><div class="detalle-item"><span>DUI</span><strong>${s.dui}</strong></div><div class="detalle-item"><span>Correo</span><strong>${s.correo}</strong></div><div class="detalle-item"><span>Teléfono</span><strong>${s.telefono}</strong></div></div>
+          <div class="detalle-card"><h4>Datos del negocio</h4><div class="detalle-item"><span>Tienda</span><strong>${s.tienda}</strong></div><div class="detalle-item"><span>Tipo solicitado</span><strong>${s.tipo}</strong></div><div class="detalle-item"><span>Giro</span><strong>${s.negocio}</strong></div><div class="detalle-item"><span>Estado</span><strong>${s.estado}</strong></div></div>
+          <div class="detalle-card"><h4>Verificación fiscal</h4><div class="detalle-item"><span>NIT</span><strong>${s.nit}</strong></div><div class="detalle-item"><span>NCR</span><strong>${s.ncr}</strong></div><div class="detalle-item"><span>Cuenta bancaria</span><strong>${s.cuenta}</strong></div><div class="detalle-item"><span>Fecha solicitud</span><strong>${s.fecha}</strong></div></div>
+          <div class="detalle-card"><h4>Documentos</h4><div class="documentos-grid"><div class="documento-card">DUI</div><div class="documento-card">Selfie</div><div class="documento-card">Banco</div><div class="documento-card">NIT</div><div class="documento-card">NCR</div><div class="documento-card">Negocio</div></div></div>
+        </div>
+        <div class="detalle-card" style="margin-top:14px"><h4>Acciones de revisión</h4><p style="color:#a6b0cf;line-height:1.5;margin:0">Los botones quedan visualmente preparados. La lógica real de aprobar, rechazar o pedir corrección se conectará después con backend, permisos y bitácora global.</p><div class="detalle-actions"><button class="btn-aprobar" type="button">Aprobar</button><button class="btn-rechazar" type="button">Rechazar</button><button class="btn-corregir" type="button">Pedir corrección</button><button class="btn-nota" type="button">Agregar nota</button></div></div>`;
+      drawer.classList.add('visible'); drawer.setAttribute('aria-hidden','false');
+    }
+    function cerrarDetalle(){ drawer.classList.remove('visible'); drawer.setAttribute('aria-hidden','true'); }
+    document.querySelectorAll('[data-cerrar-detalle]').forEach(el => el.addEventListener('click', cerrarDetalle));
+    buscar.addEventListener('input', render); filtroTipo.addEventListener('change', render); filtroEstado.addEventListener('change', render);
+    render();
+  })();
+  </script>
+</section>

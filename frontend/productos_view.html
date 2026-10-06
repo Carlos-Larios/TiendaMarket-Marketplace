@@ -1,0 +1,2044 @@
+<!-- =====================================================
+     PRODUCTOS VIEW / Dashboard interno para dashboard.html
+     Diseño: resumen + filtros + lista + modales flotantes
+     ===================================================== -->
+
+<style>
+  /* =====================================================
+     STYLE / CONTENEDOR GENERAL
+     ===================================================== */
+
+  .productos-view {
+    color: #fff;
+  }
+
+  .productos-view * {
+    box-sizing: border-box;
+  }
+
+  .productos-panel {
+    background: linear-gradient(180deg, rgba(30,41,59,.96), rgba(15,23,42,.98));
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.28);
+  }
+
+  .productos-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .productos-top h1 {
+    margin: 0;
+    font-size: 32px;
+    letter-spacing: -.03em;
+  }
+
+  .productos-top p {
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 14px;
+  }
+
+  .fecha-productos {
+    background: rgba(15,23,42,.75);
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 14px 18px;
+    border-radius: 16px;
+    color: #e2e8f0;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  /* =====================================================
+     STYLE / RESUMEN SUPERIOR
+     ===================================================== */
+
+  .resumen-productos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .resumen-card {
+    background: rgba(15,23,42,.72);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resumen-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -35px -55px auto;
+    width: 110px;
+    height: 110px;
+    background: rgba(56,189,248,.12);
+    border-radius: 50%;
+  }
+
+  .resumen-card small {
+    display: block;
+    color: #94a3b8;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .resumen-card strong {
+    display: block;
+    color: #fff;
+    font-size: 28px;
+  }
+
+  .resumen-card span {
+    color: #38bdf8;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* =====================================================
+     STYLE / ACCIONES Y FILTROS
+     ===================================================== */
+
+  .acciones-productos {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+
+  .productos-view input,
+  .productos-view select,
+  .productos-view textarea {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.08);
+    background: #0f172a;
+    color: white;
+    border-radius: 13px;
+    padding: 12px;
+    outline: none;
+    font-size: 14px;
+  }
+
+  .productos-view textarea {
+    min-height: 90px;
+    resize: vertical;
+  }
+
+  .productos-view input:focus,
+  .productos-view select:focus,
+  .productos-view textarea:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56,189,248,.14);
+  }
+
+  .btn-productos {
+    border: none;
+    border-radius: 13px;
+    padding: 12px 16px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    transition: .25s;
+    white-space: nowrap;
+  }
+
+  .btn-productos:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+
+  .btn-secundario {
+    background: rgba(51,65,85,.95);
+  }
+
+  .btn-peligro {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+  }
+
+  .filtros-productos {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr auto;
+    gap: 12px;
+    background: rgba(15,23,42,.55);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+
+  /* =====================================================
+     STYLE / LISTA DE PRODUCTOS
+     ===================================================== */
+
+  .productos-lista-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0 10px;
+  }
+
+  .productos-lista-header h2 {
+    margin: 0;
+    color: #38bdf8;
+    font-size: 20px;
+  }
+
+  .productos-meta {
+    color: #94a3b8;
+    font-size: 13px;
+  }
+
+  .lista-productos {
+    display: grid;
+    gap: 12px;
+  }
+
+  .producto-row {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    background: rgba(15,23,42,.72);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 12px;
+    cursor: pointer;
+    transition: .25s;
+  }
+
+  .producto-row:hover {
+    border-color: rgba(56,189,248,.72);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 35px rgba(0,0,0,.25);
+  }
+
+  .producto-img {
+    width: 90px;
+    height: 76px;
+    border-radius: 14px;
+    background: #020617;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+
+  .producto-info h3 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    color: white;
+  }
+
+  .producto-info p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 13px;
+  }
+
+  .producto-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 9px;
+  }
+
+  .tag {
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(30,41,59,.9);
+    color: #e2e8f0;
+    border-radius: 999px;
+    padding: 5px 8px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .tag-stock {
+    color: #4ade80;
+    border-color: rgba(74,222,128,.35);
+    background: rgba(22,163,74,.13);
+  }
+
+  .tag-pedido {
+    color: #c084fc;
+    border-color: rgba(192,132,252,.35);
+    background: rgba(147,51,234,.13);
+  }
+
+  .tag-agotado {
+    color: #fb7185;
+    border-color: rgba(251,113,133,.35);
+    background: rgba(239,68,68,.13);
+  }
+
+  .tag-importando {
+    color: #86efac;
+    border-color: rgba(34,197,94,.45);
+    background: rgba(20,83,45,.42);
+  }
+
+  .tag-oculto {
+    color: #cbd5e1;
+    border-color: rgba(148,163,184,.35);
+    background: rgba(71,85,105,.25);
+  }
+
+  .tag-dueno {
+    color: #bfdbfe;
+    border-color: rgba(96,165,250,.35);
+    background: rgba(37,99,235,.13);
+  }
+
+  .tag-emprendedor {
+    color: #fde68a;
+    border-color: rgba(245,158,11,.35);
+    background: rgba(146,64,14,.18);
+  }
+
+  .tag-revision {
+    color: #fbbf24;
+    border-color: rgba(245,158,11,.38);
+    background: rgba(180,83,9,.18);
+  }
+
+  .tag-bloqueado {
+    color: #fecaca;
+    border-color: rgba(248,113,113,.40);
+    background: rgba(127,29,29,.25);
+  }
+
+  .marketplace-owner-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin-top: 7px;
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .stock-numero {
+    color: #4ade80;
+    border-color: rgba(74,222,128,.35);
+    background: rgba(22,163,74,.13);
+  }
+
+  .stock-cero {
+    color: #fb7185;
+    border-color: rgba(251,113,133,.35);
+    background: rgba(239,68,68,.13);
+  }
+
+  .producto-side {
+    text-align: right;
+    min-width: 150px;
+  }
+
+  .producto-precio {
+    color: #4ade80;
+    font-size: 22px;
+    font-weight: 900;
+  }
+
+  .producto-original {
+    color: #94a3b8;
+    font-size: 12px;
+    text-decoration: line-through;
+  }
+
+  .producto-botones {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  .btn-mini {
+    border: none;
+    border-radius: 10px;
+    padding: 8px 10px;
+    color: white;
+    cursor: pointer;
+    background: #2563eb;
+    font-weight: 800;
+    font-size: 12px;
+  }
+
+  .btn-mini.danger {
+    background: #ef4444;
+  }
+
+  .publish-switch-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    background: rgba(15,23,42,.55);
+    border: 1px solid rgba(148,163,184,.22);
+    border-radius: 999px;
+    padding: 4px 8px;
+  }
+
+  .publish-switch-wrap input { display: none; }
+  .publish-switch { width: 40px; height: 22px; border-radius: 999px; position: relative; background: rgba(100,116,139,.75); border: 1px solid rgba(148,163,184,.35); transition: .2s; display:inline-block; }
+  .publish-switch::after { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 2px; border-radius: 50%; background: #e2e8f0; transition: .2s; box-shadow: 0 3px 8px rgba(0,0,0,.35); }
+  .publish-switch-wrap input:checked + .publish-switch { background: linear-gradient(135deg, #16a34a, #22c55e); border-color: rgba(34,197,94,.75); }
+  .publish-switch-wrap input:checked + .publish-switch::after { transform: translateX(18px); background: #ecfdf5; }
+  .publish-switch-text { font-weight: 900; font-size: 12px; color: #cbd5e1; }
+  .publish-switch-wrap input:checked ~ .publish-switch-text { color: #86efac; }
+
+  .sin-productos {
+    background: rgba(15,23,42,.72);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 28px;
+    text-align: center;
+    color: #94a3b8;
+  }
+
+  .paginacion-productos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .paginacion-productos button {
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    background: #2563eb;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .paginacion-productos button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    background: #475569;
+  }
+
+  .paginacion-productos span {
+    color: #cbd5e1;
+    background: rgba(15,23,42,.75);
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 800;
+  }
+
+  /* =====================================================
+     STYLE / MODALES SWEETALERT
+     ===================================================== */
+
+  .swal2-popup {
+    border-radius: 22px !important;
+  }
+
+  .modal-producto {
+    text-align: left;
+  }
+
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .modal-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .modal-full {
+    grid-column: 1 / -1;
+  }
+
+  .modal-section-title {
+    grid-column: 1 / -1;
+    background: rgba(56,189,248,.1);
+    border: 1px solid rgba(56,189,248,.18);
+    color: #7dd3fc;
+    border-radius: 13px;
+    padding: 10px 12px;
+    font-weight: 900;
+    margin-top: 4px;
+  }
+
+  .input-modal {
+    width: 100% !important;
+    margin: 0 !important;
+    height: auto !important;
+    border: 1px solid rgba(255,255,255,.1) !important;
+    background: #0f172a !important;
+    color: white !important;
+    border-radius: 12px !important;
+    padding: 11px !important;
+  }
+
+  .detalle-producto-box {
+    text-align: left;
+    background: #0f172a;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 16px;
+    max-height: 590px;
+    overflow-y: auto;
+  }
+
+  .detalle-producto-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 16px;
+    margin-bottom: 15px;
+  }
+
+  .detalle-producto-img {
+    width: 180px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 16px;
+    background: #020617;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+
+  .detalle-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .detalle-card {
+    background: #1e293b;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 13px;
+    padding: 11px;
+  }
+
+  .detalle-card small {
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .detalle-card strong {
+    color: white;
+    word-break: break-word;
+  }
+
+  .calculadora-result {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .calc-card {
+    background: #0f172a;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 13px;
+    padding: 12px;
+    color: #94a3b8;
+  }
+
+  .calc-card strong {
+    display: block;
+    color: #4ade80;
+    font-size: 20px;
+    margin-top: 5px;
+  }
+
+  @media(max-width: 1000px) {
+    .resumen-productos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .acciones-productos,
+    .filtros-productos {
+      grid-template-columns: 1fr;
+    }
+
+    .producto-row {
+      grid-template-columns: 80px 1fr;
+    }
+
+    .producto-side {
+      grid-column: 1 / -1;
+      text-align: left;
+    }
+
+    .producto-botones {
+      justify-content: flex-start;
+    }
+  }
+
+  @media(max-width: 700px) {
+    .productos-top,
+    .detalle-producto-grid,
+    .modal-grid,
+    .modal-grid-3,
+    .detalle-cards,
+    .calculadora-result {
+      grid-template-columns: 1fr;
+    }
+
+    .resumen-productos {
+      grid-template-columns: 1fr;
+    }
+
+    .fecha-productos {
+      white-space: normal;
+    }
+  }
+
+/* =====================================================
+   STYLE / BUSCADOR + PANEL FLOTANTE DE FILTROS
+   ===================================================== */
+.modern-filter-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  margin: 22px 0;
+  background: rgba(30, 41, 59, 0.76);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.modern-filter-toolbar .search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  padding: 0 14px;
+}
+
+.modern-filter-toolbar .search-box input {
+  width: 100%;
+  border: none !important;
+  background: transparent !important;
+  color: #f8fafc;
+  padding: 12px 0;
+  outline: none;
+}
+
+.modern-filter-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-modern-filter {
+  border: none;
+  border-radius: 13px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .15s ease, opacity .15s ease;
+  color: #e0f2fe;
+  background: rgba(14, 165, 233, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.btn-modern-filter:hover {
+  transform: translateY(-1px);
+  opacity: .92;
+}
+
+.modern-filters-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.55);
+  z-index: 90;
+}
+
+.modern-filters-overlay.activo {
+  display: block;
+}
+
+.modern-filters-panel {
+  position: fixed;
+  top: 0;
+  right: -390px;
+  width: 370px;
+  height: 100vh;
+  background: #0f172a;
+  border-left: 1px solid rgba(148, 163, 184, .2);
+  box-shadow: -20px 0 50px rgba(0, 0, 0, .35);
+  z-index: 100;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: right .25s ease;
+  overflow-y: auto;
+}
+
+.modern-filters-panel.abierto {
+  right: 0;
+}
+
+.modern-filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.modern-filters-header h3 {
+  color: #f8fafc;
+  margin: 0;
+}
+
+.modern-filters-panel label {
+  color: #cbd5e1;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.modern-filters-panel input,
+.modern-filters-panel select {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.9);
+  color: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.modern-filters-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.modern-filters-actions button {
+  flex: 1;
+}
+
+.btn-modern-secondary {
+  border: none;
+  border-radius: 13px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  color: #f8fafc;
+  background: rgba(100, 116, 139, 0.5);
+}
+
+.btn-modern-primary {
+  border: none;
+  border-radius: 13px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  color: #082f49;
+  background: linear-gradient(135deg, #22d3ee, #60a5fa);
+}
+
+.btn-modern-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  color: #f8fafc;
+  background: rgba(148, 163, 184, .18);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .modern-filter-toolbar {
+    flex-direction: column;
+  }
+
+  .modern-filter-actions {
+    width: 100%;
+  }
+
+  .modern-filter-actions button,
+  .modern-filter-actions .btn-productos {
+    flex: 1;
+  }
+
+  .modern-filters-panel {
+    width: 100%;
+    right: -100%;
+  }
+}
+
+</style>
+
+<script>
+  window.logoutProductosView = function() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    window.location.href = "login-Panel.html";
+  };
+</script>
+
+<div class="productos-view" data-panel-tipo="">
+  <section class="productos-panel">
+
+    <!-- =====================================================
+         HTML / ENCABEZADO DEL DASHBOARD DE PRODUCTOS
+         ===================================================== -->
+    <div class="productos-top">
+      <div>
+        <h1>📦 Dashboard de Productos</h1>
+        <p>Administra publicaciones de Mi tienda, vendedores y emprendedores desde un solo panel.</p>
+      </div>
+
+      <div class="fecha-productos" id="fechaProductos">
+        Fecha
+      </div>
+    </div>
+
+    <!-- =====================================================
+         HTML / RESUMEN RÁPIDO
+         ===================================================== -->
+    <div class="resumen-productos">
+      <div class="resumen-card">
+        <small>Total productos</small>
+        <strong id="statTotal">0</strong>
+        <span>Catálogo publicado</span>
+      </div>
+
+      <div class="resumen-card">
+        <small>En stock</small>
+        <strong id="statStock">0</strong>
+        <span>Disponibles para vender</span>
+      </div>
+
+      <div class="resumen-card">
+        <small>Importación</small>
+        <strong id="statPedido">0</strong>
+        <span>Productos importados</span>
+      </div>
+
+      <div class="resumen-card">
+        <small>Agotados</small>
+        <strong id="statAgotados">0</strong>
+        <span>Sin disponibilidad</span>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         HTML / ACCIONES PRINCIPALES
+         ===================================================== -->
+    <div class="modern-filter-toolbar productos-filter-toolbar">
+      <div class="search-box">
+        <span>🔎</span>
+        <input
+          type="text"
+          id="buscarProducto"
+          placeholder="Buscar por nombre, marca, modelo, SKU, código o categoría..."
+        >
+      </div>
+
+      <div class="modern-filter-actions">
+        <button class="btn-modern-filter" type="button" id="btnAbrirFiltrosProductos">
+          ⚙ Filtros
+        </button>
+
+
+        <button class="btn-productos btn-secundario" type="button" id="btnAbrirCalculadora">
+          🧮 Calculadora importación
+        </button>
+      </div>
+    </div>
+
+    <div class="modern-filters-overlay" id="filtrosProductosOverlay"></div>
+
+    <aside class="modern-filters-panel" id="filtrosProductosPanel">
+      <div class="modern-filters-header">
+        <h3>Filtros de productos</h3>
+        <button class="btn-modern-close" type="button" id="btnCerrarFiltrosProductos">×</button>
+      </div>
+
+      <label>Tipo de venta</label>
+      <select id="filtroTipoVenta">
+        <option value="">Todos los tipos</option>
+        <option value="stock">En stock</option>
+        <option value="importacion">Importación</option>
+      </select>
+
+      <label>Disponibilidad</label>
+      <select id="filtroDisponibilidad">
+        <option value="">Todas las disponibilidades</option>
+        <option value="Disponible">Disponible</option>
+        <option value="Agotado">Agotado</option>
+        <option value="Reservado">Reservado</option>
+        <option value="Próximamente">Próximamente</option>
+      </select>
+
+      <label>Propietario / tipo</label>
+      <select id="filtroPropietarioProducto">
+        <option value="">Todos</option>
+        <option value="mi_tienda">Mi tienda</option>
+        <option value="vendedor">Vendedores</option>
+        <option value="emprendedor">Emprendedores</option>
+        <option value="revision">En revisión</option>
+        <option value="bloqueado">Bloqueados</option>
+      </select>
+
+      <label>Marca</label>
+      <input type="text" id="filtroMarca" placeholder="Filtrar por marca">
+
+      <label>Precio</label>
+      <select id="filtroPrecio">
+        <option value="">Todos los precios</option>
+        <option value="0-25">Menos de $25</option>
+        <option value="25-50">$25 a $50</option>
+        <option value="50-100">$50 a $100</option>
+        <option value="100-300">$100 a $300</option>
+        <option value="300-999999">$300 o más</option>
+      </select>
+
+      <div class="modern-filters-actions">
+        <button class="btn-modern-primary" type="button" id="btnAplicarFiltrosProductos">Aplicar</button>
+        <button class="btn-modern-secondary" type="button" id="limpiarFiltros">Limpiar</button>
+      </div>
+    </aside>
+
+    <!-- =====================================================
+         HTML / LISTA DE PRODUCTOS PUBLICADOS
+         ===================================================== -->
+    <div class="productos-lista-header">
+      <h2>Productos publicados</h2>
+      <div class="productos-meta" id="infoProductos">Mostrando productos...</div>
+    </div>
+
+    <div id="listaProductos" class="lista-productos"></div>
+    <div id="paginacionProductos" class="paginacion-productos"></div>
+
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script type="module">
+    /* =====================================================
+       JAVASCRIPT / IMPORTACIONES Y CONFIGURACIÓN BASE
+       ===================================================== */
+
+    import axios from "https://cdn.jsdelivr.net/npm/axios@1.7.7/+esm";
+
+    const API = "http://localhost:3000/api";
+    const productosToken = localStorage.getItem("token");
+
+    if (!productosToken) {
+      window.location.href = "login-Panel.html";
+    }
+
+    const authHeaders = {
+      headers: {
+        Authorization: `Bearer ${productosToken}`
+      }
+    };
+
+    /* =====================================================
+       JAVASCRIPT / REFERENCIAS HTML
+       ===================================================== */
+
+    const listaProductos = document.getElementById("listaProductos");
+    const buscarProducto = document.getElementById("buscarProducto");
+    const filtroTipoVenta = document.getElementById("filtroTipoVenta");
+    const filtroDisponibilidad = document.getElementById("filtroDisponibilidad");
+    const filtroMarca = document.getElementById("filtroMarca");
+    const filtroPrecio = document.getElementById("filtroPrecio");
+    const filtroPropietarioProducto = document.getElementById("filtroPropietarioProducto");
+    const limpiarFiltros = document.getElementById("limpiarFiltros");
+    const btnAbrirCalculadora = document.getElementById("btnAbrirCalculadora");
+
+    const fechaProductos = document.getElementById("fechaProductos");
+    const statTotal = document.getElementById("statTotal");
+    const statStock = document.getElementById("statStock");
+    const statPedido = document.getElementById("statPedido");
+    const statAgotados = document.getElementById("statAgotados");
+
+    /* =====================================================
+       JAVASCRIPT / VARIABLES GLOBALES
+       ===================================================== */
+
+    let productosGlobales = [];
+    let categoriasGlobales = [];
+    let paginaActual = 1;
+    const limiteProductos = 20;
+    let busquedaActual = "";
+    let totalProductosActual = 0;
+    let totalPaginasActual = 1;
+    let destinoPendienteProductosProcesado = false;
+
+
+function obtenerDestinoPendienteVista(vista, acciones = []) {
+  let destino = window.TIENDAPRO_DESTINO_PENDIENTE || null;
+  if (!destino) {
+    try { destino = JSON.parse(localStorage.getItem('tiendapro_destino_pendiente') || 'null'); } catch { destino = null; }
+  }
+  if (!destino) return null;
+  if (vista && destino.vista && destino.vista !== vista) return null;
+  if (acciones.length && !acciones.includes(destino.accion)) return null;
+  return destino;
+}
+function limpiarDestinoPendienteVista() {
+  window.TIENDAPRO_DESTINO_PENDIENTE = null;
+  try { localStorage.removeItem('tiendapro_destino_pendiente'); } catch {}
+}
+function resaltarRegistroPendiente(selector) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.style.outline = '2px solid #38bdf8';
+  el.style.boxShadow = '0 0 0 6px rgba(56,189,248,.16)';
+  setTimeout(() => { el.style.outline = ''; el.style.boxShadow = ''; }, 2400);
+}
+
+    async function procesarDestinoPendienteProductos() {
+      if (destinoPendienteProductosProcesado) return;
+      const destino = obtenerDestinoPendienteVista('productos_view.html', ['abrirProducto']);
+      if (!destino) return;
+      destinoPendienteProductosProcesado = true;
+      const registro = String(destino.registro || destino.idVisible || '').trim();
+    const soloFiltrarDestino = destino.soloFiltrar === true || destino.abrirDetalle === false || destino.accion === 'filtrarRegistro';
+      if (!registro) return limpiarDestinoPendienteVista();
+      let producto = productosGlobales.find(p => String(p.id) === registro || String(p.sku || '') === registro || String(p.codigo_barras || '') === registro);
+      if (!producto) {
+        try {
+          busquedaActual = registro;
+          if (buscarProducto) buscarProducto.value = registro;
+          paginaActual = 1;
+          await cargarProductos();
+          producto = productosGlobales.find(p => String(p.id) === registro || String(p.sku || '') === registro || String(p.codigo_barras || '') === registro) || productosGlobales[0];
+        } catch (error) { console.error('No se pudo preparar el producto buscado:', error); }
+      }
+      if (producto) {
+        limpiarDestinoPendienteVista();
+        setTimeout(() => {
+          resaltarRegistroPendiente(`[data-producto-id="${producto.id}"]`);
+          if (!soloFiltrarDestino) window.verProducto(Number(producto.id));
+        }, 260);
+      } else limpiarDestinoPendienteVista();
+    }
+
+    /* =====================================================
+       JAVASCRIPT / FUNCIONES DE AYUDA
+       ===================================================== */
+
+    fechaProductos.innerText = new Date().toLocaleDateString("es-SV", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
+    function normalizarTexto(texto) {
+      return (texto || "")
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    }
+
+    function limpiarTexto(texto) {
+      return (texto || "").trim();
+    }
+
+    function formatoDinero(valor) {
+      return `$${(Number(valor) || 0).toFixed(2)}`;
+    }
+
+    function precioFinal(producto) {
+      const p = parseFloat(producto.precio) || 0;
+      const d = parseFloat(producto.descuento) || 0;
+      return (p - (p * d / 100)).toFixed(2);
+    }
+
+    function esImportado(producto) {
+      return normalizarTexto(producto.tipo_venta || "stock") === "importacion";
+    }
+
+    function stockAdmin(producto) {
+      return Number(producto.stock_total_fisico ?? producto.stock_fisico_total ?? producto.stock_fisico_disponible ?? producto.stock ?? 0);
+    }
+
+    function stockPublicado(producto) {
+      return Number(producto.stock_fisico_disponible ?? producto.stock_publicado ?? producto.stock ?? 0);
+    }
+
+    function etiquetaTipoVenta(producto) {
+      return esImportado(producto) ? "Importado" : "";
+    }
+
+    function estadoVisualProducto(producto) {
+      const publicado = Number(producto.publicado ?? 1) === 1;
+      const disponibilidad = normalizarTexto(producto.disponibilidad || "Disponible");
+      const estadoGuardado = normalizarTexto(producto.estado_visual || "");
+      const stockVisible = stockPublicado(producto);
+
+      if (estadoGuardado === "bloqueado") return "bloqueado";
+      if (estadoGuardado === "en_revision" || estadoGuardado === "en revisión") return "en_revision";
+      if (!publicado || estadoGuardado === "oculto") return "oculto";
+      if (estadoGuardado === "importando") return "importando";
+      if (esImportado(producto)) return "importado";
+      if (disponibilidad === "agotado") return "agotado";
+      if (stockVisible > 0) return "en_stock";
+      return "agotado";
+    }
+
+    function etiquetaEstadoVisual(producto) {
+      const estado = estadoVisualProducto(producto);
+      const etiquetas = {
+        en_stock: "En stock",
+        importado: "Importado",
+        importando: "Importando",
+        agotado: "Agotado",
+        oculto: "Oculto",
+        en_revision: "En revisión",
+        bloqueado: "Bloqueado"
+      };
+      return etiquetas[estado] || "Agotado";
+    }
+
+    function claseEstadoVisual(producto) {
+      const estado = estadoVisualProducto(producto);
+      if (estado === "bloqueado") return "tag-bloqueado";
+      if (estado === "en_revision") return "tag-revision";
+      if (estado === "agotado") return "tag-agotado";
+      if (estado === "importado") return "tag-pedido";
+      if (estado === "importando") return "tag-importando";
+      if (estado === "oculto") return "tag-oculto";
+      return "tag-stock";
+    }
+
+    function claseStock(producto) {
+      return stockPublicado(producto) > 0 ? "stock-numero" : "stock-cero";
+    }
+
+    function tagsProductoHTML(producto) {
+      const tags = [];
+      const estado = estadoVisualProducto(producto);
+
+      tags.push(`<span class="tag ${claseTipoPropietario(producto)}">🏪 ${etiquetaTipoPropietario(producto)}</span>`);
+      tags.push(`<span class="tag tag-dueno">Dueño: ${nombrePropietarioProducto(producto)}</span>`);
+
+      if (estado === "oculto") {
+        tags.push(`<span class="tag tag-oculto">Oculto</span>`);
+        return tags.join("");
+      }
+
+      if (estado === "en_revision") {
+        tags.push(`<span class="tag tag-revision">En revisión</span>`);
+        return tags.join("");
+      }
+
+      if (estado === "bloqueado") {
+        tags.push(`<span class="tag tag-bloqueado">Bloqueado</span>`);
+        return tags.join("");
+      }
+
+      if (esImportado(producto)) {
+        tags.push(`<span class="tag tag-pedido">Importado</span>`);
+      } else {
+        tags.push(`<span class="tag ${claseEstadoVisual(producto)}">${etiquetaEstadoVisual(producto)}</span>`);
+        tags.push(`<span class="tag ${claseStock(producto)}">Stock: ${stockPublicado(producto)}</span>`);
+      }
+
+      if (Number(producto.publicado ?? 1) === 1) {
+        tags.push(`<span class="tag tag-stock">Publicado</span>`);
+      }
+
+      return tags.join("");
+    }
+
+    function switchPublicacionProducto(producto) {
+      const publicado = Number(producto.publicado ?? 1) === 1;
+      return `
+        <label class="publish-switch-wrap" title="Publicar u ocultar este producto completo">
+          <input type="checkbox" ${publicado ? "checked" : ""} onchange="window.cambiarPublicacionProducto(${Number(producto.id)}, this.checked ? 1 : 0)">
+          <span class="publish-switch"></span>
+          <span class="publish-switch-text">${publicado ? "Publicado" : "Oculto"}</span>
+        </label>
+      `;
+    }
+
+
+    function nombrePropietarioProducto(producto) {
+      return producto.nombre_tienda ||
+        producto.tienda_nombre ||
+        producto.vendedor_nombre ||
+        producto.emprendedor_nombre ||
+        producto.propietario ||
+        producto.dueno ||
+        producto.owner_name ||
+        producto.nombre_propietario ||
+        "Mi tienda";
+    }
+
+    function tipoPropietarioProducto(producto) {
+      const tipo = normalizarTexto(
+        producto.tipo_propietario ||
+        producto.tipo_vendedor ||
+        producto.tipo_tienda ||
+        producto.origen_producto ||
+        producto.origen ||
+        producto.rol_propietario ||
+        ""
+      );
+
+      if (tipo.includes("emprendedor")) return "emprendedor";
+      if (tipo.includes("vendedor") || tipo.includes("comercial") || Number(producto.vendedor_id || 0) > 0) return "vendedor";
+      return "mi_tienda";
+    }
+
+    function etiquetaTipoPropietario(producto) {
+      const tipo = tipoPropietarioProducto(producto);
+      if (tipo === "emprendedor") return "Emprendedor";
+      if (tipo === "vendedor") return "Vendedor";
+      return "Mi tienda";
+    }
+
+    function claseTipoPropietario(producto) {
+      const tipo = tipoPropietarioProducto(producto);
+      if (tipo === "emprendedor") return "tag-emprendedor";
+      if (tipo === "vendedor") return "tag-dueno";
+      return "tag-stock";
+    }
+
+    function obtenerCategoriaPorNombreYPadre(nombre, parentId) {
+      return categoriasGlobales.find(cat =>
+        normalizarTexto(cat.name) === normalizarTexto(nombre) &&
+        String(cat.parent_id || "") === String(parentId || "")
+      );
+    }
+
+    async function buscarOCrearCategoria(nombre, parentId) {
+      const texto = limpiarTexto(nombre);
+      if (!texto) return null;
+
+      const existente = obtenerCategoriaPorNombreYPadre(texto, parentId);
+      if (existente) return existente;
+
+      const res = await axios.post(`${API}/categorias/buscar-o-crear`, {
+        name: texto,
+        parent_id: parentId || null
+      }, authHeaders);
+
+      await cargarCategorias();
+      return res.data.categoria;
+    }
+
+    function calcularCostoProducto(datos) {
+      const compra = Number(datos.precio_compra || 0);
+      const envio = Number(datos.costo_envio || 0);
+      const aduana = Number(datos.costo_aduana || 0);
+      const precio = Number(datos.precio || 0);
+
+      const costoTotal = compra + envio + aduana;
+      const ganancia = precio - costoTotal;
+      const margen = precio > 0 ? (ganancia / precio) * 100 : 0;
+
+      return { costoTotal, ganancia, margen };
+    }
+
+    /* =====================================================
+       JAVASCRIPT / CARGA DE CATEGORÍAS
+       ===================================================== */
+
+    async function cargarCategorias() {
+      try {
+        const res = await axios.get(`${API}/categorias`, authHeaders);
+        categoriasGlobales = res.data || [];
+      } catch (error) {
+        console.log("Error al cargar categorías", error);
+      }
+    }
+
+    function opcionesCategoriasHTML(categoriaActual = "") {
+      return categoriasGlobales.map(cat =>
+        `<option value="${cat.name}" ${categoriaActual === cat.name ? "selected" : ""}>${cat.name}</option>`
+      ).join("");
+    }
+
+    /* =====================================================
+       JAVASCRIPT / CARGAR PRODUCTOS
+       ===================================================== */
+
+    async function cargarProductos() {
+      try {
+        const params = new URLSearchParams({
+          page: paginaActual,
+          limit: limiteProductos,
+          search: busquedaActual,
+          marca: filtroMarca.value.trim(),
+          tipo_venta: filtroTipoVenta.value
+        });
+
+        const res = await axios.get(`${API}/productos?${params.toString()}`, authHeaders);
+
+        productosGlobales = Array.isArray(res.data.productos)
+          ? res.data.productos
+          : Array.isArray(res.data)
+            ? res.data
+            : [];
+
+        totalProductosActual = Number(res.data.total || productosGlobales.length);
+        totalPaginasActual = Number(res.data.totalPaginas || 1);
+
+        aplicarFiltrosLocales();
+        renderizarPaginacion();
+
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+
+        listaProductos.innerHTML = `
+          <div class="sin-productos">
+            No se pudieron cargar los productos.
+          </div>
+        `;
+      }
+    }
+
+    /* =====================================================
+       JAVASCRIPT / ESTADÍSTICAS
+       ===================================================== */
+
+    function actualizarEstadisticas(productos) {
+      statTotal.innerText = totalProductosActual || productos.length;
+
+      const enStock = productos.filter(p => estadoVisualProducto(p) === "en_stock").length;
+      const bajoPedido = productos.filter(p =>
+        esImportado(p) || estadoVisualProducto(p) === "importando"
+      ).length;
+      const agotados = productos.filter(p => estadoVisualProducto(p) === "agotado").length;
+
+      statStock.innerText = enStock;
+      statPedido.innerText = bajoPedido;
+      statAgotados.innerText = agotados;
+    }
+
+    /* =====================================================
+       JAVASCRIPT / MOSTRAR LISTA DE PRODUCTOS
+       ===================================================== */
+
+    function mostrarProductos(productos) {
+      const infoProductos = document.getElementById("infoProductos");
+
+      actualizarEstadisticas(productos);
+
+      if (infoProductos) {
+        const inicio = totalProductosActual === 0 ? 0 : ((paginaActual - 1) * limiteProductos) + 1;
+        const fin = Math.min(paginaActual * limiteProductos, totalProductosActual);
+        infoProductos.innerText = `Mostrando ${inicio}-${fin} de ${totalProductosActual || productos.length} productos`;
+      }
+
+      listaProductos.innerHTML = "";
+
+      if (productos.length === 0) {
+        listaProductos.innerHTML = `
+          <div class="sin-productos">
+            No hay productos que coincidan con los filtros.
+          </div>
+        `;
+        return;
+      }
+
+      productos.forEach(producto => {
+        const precioOriginal = Number(producto.precio || 0).toFixed(2);
+        const descuento = Number(producto.descuento || 0);
+        const final = precioFinal(producto);
+
+        listaProductos.innerHTML += `
+          <div class="producto-row" data-producto-id="${producto.id}" onclick="verProducto(${producto.id})" title="Clic para ver detalles y acciones">
+            <img
+              class="producto-img"
+              src="${producto.imagen || ""}"
+              onerror="this.src='https://via.placeholder.com/160x120?text=Sin+imagen'"
+              alt="${producto.nombre || "Producto"}"
+            >
+
+            <div class="producto-info">
+              <h3>${producto.nombre || "Producto sin nombre"}</h3>
+              <p>
+                ${producto.marca || "Sin marca"} 
+                ${producto.modelo ? "· " + producto.modelo : ""} 
+                ${producto.categoria ? "· " + producto.categoria : ""}
+              </p>
+
+              <div class="marketplace-owner-line">
+                <span>🏪 ${nombrePropietarioProducto(producto)}</span>
+                <span>· ${etiquetaTipoPropietario(producto)}</span>
+              </div>
+
+              <div class="producto-tags">
+                ${tagsProductoHTML(producto)}
+              </div>
+            </div>
+
+            <div class="producto-side">
+              <div class="producto-precio">${formatoDinero(final)}</div>
+              ${descuento > 0 ? `<div class="producto-original">$${precioOriginal}</div>` : ""}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    /* =====================================================
+       JAVASCRIPT / FILTROS
+       ===================================================== */
+
+    function aplicarFiltrosLocales() {
+      let filtrados = [...productosGlobales];
+
+      const precioFiltro = filtroPrecio.value;
+      const disponibilidad = normalizarTexto(filtroDisponibilidad.value);
+      const propietarioFiltro = normalizarTexto(filtroPropietarioProducto?.value || "");
+
+      if (disponibilidad) {
+        filtrados = filtrados.filter(p =>
+          normalizarTexto(p.disponibilidad) === disponibilidad
+        );
+      }
+
+      if (propietarioFiltro) {
+        filtrados = filtrados.filter(p => {
+          const estado = estadoVisualProducto(p);
+          if (propietarioFiltro === "revision") return estado === "en_revision";
+          if (propietarioFiltro === "bloqueado") return estado === "bloqueado";
+          return tipoPropietarioProducto(p) === propietarioFiltro;
+        });
+      }
+
+      if (precioFiltro) {
+        const [min, max] = precioFiltro.split("-").map(Number);
+
+        filtrados = filtrados.filter(producto => {
+          const precio = Number(precioFinal(producto));
+          return precio >= min && precio <= max;
+        });
+      }
+
+      mostrarProductos(filtrados);
+    }
+
+    let temporizadorBusqueda = null;
+
+    buscarProducto.addEventListener("input", () => {
+      clearTimeout(temporizadorBusqueda);
+
+      temporizadorBusqueda = setTimeout(() => {
+        busquedaActual = buscarProducto.value.trim();
+        paginaActual = 1;
+        cargarProductos();
+      }, 350);
+    });
+
+    filtroTipoVenta.addEventListener("change", () => {
+      paginaActual = 1;
+      cargarProductos();
+    });
+
+    filtroMarca.addEventListener("input", () => {
+      clearTimeout(temporizadorBusqueda);
+
+      temporizadorBusqueda = setTimeout(() => {
+        paginaActual = 1;
+        cargarProductos();
+      }, 350);
+    });
+
+    filtroDisponibilidad.addEventListener("change", aplicarFiltrosLocales);
+    filtroPrecio.addEventListener("change", aplicarFiltrosLocales);
+    if (filtroPropietarioProducto) filtroPropietarioProducto.addEventListener("change", aplicarFiltrosLocales);
+
+    limpiarFiltros.addEventListener("click", () => {
+      buscarProducto.value = "";
+      filtroTipoVenta.value = "";
+      filtroDisponibilidad.value = "";
+      filtroMarca.value = "";
+      filtroPrecio.value = "";
+      if (filtroPropietarioProducto) filtroPropietarioProducto.value = "";
+
+      busquedaActual = "";
+      paginaActual = 1;
+      cerrarFiltrosProductos();
+      cargarProductos();
+    });
+
+    function abrirFiltrosProductos() {
+      filtrosProductosOverlay.classList.add("activo");
+      filtrosProductosPanel.classList.add("abierto");
+    }
+
+    function cerrarFiltrosProductos() {
+      filtrosProductosOverlay.classList.remove("activo");
+      filtrosProductosPanel.classList.remove("abierto");
+    }
+
+    btnAbrirFiltrosProductos.addEventListener("click", abrirFiltrosProductos);
+    btnCerrarFiltrosProductos.addEventListener("click", cerrarFiltrosProductos);
+    filtrosProductosOverlay.addEventListener("click", cerrarFiltrosProductos);
+    btnAplicarFiltrosProductos.addEventListener("click", () => {
+      cerrarFiltrosProductos();
+      paginaActual = 1;
+      cargarProductos();
+      aplicarFiltrosLocales();
+    });
+
+    /* =====================================================
+       JAVASCRIPT / PAGINACIÓN
+       ===================================================== */
+
+    function renderizarPaginacion() {
+      const paginacion = document.getElementById("paginacionProductos");
+
+      if (!paginacion) return;
+
+      if (totalPaginasActual <= 1) {
+        paginacion.innerHTML = "";
+        return;
+      }
+
+      paginacion.innerHTML = `
+        <button ${paginaActual <= 1 ? "disabled" : ""} onclick="cambiarPaginaProductos(${paginaActual - 1})">
+          ← Anterior
+        </button>
+
+        <span>Página ${paginaActual} de ${totalPaginasActual}</span>
+
+        <button ${paginaActual >= totalPaginasActual ? "disabled" : ""} onclick="cambiarPaginaProductos(${paginaActual + 1})">
+          Siguiente →
+        </button>
+      `;
+    }
+
+    window.cambiarPaginaProductos = function(nuevaPagina) {
+      if (nuevaPagina < 1 || nuevaPagina > totalPaginasActual) return;
+      paginaActual = nuevaPagina;
+      cargarProductos();
+    };
+
+    /* =====================================================
+       JAVASCRIPT / MODAL AGREGAR PRODUCTO
+       ===================================================== */
+
+    function crearFormularioProducto(producto = {}) {
+      const tipoActual = producto.tipo_venta || "stock";
+      return `
+        <div class="modal-producto">
+          <div class="modal-grid">
+            <div class="modal-section-title">1. Datos básicos</div>
+
+            <input id="modalNombre" class="input-modal" placeholder="Nombre del producto" value="${producto.nombre || ""}">
+            <input id="modalMarca" class="input-modal" placeholder="Marca" value="${producto.marca || ""}">
+            <input id="modalModelo" class="input-modal" placeholder="Modelo opcional" value="${producto.modelo || ""}">
+            <input id="modalImagen" class="input-modal" placeholder="URL de imagen" value="${producto.imagen || ""}">
+            <textarea id="modalDescripcion" class="input-modal modal-full" placeholder="Descripción corta">${producto.descripcion || ""}</textarea>
+
+            <div class="modal-section-title">2. Venta</div>
+
+            <input id="modalPrecio" type="number" step="0.01" class="input-modal" placeholder="Precio publicado" value="${producto.precio || ""}">
+            <input id="modalDescuento" type="number" class="input-modal" placeholder="Descuento % opcional" value="${producto.descuento || 0}">
+
+            <select id="modalTipoVenta" class="input-modal">
+              <option value="stock" ${tipoActual === "stock" ? "selected" : ""}>Stock</option>
+              <option value="importacion" ${tipoActual === "importacion" ? "selected" : ""}>Importación</option>
+            </select>
+
+            <select id="modalPublicado" class="input-modal">
+              <option value="1" ${Number(producto.publicado ?? 1) === 1 ? "selected" : ""}>Publicado en tienda</option>
+              <option value="0" ${Number(producto.publicado ?? 1) === 0 ? "selected" : ""}>Oculto para clientes</option>
+            </select>
+
+            <input id="modalTiempoEntrega" class="input-modal modal-full" placeholder="Tiempo estimado para importación. Ej: 15 a 20 días" value="${producto.tiempo_entrega || ""}">
+
+            <div class="modal-section-title">3. Categoría</div>
+
+            <select id="modalCategoria" class="input-modal">
+              <option value="">Seleccionar categoría existente</option>
+              ${opcionesCategoriasHTML(producto.categoria || "")}
+            </select>
+            <input id="modalCategoriaNueva" class="input-modal" placeholder="O escribir categoría nueva">
+
+            <input id="modalSubcategoria" class="input-modal" placeholder="Subcategoría opcional. Ej: Hombre, Mujer, Computadoras">
+            <input id="modalTipoCategoria" class="input-modal" placeholder="Tipo opcional. Ej: Zapatos, Camisetas, Gabinetes">
+
+            <div class="modal-section-title">Extras opcionales</div>
+
+            <input id="modalSku" class="input-modal" placeholder="SKU / código interno" value="${producto.sku || ""}">
+            <input id="modalCodigo" class="input-modal" placeholder="Código de barras / QR del modelo" value="${producto.codigo_barras || ""}">
+            <input id="modalColor" class="input-modal" placeholder="Color" value="${producto.color || ""}">
+            <input id="modalTalla" class="input-modal" placeholder="Talla / tamaño" value="${producto.talla || ""}">
+
+            <select id="modalCondicion" class="input-modal">
+              <option value="Nuevo" ${producto.condicion === "Nuevo" ? "selected" : ""}>Nuevo</option>
+              <option value="Renovado" ${producto.condicion === "Renovado" ? "selected" : ""}>Renovado</option>
+              <option value="Usado" ${producto.condicion === "Usado" ? "selected" : ""}>Usado</option>
+            </select>
+
+            <input id="modalProveedor" class="input-modal" placeholder="Proveedor de referencia opcional" value="${producto.proveedor || ""}">
+            <input id="modalPaisOrigen" class="input-modal" placeholder="País de origen opcional" value="${producto.pais_origen || ""}">
+
+            <div class="modal-section-title">Costos privados opcionales</div>
+
+            <input id="modalPrecioCompra" type="number" step="0.01" class="input-modal" placeholder="Costo producto" value="${producto.precio_compra || 0}">
+            <input id="modalCostoEnvio" type="number" step="0.01" class="input-modal" placeholder="Envío" value="${producto.costo_envio || 0}">
+            <input id="modalCostoAduana" type="number" step="0.01" class="input-modal" placeholder="Aduana / impuestos" value="${producto.costo_aduana || 0}">
+
+            <div id="modalResumenCostos" class="modal-section-title">
+              Costo total: $0.00 · Ganancia: $0.00 · Margen: 0.00%
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function leerDatosModal() {
+      const valor = (id, defecto = "") => document.getElementById(id)?.value ?? defecto;
+      const tipoVenta = valor("modalTipoVenta", "stock");
+      const esImportacion = normalizarTexto(tipoVenta) === "importacion";
+      const categoriaNueva = limpiarTexto(valor("modalCategoriaNueva", ""));
+
+      return {
+        nombre: valor("modalNombre").trim(),
+        descripcion: valor("modalDescripcion").trim(),
+        precio: valor("modalPrecio") || 0,
+        descuento: valor("modalDescuento") || 0,
+        imagen: valor("modalImagen").trim(),
+
+        // En productos de stock el stock real lo controla Inventario físico.
+        stock: 0,
+        stock_minimo: 0,
+        publicado: valor("modalPublicado", "1"),
+        permite_bajo_pedido: esImportacion ? 1 : 0,
+        estado_visual: "auto",
+
+        categoria: categoriaNueva || valor("modalCategoria"),
+        genero: "",
+        marca: valor("modalMarca").trim(),
+        modelo: valor("modalModelo").trim(),
+        condicion: valor("modalCondicion", "Nuevo"),
+        sku: valor("modalSku").trim(),
+        codigo_barras: valor("modalCodigo").trim(),
+        color: valor("modalColor").trim(),
+        talla: valor("modalTalla").trim(),
+        disponibilidad: "Disponible",
+        proveedor: valor("modalProveedor").trim(),
+        pais_origen: valor("modalPaisOrigen").trim(),
+        precio_compra: valor("modalPrecioCompra") || 0,
+        costo_envio: valor("modalCostoEnvio") || 0,
+        costo_aduana: valor("modalCostoAduana") || 0,
+        tiempo_entrega: esImportacion ? (valor("modalTiempoEntrega").trim() || "15 a 20 días") : valor("modalTiempoEntrega").trim(),
+        tipo_venta: tipoVenta
+      };
+    }
+
+    function activarCalculoModal() {
+      const ids = ["modalPrecio", "modalPrecioCompra", "modalCostoEnvio", "modalCostoAduana"];
+
+      function actualizar() {
+        const datos = leerDatosModal();
+        const { costoTotal, ganancia, margen } = calcularCostoProducto(datos);
+        const resumen = document.getElementById("modalResumenCostos");
+
+        if (resumen) {
+          resumen.innerText = `Costo total: ${formatoDinero(costoTotal)} · Ganancia: ${formatoDinero(ganancia)} · Margen: ${margen.toFixed(2)}%`;
+        }
+      }
+
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", actualizar);
+      });
+
+      actualizar();
+    }
+
+    async function resolverCategoriaModal(datos) {
+      const subcategoria = limpiarTexto(document.getElementById("modalSubcategoria")?.value);
+      const tipo = limpiarTexto(document.getElementById("modalTipoCategoria")?.value);
+
+      if (!datos.categoria) return datos;
+
+      const categoriaPrincipal = await buscarOCrearCategoria(datos.categoria, null);
+      let categoriaFinal = categoriaPrincipal.name;
+      const categoriaBase = categoriaPrincipal;
+      let subcategoriaCreada = null;
+
+      if (subcategoria && categoriaBase) {
+        subcategoriaCreada = await buscarOCrearCategoria(subcategoria, categoriaBase.id);
+        categoriaFinal = subcategoriaCreada.name;
+      }
+
+      if (tipo) {
+        if (!subcategoriaCreada) {
+          Swal.showValidationMessage("Para crear un tipo primero escribe una subcategoría");
+          return false;
+        }
+
+        const tipoCreado = await buscarOCrearCategoria(tipo, subcategoriaCreada.id);
+        categoriaFinal = tipoCreado.name;
+      }
+
+      datos.categoria = categoriaFinal;
+      return datos;
+    }
+
+    async function abrirModalProducto(producto = null) {
+      const esEdicion = Boolean(producto);
+
+      const resultado = await Swal.fire({
+        title: esEdicion ? "Editar producto" : "Agregar producto",
+        width: "980px",
+        background: "#1e293b",
+        color: "white",
+        html: crearFormularioProducto(producto || {}),
+        showCancelButton: true,
+        confirmButtonText: esEdicion ? "Actualizar" : "Guardar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#2563eb",
+        cancelButtonColor: "#475569",
+        didOpen: () => {
+          activarCalculoModal();
+          const tipoSelect = document.getElementById("modalTipoVenta");
+          const tiempoInput = document.getElementById("modalTiempoEntrega");
+
+          function sincronizarTipoVenta() {
+            if (!tipoSelect) return;
+            if (tipoSelect.value === "importacion" && tiempoInput && !tiempoInput.value.trim()) {
+              tiempoInput.value = "15 a 20 días";
+            }
+          }
+
+          if (tipoSelect) tipoSelect.addEventListener("change", sincronizarTipoVenta);
+          sincronizarTipoVenta();
+        },
+        preConfirm: async () => {
+          let datos = leerDatosModal();
+
+          if (!datos.nombre) {
+            Swal.showValidationMessage("El nombre es obligatorio");
+            return false;
+          }
+
+          if (!datos.precio || Number(datos.precio) <= 0) {
+            Swal.showValidationMessage("El precio debe ser mayor a 0");
+            return false;
+          }
+
+          if (!datos.categoria) {
+            Swal.showValidationMessage("Selecciona una categoría");
+            return false;
+          }
+
+          datos = await resolverCategoriaModal(datos);
+          return datos;
+        }
+      });
+
+      if (!resultado.isConfirmed || !resultado.value) return;
+
+      try {
+        if (esEdicion) {
+          await axios.put(`${API}/productos/${producto.id}`, resultado.value, authHeaders);
+        } else {
+          await axios.post(`${API}/productos`, resultado.value, authHeaders);
+        }
+
+        Swal.fire({
+          title: esEdicion ? "Producto actualizado" : "Producto agregado",
+          icon: "success",
+          background: "#1e293b",
+          color: "white",
+          timer: 1400,
+          showConfirmButton: false
+        });
+
+        paginaActual = 1;
+        await cargarCategorias();
+        await cargarProductos();
+
+      } catch (error) {
+        console.error(error);
+
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo guardar el producto",
+          icon: "error",
+          background: "#1e293b",
+          color: "white"
+        });
+      }
+    }
+
+    /* =====================================================
+       JAVASCRIPT / MODAL VER DETALLE DEL PRODUCTO
+       ===================================================== */
+
+    window.verProducto = async function(id) {
+      try {
+        const res = await axios.get(`${API}/productos/${id}`, authHeaders);
+        const producto = res.data;
+        const { costoTotal, ganancia, margen } = calcularCostoProducto(producto);
+
+        await Swal.fire({
+          title: producto.nombre || "Detalle del producto",
+          width: "950px",
+          background: "#1e293b",
+          color: "white",
+          html: `
+            <div class="detalle-producto-box">
+              <div class="detalle-producto-grid">
+                <img
+                  class="detalle-producto-img"
+                  src="${producto.imagen || ""}"
+                  onerror="this.src='https://via.placeholder.com/300x220?text=Sin+imagen'"
+                >
+
+                <div>
+                  <h2 style="margin:0 0 6px;color:white;">${producto.nombre || "Producto sin nombre"}</h2>
+                  <p style="color:#94a3b8;margin:0 0 12px;">${producto.descripcion || "Sin descripción"}</p>
+
+                  <div class="producto-tags" style="margin-bottom:12px;">
+                    ${tagsProductoHTML(producto)}
+                  </div>
+
+                  <div class="marketplace-owner-line" style="margin-bottom:12px;">
+                    <span>🏪 Propietario: ${nombrePropietarioProducto(producto)}</span>
+                    <span>· Tipo: ${etiquetaTipoPropietario(producto)}</span>
+                  </div>
+
+                  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#0f172a;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 12px;">
+                    <strong style="color:#cbd5e1;">Publicación:</strong>
+                    ${switchPublicacionProducto(producto)}
+                  </div>
+                </div>
+              </div>
+
+              <div class="detalle-cards">
+                <div class="detalle-card"><small>Propietario</small><strong>${nombrePropietarioProducto(producto)}</strong></div>
+                <div class="detalle-card"><small>Tipo de propietario</small><strong>${etiquetaTipoPropietario(producto)}</strong></div>
+                <div class="detalle-card"><small>Precio publicado</small><strong>${formatoDinero(precioFinal(producto))}</strong></div>
+                <div class="detalle-card"><small>Precio normal</small><strong>${formatoDinero(producto.precio)}</strong></div>
+                <div class="detalle-card"><small>Descuento</small><strong>${producto.descuento || 0}%</strong></div>
+                <div class="detalle-card"><small>Categoría</small><strong>${producto.categoria || "Sin categoría"}</strong></div>
+                <div class="detalle-card"><small>Estado visual</small><strong>${etiquetaEstadoVisual(producto)}</strong></div>
+                <div class="detalle-card"><small>Publicado</small><strong>${Number(producto.publicado ?? 1) === 1 ? "Sí" : "No"}</strong></div>
+                <div class="detalle-card"><small>Stock mínimo</small><strong>${producto.stock_minimo || 0}</strong></div>
+                <div class="detalle-card"><small>Tipo de venta</small><strong>${esImportado(producto) ? "Importado" : "Stock"}</strong></div>
+                <div class="detalle-card"><small>Marca</small><strong>${producto.marca || "Sin marca"}</strong></div>
+                <div class="detalle-card"><small>Modelo</small><strong>${producto.modelo || "Sin modelo"}</strong></div>
+                <div class="detalle-card"><small>SKU</small><strong>${producto.sku || "Sin SKU"}</strong></div>
+                <div class="detalle-card"><small>Código barras / QR</small><strong>${producto.codigo_barras || "Sin código"}</strong></div>
+                <div class="detalle-card"><small>Proveedor referencia</small><strong>${producto.proveedor || "Sin proveedor"}</strong></div>
+                <div class="detalle-card"><small>País origen</small><strong>${producto.pais_origen || "Sin país"}</strong></div>
+                <div class="detalle-card"><small>Entrega estimada</small><strong>${producto.tiempo_entrega || "No definida"}</strong></div>
+                <div class="detalle-card"><small>Condición</small><strong>${producto.condicion || "Nuevo"}</strong></div>
+                <div class="detalle-card"><small>Costo total estimado</small><strong>${formatoDinero(costoTotal)}</strong></div>
+                <div class="detalle-card"><small>Ganancia estimada</small><strong>${formatoDinero(ganancia)}</strong></div>
+                <div class="detalle-card"><small>Margen</small><strong>${margen.toFixed(2)}%</strong></div>
+              </div>
+            </div>
+          `,
+          showCancelButton: true,
+          showDenyButton: true,
+          confirmButtonText: "Editar",
+          denyButtonText: "Eliminar",
+          cancelButtonText: "Cerrar",
+          confirmButtonColor: "#2563eb",
+          denyButtonColor: "#ef4444",
+          cancelButtonColor: "#475569"
+        }).then((r) => {
+          if (r.isConfirmed) editarProducto(producto.id);
+          if (r.isDenied) eliminarProducto(producto.id);
+        });
+
+      } catch (error) {
+        console.error(error);
+
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo abrir el detalle del producto",
+          icon: "error",
+          background: "#1e293b",
+          color: "white"
+        });
+      }
+    };
+
+    /* =====================================================
+       JAVASCRIPT / EDITAR Y ELIMINAR
+       ===================================================== */
+
+    window.editarProducto = async function(id) {
+      try {
+        const res = await axios.get(`${API}/productos/${id}`, authHeaders);
+        await abrirModalProducto(res.data);
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo cargar el producto",
+          icon: "error",
+          background: "#1e293b",
+          color: "white"
+        });
+      }
+    };
+
+    window.eliminarProducto = async function(id) {
+      const resultado = await Swal.fire({
+        title: "¿Eliminar producto?",
+        text: "Esta acción no se puede deshacer",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ef4444",
+        cancelButtonColor: "#334155",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+        background: "#1e293b",
+        color: "white"
+      });
+
+      if (!resultado.isConfirmed) return;
+
+      try {
+        await axios.delete(`${API}/productos/${id}`, authHeaders);
+
+        Swal.fire({
+          title: "Eliminado",
+          text: "Producto eliminado correctamente",
+          icon: "success",
+          background: "#1e293b",
+          color: "white",
+          timer: 1200,
+          showConfirmButton: false
+        });
+
+        await cargarProductos();
+
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: error.response?.data?.mensaje || "No se pudo eliminar",
+          icon: "error",
+          background: "#1e293b",
+          color: "white"
+        });
+      }
+    };
+
+
+
+    window.cambiarPublicacionProducto = async function(id, publicado) {
+      try {
+        const res = await axios.put(`${API}/productos/${id}/publicacion`, { publicado: Number(publicado) }, authHeaders);
+
+        await cargarProductos();
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo cambiar la publicación",
+          icon: "error",
+          background: "#1e293b",
+          color: "white"
+        });
+        await cargarProductos();
+      }
+    };
+
+    /* =====================================================
+       JAVASCRIPT / CALCULADORA DE IMPORTACIÓN
+       ===================================================== */
+
+    btnAbrirCalculadora.addEventListener("click", () => {
+      Swal.fire({
+        title: "Calculadora de importación",
+        width: "780px",
+        background: "#1e293b",
+        color: "white",
+        html: `
+          <div class="modal-producto">
+            <div class="modal-grid-3">
+              <input id="calcCosto" type="number" step="0.01" class="input-modal" placeholder="Costo proveedor">
+              <input id="calcEnvio" type="number" step="0.01" class="input-modal" placeholder="Envío">
+              <input id="calcImportacion" type="number" step="0.01" class="input-modal" placeholder="% importación">
+              <input id="calcGanancia" type="number" step="0.01" class="input-modal" placeholder="Ganancia fija $">
+              <input id="calcMargen" type="number" step="0.01" class="input-modal" placeholder="Ganancia % opcional">
+              <input id="calcRedondeo" type="number" step="0.01" class="input-modal" placeholder="Redondear a .99 opcional">
+
+              <div class="modal-full calculadora-result">
+                <div class="calc-card">Importación <strong id="calcImpResultado">$0.00</strong></div>
+                <div class="calc-card">Costo real <strong id="calcCostoReal">$0.00</strong></div>
+                <div class="calc-card">Precio sugerido <strong id="calcPrecioSugerido">$0.00</strong></div>
+              </div>
+            </div>
+          </div>
+        `,
+        confirmButtonText: "Cerrar",
+        confirmButtonColor: "#2563eb",
+        didOpen: () => {
+          const campos = ["calcCosto", "calcEnvio", "calcImportacion", "calcGanancia", "calcMargen", "calcRedondeo"];
+
+          function calcular() {
+            const costo = Number(document.getElementById("calcCosto").value) || 0;
+            const envio = Number(document.getElementById("calcEnvio").value) || 0;
+            const porcentaje = Number(document.getElementById("calcImportacion").value) || 0;
+            const gananciaFija = Number(document.getElementById("calcGanancia").value) || 0;
+            const gananciaPorcentaje = Number(document.getElementById("calcMargen").value) || 0;
+            const redondeo = Number(document.getElementById("calcRedondeo").value) || 0;
+
+            const base = costo + envio;
+            const importacion = base * (porcentaje / 100);
+            const costoReal = base + importacion;
+            let precio = costoReal + gananciaFija + (costoReal * (gananciaPorcentaje / 100));
+
+            if (redondeo === 99 && precio > 0) {
+              precio = Math.floor(precio) + 0.99;
+            }
+
+            document.getElementById("calcImpResultado").innerText = formatoDinero(importacion);
+            document.getElementById("calcCostoReal").innerText = formatoDinero(costoReal);
+            document.getElementById("calcPrecioSugerido").innerText = formatoDinero(precio);
+          }
+
+          campos.forEach(id => {
+            document.getElementById(id).addEventListener("input", calcular);
+          });
+
+          calcular();
+        }
+      });
+    });
+
+    /* =====================================================
+       JAVASCRIPT / CARGA INICIAL
+       ===================================================== */
+
+    await cargarCategorias();
+    await cargarProductos();
+  </script>
+</div>

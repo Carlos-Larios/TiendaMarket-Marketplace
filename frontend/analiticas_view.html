@@ -1,0 +1,564 @@
+<section class="analiticas-pro">
+  <style>
+    .analiticas-pro{
+      display:grid;
+      gap:18px;
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden;
+    }
+    .analiticas-head{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+      background:rgba(42,48,66,.78);
+      border:1px solid rgba(166,176,207,.16);
+      border-radius:18px;
+      padding:22px;
+      min-width:0;
+    }
+    .analiticas-head h2{font-size:clamp(21px,2vw,26px);margin-bottom:6px;line-height:1.1}
+    .analiticas-head p{color:#a6b0cf;line-height:1.35}
+
+    /* =====================================================
+       FILTROS ESTÁNDAR PARA DASHBOARDS
+       Izquierda: período | Centro: desde/hasta | Derecha: filtro activo
+       ===================================================== */
+    .analiticas-filtros-bar{
+      display:grid;
+      grid-template-columns: minmax(240px, auto) minmax(360px, 1fr) minmax(230px, auto);
+      align-items:center;
+      gap:14px;
+      background:rgba(42,48,66,.78);
+      border:1px solid rgba(166,176,207,.16);
+      border-radius:18px;
+      padding:14px;
+      min-width:0;
+    }
+    .analiticas-periodos,
+    .analiticas-rango,
+    .analiticas-filtro-activo{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      min-width:0;
+      flex-wrap:wrap;
+    }
+    .analiticas-periodos{justify-content:flex-start;}
+    .analiticas-rango{justify-content:center;}
+    .analiticas-filtro-activo{justify-content:flex-end;}
+    .periodo-btn{
+      border:1px solid rgba(166,176,207,.16);
+      border-radius:12px;
+      padding:11px 18px;
+      background:#32394e;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+      transition:.18s ease;
+    }
+    .periodo-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    .periodo-btn.active{background:linear-gradient(135deg,#50a5f1,#556ee6);border-color:rgba(125,211,252,.28)}
+    .fecha-analiticas{
+      border:1px solid rgba(166,176,207,.22);
+      background:#32394e;
+      color:#fff;
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:800;
+      min-width:150px;
+      color-scheme:dark;
+      outline:none;
+    }
+    .rango-label{
+      color:#dbeafe;
+      font-size:11px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      padding:0 2px;
+      white-space:nowrap;
+    }
+    .btn-aplicar-rango,
+    .btn-limpiar-rango{
+      border:1px solid rgba(166,176,207,.18);
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:900;
+      cursor:pointer;
+      color:#fff;
+      background:#556ee6;
+      white-space:nowrap;
+      transition:.18s ease;
+    }
+    .btn-aplicar-rango:hover,
+    .btn-limpiar-rango:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    .btn-limpiar-rango{background:#32394e;color:#cbd5e1;}
+    .filtro-activo-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      max-width:100%;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(15,23,42,.45);
+      border:1px solid rgba(166,176,207,.14);
+      color:#e0e7ff;
+      font-size:12px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .kpis-analiticas{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(180px,1fr));
+      gap:16px;
+    }
+    .kpi-card{
+      position:relative;
+      min-width:0;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:8px;
+      min-height:118px;
+      background:linear-gradient(180deg,rgba(50,57,78,.95),rgba(42,48,66,.95));
+      border:1px solid rgba(166,176,207,.14);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .kpi-card::after{
+      content:"";
+      position:absolute;
+      right:-32px;
+      bottom:-42px;
+      width:95px;
+      height:95px;
+      border-radius:30px;
+      background:rgba(116,132,255,.18);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .kpi-card.destacado{background:linear-gradient(135deg,#556ee6,#6f7dfb)}
+    .kpi-card.verde{background:linear-gradient(135deg,#0089fa,#0bd5c7)}
+    .kpi-card small{
+      display:block;
+      color:#f5e3ff;
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:.45px;
+      font-size:clamp(11px,1vw,13px);
+      line-height:1.25;
+      max-width:100%;
+      overflow-wrap:anywhere;
+      white-space:normal;
+    }
+    .kpi-card strong{
+      display:block;
+      margin-top:0;
+      font-size:clamp(22px,2.2vw,30px);
+      line-height:1.05;
+      max-width:100%;
+      overflow-wrap:anywhere;
+      white-space:normal;
+    }
+    .kpi-card span{
+      display:block;
+      margin-top:0;
+      color:#ffffff;
+      font-size:clamp(12px,.95vw,14px);
+      line-height:1.25;
+      max-width:100%;
+      overflow-wrap:anywhere;
+    }
+    .analiticas-grid{
+      display:grid;
+      grid-template-columns:minmax(0,2fr) minmax(260px,1fr);
+      gap:18px;
+      align-items:start;
+    }
+    .panel-analiticas{
+      background:rgba(42,48,66,.82);
+      border:1px solid rgba(166,176,207,.14);
+      border-radius:18px;
+      padding:18px;
+      min-width:0;
+      overflow:hidden;
+    }
+    .panel-analiticas h3{margin-bottom:4px;font-size:clamp(18px,1.6vw,22px);line-height:1.15}
+    .panel-analiticas p{color:#a6b0cf;margin-bottom:12px;line-height:1.35}
+    .chart-box{height:310px;min-width:0;position:relative}
+    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;min-width:0}
+    .lista-simple{display:grid;gap:10px}
+    .lista-item{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(166,176,207,.12);padding:10px 0;color:#e5e7eb;min-width:0}
+    .lista-item span:first-child{min-width:0;overflow-wrap:anywhere}
+    .lista-item span:last-child{font-weight:900;color:#50e5ff;white-space:nowrap}
+    .mensaje-vacio{color:#a6b0cf;padding:12px;border:1px dashed rgba(166,176,207,.2);border-radius:12px}
+
+    @media(max-width:1400px){
+      .kpis-analiticas{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .analiticas-grid{grid-template-columns:1fr}
+      .mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:1000px){
+      .analiticas-head{align-items:flex-start;flex-direction:column}
+      .analiticas-filtros-bar{grid-template-columns:1fr;align-items:stretch}
+      .analiticas-periodos,.analiticas-rango,.analiticas-filtro-activo{justify-content:flex-start;width:100%}
+    }
+    @media(max-width:760px){
+      .kpis-analiticas,.mini-grid{grid-template-columns:1fr}
+      .analiticas-head{padding:16px;border-radius:15px}
+      .analiticas-filtros-bar{padding:10px;border-radius:15px}
+      .periodo-btn{flex:1 1 80px;padding:10px 12px}
+      .fecha-analiticas{flex:1 1 150px;min-width:0}
+      .kpi-card{min-height:104px;padding:16px}
+      .chart-box{height:280px}
+    }
+    @media(max-width:480px){
+      .analiticas-pro{gap:14px}
+      .panel-analiticas{padding:14px;border-radius:15px}
+      .chart-box{height:250px}
+    }
+  </style>
+
+  <div class="analiticas-head">
+    <div>
+      <h2>📊 Inicio / Resumen</h2>
+      <p id="periodoDescripcion">Analíticas filtradas por período.</p>
+    </div>
+  </div>
+
+  <div class="analiticas-filtros-bar">
+    <div class="analiticas-periodos">
+      <button class="periodo-btn active" data-periodo="dia">Día</button>
+      <button class="periodo-btn" data-periodo="mes">Mes</button>
+      <button class="periodo-btn" data-periodo="anio">Año</button>
+    </div>
+
+    <div class="analiticas-rango">
+      <span class="rango-label">Desde</span>
+      <input class="fecha-analiticas" id="desdeAnaliticas" type="date">
+      <span class="rango-label">Hasta</span>
+      <input class="fecha-analiticas" id="hastaAnaliticas" type="date">
+      <button class="btn-aplicar-rango" id="btnAplicarRango" type="button">Aplicar</button>
+      <button class="btn-limpiar-rango" id="btnLimpiarRango" type="button">Limpiar</button>
+    </div>
+
+    <div class="analiticas-filtro-activo">
+      <span class="filtro-activo-pill" id="filtroActivoAnaliticas">Filtro activo: Día</span>
+    </div>
+
+    <input id="fechaAnaliticas" type="hidden">
+    <input id="mesAnaliticas" type="hidden">
+    <input id="anioAnaliticas" type="hidden">
+  </div>
+
+  <div class="kpis-analiticas">
+    <div class="kpi-card destacado"><small>Ventas generadas</small><strong id="ventasGeneradas">$0.00</strong><span>Pedidos no cancelados</span></div>
+    <div class="kpi-card"><small>Ganancias confirmadas</small><strong id="gananciasConfirmadas">$0.00</strong><span>Pedidos entregados / pagados</span></div>
+    <div class="kpi-card"><small>Pedidos válidos</small><strong id="pedidosValidos">0</strong><span>Ventas registradas</span></div>
+    <div class="kpi-card"><small>Ticket promedio</small><strong id="ticketPromedio">$0.00</strong><span>Promedio por pedido</span></div>
+  </div>
+
+  <div class="analiticas-grid">
+    <div class="panel-analiticas">
+      <h3 id="tituloGraficaPrincipal">Ventas y ganancias</h3>
+      <p id="subtituloGraficaPrincipal">Datos del período seleccionado</p>
+      <div class="chart-box"><canvas id="graficaVentas"></canvas></div>
+    </div>
+    <div class="mini-grid">
+      <div class="kpi-card verde"><small id="labelVentasPeriodo">Ventas del período</small><strong id="ventasPeriodo">$0.00</strong><span id="pedidosPeriodo">0 pedidos</span></div>
+      <div class="kpi-card"><small>Productos vendidos</small><strong id="productosVendidos">0</strong><span>Unidades registradas</span></div>
+      <div class="kpi-card"><small>Ventas del mes</small><strong id="ventasMes">$0.00</strong><span>Según período</span></div>
+      <div class="kpi-card"><small>Ventas del año</small><strong id="ventasAnio">$0.00</strong><span>Según período</span></div>
+    </div>
+  </div>
+
+  <div class="analiticas-grid">
+    <div class="panel-analiticas">
+      <h3>Productos más vendidos</h3>
+      <p>Top 10 por unidades dentro del período seleccionado</p>
+      <div class="chart-box"><canvas id="graficaProductos"></canvas></div>
+    </div>
+    <div class="panel-analiticas">
+      <h3>Estados y métodos de pago</h3>
+      <p>Distribución filtrada</p>
+      <div id="listaEstados" class="lista-simple"></div>
+      <div style="height:16px"></div>
+      <div id="listaMetodos" class="lista-simple"></div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+(() => {
+  const token = localStorage.getItem("token");
+  const money = n => `$${Number(n || 0).toFixed(2)}`;
+  let periodoActual = "dia";
+  let graficaVentas = null;
+  let graficaProductos = null;
+
+  const fechaInput = document.getElementById("fechaAnaliticas");
+  const mesInput = document.getElementById("mesAnaliticas");
+  const anioInput = document.getElementById("anioAnaliticas");
+  const desdeInput = document.getElementById("desdeAnaliticas");
+  const hastaInput = document.getElementById("hastaAnaliticas");
+  const filtroActivoEl = document.getElementById("filtroActivoAnaliticas");
+
+  function fechaLocalHoy() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function sumarDias(fecha, dias) {
+    const d = new Date(`${fecha}T00:00:00`);
+    d.setDate(d.getDate() + dias);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  const hoy = fechaLocalHoy();
+  if (!fechaInput.value) fechaInput.value = hoy;
+  if (!mesInput.value) mesInput.value = hoy.slice(0, 7);
+  if (!anioInput.value) anioInput.value = hoy.slice(0, 4);
+  if (!desdeInput.value) desdeInput.value = hoy;
+  if (!hastaInput.value) hastaInput.value = hoy;
+
+  function fechaFiltroActual() {
+    if (periodoActual === "mes") return `${mesInput.value || hoy.slice(0, 7)}-01`;
+    if (periodoActual === "anio") return `${anioInput.value || hoy.slice(0, 4)}-01-01`;
+    if (periodoActual === "rango") return desdeInput.value || hoy;
+    return fechaInput.value || hoy;
+  }
+
+  function qs() {
+    const params = new URLSearchParams();
+    params.set("periodo", periodoActual);
+    params.set("fecha", fechaFiltroActual());
+
+    if (periodoActual === "rango") {
+      params.set("desde", desdeInput.value || hoy);
+      params.set("hasta", hastaInput.value || desdeInput.value || hoy);
+    }
+
+    return params.toString();
+  }
+
+  // Si abres el frontend con Live Server, el puerto será 5500.
+  // El backend de Node normalmente corre en 3000, por eso usamos esa URL.
+  // Si tu backend usa otro puerto, cambia aquí el 3000.
+  const API_URL = window.API_URL || localStorage.getItem("API_URL") ||
+    (["5500", "5501"].includes(window.location.port) ? "http://localhost:3000" : "");
+
+  async function api(path) {
+    const url = `${API_URL}/api/analiticas/${path}?${qs()}`;
+    const r = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store"
+    });
+
+    if (!r.ok) {
+      const texto = await r.text().catch(() => "");
+      console.error("Error API analíticas:", r.status, url, texto);
+      throw new Error(`${path} - ${r.status}`);
+    }
+
+    return r.json();
+  }
+
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function formatearFechaCorta(fecha) {
+    const partes = String(fecha || "").split("-");
+    if (partes.length !== 3) return fecha || "Sin fecha";
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+  }
+
+  function textoFiltroActivo() {
+    if (periodoActual === "dia") return `Filtro activo: Día · ${formatearFechaCorta(fechaInput.value)}`;
+    if (periodoActual === "mes") return `Filtro activo: Mes · ${mesInput.value || hoy.slice(0, 7)}`;
+    if (periodoActual === "anio") return `Filtro activo: Año · ${anioInput.value || hoy.slice(0, 4)}`;
+    return `Filtro activo: Desde ${formatearFechaCorta(desdeInput.value)} hasta ${formatearFechaCorta(hastaInput.value)}`;
+  }
+
+  function actualizarFiltroActivo() {
+    if (filtroActivoEl) filtroActivoEl.textContent = textoFiltroActivo();
+  }
+
+  function descripcionPeriodo() {
+    if (periodoActual === "dia") return `Mostrando solo el día ${fechaInput.value}`;
+    if (periodoActual === "mes") return `Mostrando el mes de ${mesInput.value}`;
+    if (periodoActual === "anio") return `Mostrando el año ${anioInput.value}`;
+    return `Mostrando desde ${desdeInput.value} hasta ${hastaInput.value}`;
+  }
+
+  function endpointGrafica() {
+    if (periodoActual === "dia" || periodoActual === "rango") return "ventas-dia";
+    if (periodoActual === "mes") return "ventas-mes";
+    return "ventas-anio";
+  }
+
+  function labelGrafica(row) {
+    return row.fecha_label || row.mes_label || row.anio || row.mes || row.fecha || "";
+  }
+
+  function crearGraficaVentas(rows) {
+    const ctx = document.getElementById("graficaVentas");
+    if (!ctx || !window.Chart) return;
+    if (graficaVentas) graficaVentas.destroy();
+
+    graficaVentas = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: rows.map(labelGrafica),
+        datasets: [
+          { label: "Ventas generadas", data: rows.map(r => Number(r.ventas || 0)) },
+          { label: "Ganancias confirmadas", data: rows.map(r => Number(r.ganancias || 0)) },
+          { label: "Pedidos", type: "line", data: rows.map(r => Number(r.pedidos || 0)), yAxisID: "y1" }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: "#e5e7eb" } } },
+        scales: {
+          x: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(203,213,225,.12)" } },
+          y: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(203,213,225,.12)" } },
+          y1: { position: "right", ticks: { color: "#cbd5e1" }, grid: { drawOnChartArea: false } }
+        }
+      }
+    });
+  }
+
+  function crearGraficaProductos(productos) {
+    const ctx = document.getElementById("graficaProductos");
+    if (!ctx || !window.Chart) return;
+    if (graficaProductos) graficaProductos.destroy();
+
+    graficaProductos = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: productos.map(p => p.nombre),
+        datasets: [{ label: "Unidades vendidas", data: productos.map(p => Number(p.unidades_vendidas || 0)) }]
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: "#e5e7eb" } } },
+        scales: {
+          x: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(203,213,225,.12)" } },
+          y: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(203,213,225,.12)" } }
+        }
+      }
+    });
+  }
+
+  function lista(id, rows, labelKey) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (!rows || !rows.length) {
+      el.innerHTML = '<div class="mensaje-vacio">Sin datos para este período.</div>';
+      return;
+    }
+    el.innerHTML = rows.map(r => `<div class="lista-item"><span>${r[labelKey]}</span><span>${r.total}</span></div>`).join("");
+  }
+
+  async function cargarAnaliticas() {
+    actualizarFiltroActivo();
+    setText("periodoDescripcion", "Cargando " + descripcionPeriodo().toLowerCase() + "...");
+    setText("tituloGraficaPrincipal", periodoActual === "dia" ? "Ventas del día" : periodoActual === "mes" ? "Ventas por día del mes" : periodoActual === "anio" ? "Ventas por mes del año" : "Ventas del rango");
+    setText("subtituloGraficaPrincipal", descripcionPeriodo());
+    setText("labelVentasPeriodo", periodoActual === "dia" ? "Ventas del día" : periodoActual === "mes" ? "Ventas del mes" : periodoActual === "anio" ? "Ventas del año" : "Ventas del rango");
+
+    const [resumen, ventas, productos, estados, metodos] = await Promise.all([
+      api("resumen"),
+      api(endpointGrafica()),
+      api("productos-vendidos"),
+      api("estado-pedidos"),
+      api("metodos-pago")
+    ]);
+
+    setText("ventasGeneradas", money(resumen.ventas_generadas));
+    setText("gananciasConfirmadas", money(resumen.ganancias_confirmadas));
+    setText("pedidosValidos", Number(resumen.pedidos_validos || 0));
+    setText("ticketPromedio", money(resumen.ticket_promedio));
+    setText("ventasPeriodo", money(resumen.ventas_periodo));
+    setText("pedidosPeriodo", `${Number(resumen.pedidos_periodo || 0)} pedidos`);
+    setText("ventasMes", money(periodoActual === "mes" ? resumen.ventas_periodo : resumen.ventas_mes));
+    setText("ventasAnio", money(periodoActual === "anio" ? resumen.ventas_periodo : resumen.ventas_anio));
+    setText("productosVendidos", Number(resumen.productos_vendidos || 0));
+
+    crearGraficaVentas(Array.isArray(ventas) ? ventas : []);
+    crearGraficaProductos(productos.productos || []);
+    lista("listaEstados", estados, "estado");
+    lista("listaMetodos", metodos.metodos || [], "metodo_pago");
+    setText("periodoDescripcion", descripcionPeriodo());
+  }
+
+  function actualizarControlesFecha() {
+    actualizarFiltroActivo();
+  }
+
+  function recargarConManejoError() {
+    cargarAnaliticas().catch(error => {
+      console.error(error);
+      setText("periodoDescripcion", "Error cargando analíticas. Revisa la consola del servidor.");
+    });
+  }
+
+  document.querySelectorAll(".periodo-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      periodoActual = btn.dataset.periodo;
+      document.querySelectorAll(".periodo-btn").forEach(b => b.classList.toggle("active", b === btn));
+      actualizarControlesFecha();
+      recargarConManejoError();
+    });
+  });
+
+  fechaInput.addEventListener("change", recargarConManejoError);
+  mesInput.addEventListener("change", recargarConManejoError);
+  anioInput.addEventListener("change", recargarConManejoError);
+
+  document.getElementById("btnAplicarRango")?.addEventListener("click", () => {
+    periodoActual = "rango";
+    document.querySelectorAll(".periodo-btn").forEach(b => b.classList.remove("active"));
+    actualizarFiltroActivo();
+    recargarConManejoError();
+  });
+  document.getElementById("btnLimpiarRango")?.addEventListener("click", () => {
+    desdeInput.value = hoy;
+    hastaInput.value = hoy;
+    periodoActual = "dia";
+    document.querySelectorAll(".periodo-btn").forEach(b => b.classList.toggle("active", b.dataset.periodo === "dia"));
+    actualizarFiltroActivo();
+    recargarConManejoError();
+  });
+
+  desdeInput.addEventListener("change", () => {
+    if (!hastaInput.value || hastaInput.value < desdeInput.value) hastaInput.value = desdeInput.value;
+  });
+
+  actualizarControlesFecha();
+  cargarAnaliticas().catch(error => {
+    console.error(error);
+    setText("periodoDescripcion", "Error cargando analíticas. Revisa la consola del servidor.");
+  });
+})();
+</script>

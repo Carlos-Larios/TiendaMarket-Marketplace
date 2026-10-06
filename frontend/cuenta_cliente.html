@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi cuenta | TiendaPro</title>
+  <link rel="stylesheet" href="css/tienda_publica.css?v=127">
+  <link rel="stylesheet" href="css/public-header-pages.css?v=134">
+  <link rel="stylesheet" href="css/cuenta_cliente.css?v=134">
+  <link rel="stylesheet" href="css/public-theme.css?v=110">
+  <script>document.documentElement.setAttribute("data-public-theme",localStorage.getItem("tiendapro_public_theme")==="dark"?"dark":"light")</script>
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+<body>
+  <header class="site-header public-shared-header">
+    <div class="header-main">
+      <button class="mobile-menu-trigger" type="button" id="sharedCategoriasMobile" aria-label="Abrir categorías">☰</button>
+      <a class="brand" href="tienda_publica.html" aria-label="Market inicio">
+        <span class="brand-bag">M</span><span class="brand-name">Market</span>
+      </a>
+      <div class="header-search">
+        <input id="sharedBuscarPublico" type="search" placeholder="Buscar productos, marcas o tiendas..." autocomplete="off">
+        <button id="sharedBtnBuscar" type="button" aria-label="Buscar">⌕</button>
+      </div>
+      <div id="sharedAccionesInvitado" class="account-actions" hidden>
+        <a class="seller-link" href="login-vendedor.html">Vender en TiendaPro</a>
+        <a class="text-link" href="login-cliente.html">Iniciar sesión</a>
+        <a class="btn-signup" href="registro_cliente.html">Registrarse</a>
+        <button id="sharedBtnCarrito" class="cart-icon" type="button" aria-label="Carrito">🛒<span id="sharedCartCount">0</span></button>
+      </div>
+      <div id="sharedAccionesCliente" class="account-actions" hidden>
+        <span id="sharedSaludoCliente" class="user-greeting"></span>
+        <div class="account-menu-wrap" id="sharedAccountMenu">
+          <button class="account-menu-trigger" id="sharedAccountMenuTrigger" type="button" aria-expanded="false">Mi cuenta <span class="chev">▼</span></button>
+          <div class="account-dropdown" id="sharedAccountDropdown" hidden>
+            <a href="cuenta_cliente.html">👤 Mi cuenta</a>
+            <a href="cuenta_cliente.html#pedidos">📦 Mis pedidos</a>
+            <a href="cuenta_cliente.html#favoritos">♥ Favoritos</a>
+            <a href="ajustes-cliente.html">⚙ Ajustes</a>
+            <button id="sharedCerrarSesion" type="button">↪ Cerrar sesión</button>
+          </div>
+        </div>
+        <button id="sharedBtnCarritoCliente" class="cart-icon" type="button" aria-label="Carrito">🛒<span id="sharedCartCountCliente">0</span></button>
+      </div>
+    </div>
+    <nav class="category-bar" aria-label="Categorías">
+      <button type="button" class="category-trigger" id="sharedTodasCategorias" aria-label="Todas las categorías" title="Todas las categorías" aria-expanded="false" aria-controls="sharedCategoryDrawer"><span class="category-trigger-icon">☰</span><span class="category-trigger-text-visually-hidden">Todas las categorías</span></button>
+      <div class="category-links" aria-label="Accesos rápidos de categorías">
+        <button type="button" class="store-home-link" data-shared-home>Todo</button>
+        <button type="button" data-shared-cat="Electrónica">Electrónica</button>
+        <button type="button" data-shared-cat="Hogar">Hogar</button>
+        <button type="button" data-shared-cat="Moda">Moda</button>
+        <button type="button" data-shared-cat="Belleza">Belleza</button>
+        <button type="button" data-shared-cat="Deportes">Deportes</button>
+        <button type="button" data-shared-cat="Juguetes">Juguetes</button>
+        <button type="button" data-shared-cat="Automotriz">Automotriz</button>
+        <button type="button" data-shared-cat="Mascotas">Mascotas</button>
+        <button type="button" class="offers-link" id="sharedOfertas">Ofertas</button>
+      </div>
+    </nav>
+  </header>
+  <main class="account-shell">
+    <section class="account-hero"><span class="eyebrow">Cuenta del cliente</span><h1>Mi cuenta</h1><p>Consulta tus datos, pedidos y facturas desde un solo lugar.</p></section>
+    <section class="profile-card">
+      <div class="avatar" id="avatarCliente">C</div>
+      <div><div class="muted">Cliente</div><h2 id="nombreCliente">Cargando...</h2><p id="correoCliente"></p></div>
+    </section>
+    <section class="favorites-section" id="favoritos">
+      <div class="orders-head"><div><h2>Favoritos</h2><p>Los productos que guardaste para verlos después.</p></div><span id="totalFavoritos" class="favorites-count">0 productos</span></div>
+      <div id="listaFavoritos" class="favorites-grid"><div class="empty-state">Cargando tus favoritos...</div></div>
+    </section>
+    <section class="orders-section" id="pedidos">
+      <div class="orders-head"><div><h2>Mis pedidos</h2><p>Historial de compras realizadas con esta cuenta.</p></div><button id="recargarPedidos" class="btn secondary" type="button">Actualizar</button></div>
+      <div id="mensajeCuenta" class="account-message" hidden></div>
+      <div id="listaPedidos" class="orders-list"><div class="empty-state">Cargando tus pedidos...</div></div>
+    </section>
+  </main>
+  <div id="modalPedidoCliente" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card order-detail-modal"><button class="modal-x" data-close="modalPedidoCliente">×</button><div id="detallePedidoCliente"></div></div>
+  </div>
+  <script src="js/public-theme.js"></script>
+  <script src="js/public-header-pages.js?v=118-cartfix"></script>
+  <script src="js/cuenta_cliente.js"></script>
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

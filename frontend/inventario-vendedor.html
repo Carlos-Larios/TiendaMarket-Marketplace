@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Inventario | TiendaPro</title>
+<link rel="stylesheet" href="css/vendor-shell.css?v=fase70">
+<link rel="stylesheet" href="css/vendor-theme.css?v=fase70">
+<link rel="stylesheet" href="css/inventario-vendedor.css?v=fase70">
+<link rel="stylesheet" href="css/vendor-polish.css?v=fase80">
+  <link rel="stylesheet" href="css/public-footer.css?v=136">
+  <link rel="stylesheet" href="css/site-branding.css?v=138">
+</head>
+<body data-vendor-section="inventario">
+<header class="inventory-top"><div><strong>Inventario</strong><span>Control por cantidades</span></div><button class="refresh-btn" id="refreshBtn" type="button">Actualizar</button></header>
+<main class="inventory-wrap">
+  <div class="inventory-heading">
+    <div><h1>Inventario</h1><p>Controla las existencias reales de cada presentación y variante de tus productos.</p></div>
+  </div>
+  <div id="message" class="inv-message"></div>
+  <section class="inventory-kpis">
+    <article><span>Disponible</span><strong id="kDisponible">0</strong><small>unidades listas para vender</small></article>
+    <article><span>Reservado</span><strong id="kReservado">0</strong><small>unidades en pedidos activos</small></article>
+    <article><span>Vendido</span><strong id="kVendido">0</strong><small>unidades completadas desde esta fase</small></article>
+    <article><span>Alertas</span><strong id="kAlertas">0</strong><small>agotadas o con stock bajo</small></article>
+  </section>
+  <section class="inventory-toolbar">
+    <label class="search-box"><span>⌕</span><input id="search" type="search" placeholder="Buscar producto, marca, variante o talla..."></label>
+    <select id="statusFilter">
+      <option value="todos">Todos los estados</option>
+      <option value="disponible">Con stock</option>
+      <option value="bajo">Stock bajo</option>
+      <option value="agotado">Agotado</option>
+      <option value="reservado">Con reservas</option>
+    </select>
+  </section>
+  <section class="inventory-panel">
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Producto</th><th>Variante</th><th>Total actual</th><th>Disponible</th><th>Reservado</th><th>Vendido</th><th>Estado</th><th></th></tr></thead>
+        <tbody id="inventoryRows"><tr><td colspan="8" class="loading-cell">Cargando inventario...</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+  <p class="inventory-footnote">El stock visible en la tienda pública usa la columna <strong>Disponible</strong>. Las unidades reservadas no pueden venderse nuevamente mientras el pedido siga activo.</p>
+</main>
+
+<div class="inv-modal" id="adjustModal" aria-hidden="true">
+  <div class="inv-backdrop" data-close-modal></div>
+  <section class="inv-dialog" role="dialog" aria-modal="true" aria-labelledby="adjustTitle">
+    <div class="inv-dialog-head"><div><small>AJUSTAR INVENTARIO</small><h2 id="adjustTitle">Producto</h2><p id="adjustVariant"></p></div><button type="button" class="x" data-close-modal>×</button></div>
+    <div class="inv-dialog-body">
+      <div class="reserve-note"><span>ⓘ</span><p>Solo puedes modificar las unidades <strong>disponibles</strong>. Las reservadas se liberan automáticamente si el pedido se cancela y pasan a vendidas cuando se entrega.</p></div>
+      <label>Cantidad disponible<input id="adjustAvailable" type="number" min="0" step="1"></label>
+      <label>Alerta de stock mínimo<input id="adjustMinimum" type="number" min="0" step="1"></label>
+      <div class="current-grid"><div><span>Reservado</span><strong id="adjustReserved">0</strong></div><div><span>Vendido</span><strong id="adjustSold">0</strong></div></div>
+    </div>
+    <div class="inv-dialog-actions"><button type="button" class="cancel" data-close-modal>Cancelar</button><button type="button" class="save" id="saveAdjustment">Guardar ajuste</button></div>
+  </section>
+</div>
+<script src="js/vendor-theme.js?v=fase70"></script>
+<script src="js/inventario-vendedor.js?v=fase70"></script>
+<script src="js/vendor-shell.js?v=fase70"></script>
+  <script src="js/site-branding.js?v=142"></script>
+<script src="js/public-footer.js?v=136"></script>
+</body>
+</html>

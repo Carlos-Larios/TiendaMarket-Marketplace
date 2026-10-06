@@ -1,0 +1,264 @@
+<section class="bitacora-pro">
+  <style>
+    .bitacora-pro{display:grid;gap:18px;}
+    .bitacora-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#27345f,#2a3042);border:1px solid rgba(166,176,207,.12);border-radius:24px;padding:30px;box-shadow:var(--shadow);}
+    .bitacora-hero::after{content:"";position:absolute;right:-95px;bottom:-135px;width:285px;height:285px;border-radius:999px;background:rgba(85,110,230,.16);}
+    .bitacora-hero .eyebrow{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(80,165,241,.14);border:1px solid rgba(80,165,241,.24);color:#dbeafe;font-weight:900;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+    .bitacora-hero h2{font-size:clamp(28px,4vw,42px);letter-spacing:-1px;margin-bottom:8px;color:#fff;}
+    .bitacora-hero p{color:#cbd5e1;line-height:1.65;max-width:850px;}
+    .bitacora-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+    .bita-kpi{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);min-height:112px;}
+    .bita-kpi::after{content:"";position:absolute;right:-35px;bottom:-45px;width:120px;height:120px;border-radius:999px;background:rgba(85,110,230,.14);}
+    .bita-kpi.destacado{background:linear-gradient(135deg,#556ee6,#2a3042);}
+    .bita-kpi span{display:block;color:#dbeafe;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+    .bita-kpi strong{display:block;margin-top:9px;color:#fff;font-size:30px;letter-spacing:-.5px;}
+    .bita-kpi small{display:block;margin-top:7px;color:#a6b0cf;font-weight:800;}
+    .bitacora-filtros{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow);}
+    .bita-periodos,.bita-rango,.bita-selectores{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .bita-btn{border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.35);color:#cbd5e1;padding:10px 13px;border-radius:12px;cursor:pointer;font-weight:900;transition:.2s ease;}
+    .bita-btn:hover,.bita-btn.active{color:#fff;background:var(--primary);border-color:rgba(125,211,252,.24);}
+    .bita-date{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(166,176,207,.14);color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase;}
+    .bita-date input{border:0;outline:0;color:#fff;background:transparent;font-weight:900;color-scheme:dark;}
+    .bita-select,.bita-search input{background:rgba(15,23,42,.38);border:1px solid rgba(166,176,207,.14);border-radius:12px;color:#fff;padding:11px 12px;outline:0;font-weight:800;color-scheme:dark;}
+    .bitacora-layout{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(330px,.58fr);gap:18px;align-items:start;}
+    .bita-panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);min-width:0;}
+    .bita-panel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px;}
+    .bita-panel-head h3{color:#fff;font-size:20px;letter-spacing:-.4px;}
+    .bita-panel-head p{color:var(--muted);margin-top:5px;font-size:13px;line-height:1.5;}
+    .bita-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .bita-action-btn{border:1px solid rgba(125,211,252,.22);background:rgba(80,165,241,.10);color:#bfdbfe;border-radius:10px;padding:9px 11px;font-weight:900;cursor:pointer;}
+    .bita-search{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+    .bita-search input{flex:1 1 300px;}
+    .bita-table-wrap{width:100%;overflow-x:auto;}
+    .bita-table{width:100%;min-width:1080px;border-collapse:separate;border-spacing:0;}
+    .bita-table th,.bita-table td{padding:13px 12px;border-bottom:1px solid rgba(166,176,207,.10);text-align:left;white-space:nowrap;}
+    .bita-table th{color:#8da0ff;font-size:12px;text-transform:uppercase;letter-spacing:.04em;background:rgba(15,23,42,.38);}
+    .bita-row{cursor:pointer;transition:.18s ease;}
+    .bita-row:hover td{background:rgba(85,110,230,.08);}
+    .user-link{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:#bfdbfe;font-weight:900;cursor:pointer;padding:0;}
+    .user-link:hover{text-decoration:underline;}
+    .pill{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900;border:1px solid transparent;}
+    .nivel-info{background:rgba(80,165,241,.14);color:#bfdbfe;border-color:rgba(80,165,241,.24);}
+    .nivel-alerta{background:rgba(241,180,76,.14);color:#fde68a;border-color:rgba(241,180,76,.24);}
+    .nivel-error{background:rgba(249,115,22,.14);color:#fed7aa;border-color:rgba(249,115,22,.24);}
+    .nivel-critico{background:rgba(244,106,106,.14);color:#fecaca;border-color:rgba(244,106,106,.25);}
+    .estado-ok{background:rgba(52,195,143,.14);color:#bbf7d0;border-color:rgba(52,195,143,.24);}
+    .estado-pend{background:rgba(148,163,184,.14);color:#cbd5e1;border-color:rgba(148,163,184,.18);}
+    .bita-side{display:grid;gap:18px;}
+    .side-list{display:grid;gap:12px;}
+    .side-item{padding:13px;border-radius:14px;background:rgba(15,23,42,.34);border:1px solid rgba(166,176,207,.10);}
+    .side-item strong{display:block;color:#fff;font-size:14px;}
+    .side-item span{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.45;}
+    .side-item.critico{border-color:rgba(244,106,106,.24);}
+    .side-item.permisos{border-color:rgba(241,180,76,.24);}
+    .bita-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(2,6,23,.68);backdrop-filter:blur(4px);}
+    .bita-modal.visible{display:flex;}
+    .bita-modal-card{width:min(1080px,100%);max-height:92vh;overflow:auto;background:linear-gradient(135deg,rgba(42,48,66,.98),rgba(30,41,59,.98));border:1px solid rgba(166,176,207,.16);border-radius:24px;box-shadow:0 28px 90px rgba(0,0,0,.48);}
+    .bita-modal-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:22px;border-bottom:1px solid rgba(166,176,207,.12);}
+    .bita-modal-head h3{color:#fff;font-size:23px;margin-bottom:7px;}
+    .bita-modal-head p{color:#cbd5e1;line-height:1.5;}
+    .bita-close{width:40px;height:40px;border-radius:12px;border:1px solid rgba(166,176,207,.14);background:rgba(15,23,42,.42);color:#fff;font-size:22px;cursor:pointer;}
+    .bita-modal-body{padding:22px;display:grid;gap:18px;}
+    .detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+    .detail-card{padding:14px;border-radius:14px;background:rgba(15,23,42,.35);border:1px solid rgba(166,176,207,.10);}
+    .detail-card span{display:block;color:var(--muted);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+    .detail-card strong{display:block;color:#fff;margin-top:7px;line-height:1.35;}
+    .changes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .change-box{padding:14px;border-radius:14px;background:rgba(15,23,42,.30);border:1px solid rgba(166,176,207,.10);}
+    .change-box h4{color:#fff;margin-bottom:10px;}
+    .change-box ul{list-style:none;display:grid;gap:8px;color:#cbd5e1;font-size:13px;}
+    .timeline{position:relative;display:grid;gap:12px;margin-left:8px;}
+    .timeline::before{content:"";position:absolute;left:5px;top:7px;bottom:7px;width:2px;background:rgba(125,211,252,.18);}
+    .time-item{position:relative;display:grid;grid-template-columns:82px 1fr;gap:12px;padding-left:22px;}
+    .time-item::before{content:"";position:absolute;left:0;top:6px;width:12px;height:12px;border-radius:999px;background:#50a5f1;box-shadow:0 0 16px rgba(80,165,241,.45);}
+    .time-item b{color:#bfdbfe;font-size:13px;}
+    .time-item span{color:#cbd5e1;font-size:13px;line-height:1.45;}
+    .profile-head{display:flex;gap:14px;align-items:center;}
+    .avatar{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:rgba(85,110,230,.22);border:1px solid rgba(125,211,252,.18);color:#fff;font-size:24px;font-weight:900;}
+    .user-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+    .module-bars{display:grid;gap:10px;}
+    .module-bar{display:grid;gap:6px;}
+    .module-bar div{display:flex;justify-content:space-between;color:#cbd5e1;font-size:13px;font-weight:800;}
+    .bar{height:9px;border-radius:999px;background:rgba(148,163,184,.14);overflow:hidden;}
+    .bar i{display:block;height:100%;width:var(--w);border-radius:inherit;background:linear-gradient(90deg,#556ee6,#34c38f);}
+    @media(max-width:1180px){.bitacora-layout{grid-template-columns:1fr}.bitacora-kpis{grid-template-columns:repeat(2,1fr)}.detail-grid,.user-summary-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:680px){.bitacora-kpis,.detail-grid,.user-summary-grid,.changes-grid{grid-template-columns:1fr}.bitacora-filtros{align-items:stretch}.bita-periodos,.bita-rango,.bita-selectores{width:100%}.bita-btn,.bita-date,.bita-select{flex:1 1 auto;justify-content:center}.bita-modal{padding:10px}.bita-modal-head{padding:18px}.bita-modal-body{padding:18px}.time-item{grid-template-columns:1fr}}
+  </style>
+
+  <div class="bitacora-hero">
+    <span class="eyebrow">Auditoría del sistema</span>
+    <h2>Bitácora Global</h2>
+    <p>Registro central de acciones realizadas por administradores, empleados, vendedores, clientes y procesos automáticos. Al presionar un evento se ve el detalle; al presionar un administrador o empleado se abre su perfil de actividad.</p>
+  </div>
+
+  <div class="bitacora-kpis">
+    <div class="bita-kpi destacado"><span>Total de eventos</span><strong>14,892</strong><small>Movimientos registrados</small></div>
+    <div class="bita-kpi"><span>Eventos de hoy</span><strong>326</strong><small>Actividad reciente</small></div>
+    <div class="bita-kpi"><span>Críticos</span><strong>12</strong><small>Requieren revisión</small></div>
+    <div class="bita-kpi"><span>Usuarios activos</span><strong>48</strong><small>Sesiones con actividad</small></div>
+  </div>
+
+  <div class="bitacora-filtros">
+    <div class="bita-periodos">
+      <button class="bita-btn active">Día</button>
+      <button class="bita-btn">Mes</button>
+      <button class="bita-btn">Año</button>
+    </div>
+    <div class="bita-rango">
+      <label class="bita-date">Desde <input type="date"></label>
+      <label class="bita-date">Hasta <input type="date"></label>
+    </div>
+    <div class="bita-selectores">
+      <select class="bita-select" id="bitaModulo"><option value="todos">Todos los módulos</option><option>Pedidos</option><option>Facturación</option><option>Productos</option><option>Inventario</option><option>Usuarios</option><option>Vendedores</option><option>Postventa</option><option>Seguridad</option></select>
+      <select class="bita-select" id="bitaNivel"><option value="todos">Todos los niveles</option><option>Información</option><option>Advertencia</option><option>Error</option><option>Crítico</option></select>
+    </div>
+  </div>
+
+  <div class="bitacora-layout">
+    <div class="bita-panel">
+      <div class="bita-panel-head">
+        <div><h3>Eventos del sistema</h3><p>Presiona una fila para ver el detalle completo o presiona el usuario para ver todo lo que ha hecho.</p></div>
+        <div class="bita-actions"><button class="bita-action-btn">PDF</button><button class="bita-action-btn">Excel</button><button class="bita-action-btn">CSV</button></div>
+      </div>
+      <div class="bita-search"><input id="bitaBuscar" type="search" placeholder="Buscar por ID, usuario, módulo, registro o descripción..."></div>
+      <div class="bita-table-wrap">
+        <table class="bita-table">
+          <thead><tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Usuario</th><th>Rol</th><th>Módulo</th><th>Acción</th><th>Registro</th><th>Nivel</th><th>Estado</th></tr></thead>
+          <tbody id="bitacoraBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="bita-side">
+      <div class="bita-panel">
+        <div class="bita-panel-head"><div><h3>Eventos críticos</h3><p>Últimas acciones que requieren revisión.</p></div></div>
+        <div class="side-list">
+          <div class="side-item critico"><strong>Intentos fallidos</strong><span>Empleado soporte tuvo 5 intentos fallidos desde una IP nueva.</span></div>
+          <div class="side-item critico"><strong>Permisos modificados</strong><span>Se elevó el acceso de un empleado a módulo de facturación.</span></div>
+          <div class="side-item permisos"><strong>Liquidación retenida</strong><span>Administrador financiero retuvo liquidación por disputa abierta.</span></div>
+        </div>
+      </div>
+      <div class="bita-panel">
+        <div class="bita-panel-head"><div><h3>Actividad reciente</h3><p>Resumen visual por módulo.</p></div></div>
+        <div class="module-bars">
+          <div class="module-bar"><div><span>Pedidos</span><b>42%</b></div><span class="bar"><i style="--w:42%"></i></span></div>
+          <div class="module-bar"><div><span>Facturación</span><b>21%</b></div><span class="bar"><i style="--w:21%"></i></span></div>
+          <div class="module-bar"><div><span>Usuarios</span><b>16%</b></div><span class="bar"><i style="--w:16%"></i></span></div>
+          <div class="module-bar"><div><span>Vendedores</span><b>12%</b></div><span class="bar"><i style="--w:12%"></i></span></div>
+          <div class="module-bar"><div><span>Seguridad</span><b>9%</b></div><span class="bar"><i style="--w:9%"></i></span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="bita-modal" id="bitaModal">
+    <div class="bita-modal-card">
+      <div class="bita-modal-head">
+        <div><h3 id="bitaModalTitulo">Detalle</h3><p id="bitaModalDesc">Información del evento seleccionado.</p></div>
+        <button class="bita-close" id="bitaCerrar" type="button">×</button>
+      </div>
+      <div class="bita-modal-body" id="bitaModalBody"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const eventos = [
+    {id:'AUD-0001',fecha:'02/07/2026',hora:'14:25:10',usuario:'Carlos Admin',inicial:'CA',rol:'Administrador General',modulo:'Pedidos',accion:'Editó pedido',registro:'PED-000458',nivel:'Información',estado:'Completado',desc:'Actualizó el estado del pedido de Entregando a Entregado.',motivo:'Confirmación de logística recibida.',destino:'pedidos_view.html'},
+    {id:'AUD-0002',fecha:'02/07/2026',hora:'14:28:17',usuario:'Ana Soporte',inicial:'AS',rol:'Empleado Soporte',modulo:'Postventa',accion:'Abrió devolución',registro:'DEV-000018',nivel:'Advertencia',estado:'Pendiente',desc:'Creó caso de devolución por producto dañado.',motivo:'Cliente adjuntó evidencia fotográfica.',destino:'devoluciones_view.html'},
+    {id:'AUD-0003',fecha:'02/07/2026',hora:'14:31:04',usuario:'Luis Finanzas',inicial:'LF',rol:'Empleado Finanzas',modulo:'Liquidaciones',accion:'Retuvo pago',registro:'LIQ-000077',nivel:'Crítico',estado:'Pendiente',desc:'Retuvo liquidación por disputa relacionada.',motivo:'Existe disputa abierta del pedido PED-000421.',destino:'liquidaciones_vendedores_view.html'},
+    {id:'AUD-0004',fecha:'02/07/2026',hora:'14:38:44',usuario:'Carlos Admin',inicial:'CA',rol:'Administrador General',modulo:'Usuarios',accion:'Suspendió cliente',registro:'CLI-000204',nivel:'Advertencia',estado:'Completado',desc:'Suspensión temporal de cliente por múltiples reclamos inválidos.',motivo:'Reincidencia detectada en auditoría.',destino:'clientes_view.html'},
+    {id:'AUD-0005',fecha:'02/07/2026',hora:'15:02:09',usuario:'María Inventario',inicial:'MI',rol:'Empleado Inventario',modulo:'Inventario',accion:'Actualizó unidad',registro:'INV-000992',nivel:'Información',estado:'Completado',desc:'Marcó unidad física como disponible después de revisión.',motivo:'Producto recuperado en postventa.',destino:'inventario_fisico_view.html'},
+    {id:'AUD-0006',fecha:'02/07/2026',hora:'15:11:33',usuario:'Sistema',inicial:'S',rol:'Automatización',modulo:'Seguridad',accion:'Detectó intentos fallidos',registro:'EMP-000014',nivel:'Crítico',estado:'Pendiente',desc:'Se detectaron 5 intentos fallidos de acceso.',motivo:'IP no reconocida.',destino:'empleados_view.html'},
+    {id:'AUD-0007',fecha:'02/07/2026',hora:'15:18:50',usuario:'Ana Soporte',inicial:'AS',rol:'Empleado Soporte',modulo:'Vendedores',accion:'Revisó solicitud',registro:'SOL-000036',nivel:'Información',estado:'Completado',desc:'Revisó documentos de solicitud de vendedor.',motivo:'Validación manual de DUI, NIT y cuenta bancaria.',destino:'solicitudes_vendedores_view.html'},
+    {id:'AUD-0008',fecha:'02/07/2026',hora:'15:35:12',usuario:'Carlos Admin',inicial:'CA',rol:'Administrador General',modulo:'Permisos',accion:'Cambió permisos',registro:'EMP-000008',nivel:'Error',estado:'Completado',desc:'Actualizó permisos de empleado para módulo de facturación.',motivo:'Cambio de puesto interno.',destino:'empleados_view.html'}
+  ];
+  const actividadUsuarios = {
+    'Carlos Admin': {rol:'Administrador General',inicial:'CA',estado:'Activo',sesiones:4,eventos:126,criticos:2,modulos:['Pedidos','Usuarios','Permisos','Facturación'],timeline:[['08:02','Inicio de sesión'],['08:15','Entró a Pedidos'],['09:40','Editó PED-000458'],['10:05','Suspendió CLI-000204'],['11:22','Cambió permisos de EMP-000008']]},
+    'Ana Soporte': {rol:'Empleado Soporte',inicial:'AS',estado:'Activo',sesiones:2,eventos:87,criticos:0,modulos:['Postventa','Vendedores','Disputas'],timeline:[['07:58','Inicio de sesión'],['08:20','Abrió DEV-000018'],['09:14','Revisó SOL-000036'],['10:30','Respondió disputa DIS-000022'],['12:00','Cierre parcial de casos']]},
+    'Luis Finanzas': {rol:'Empleado Finanzas',inicial:'LF',estado:'Activo',sesiones:1,eventos:54,criticos:1,modulos:['Liquidaciones','Facturación'],timeline:[['08:10','Inicio de sesión'],['08:35','Entró a Liquidaciones'],['09:12','Retuvo LIQ-000077'],['11:44','Generó reporte CSV']]},
+    'María Inventario': {rol:'Empleado Inventario',inicial:'MI',estado:'Activo',sesiones:1,eventos:71,criticos:0,modulos:['Inventario','Productos'],timeline:[['08:00','Inicio de sesión'],['08:25','Actualizó INV-000992'],['09:10','Marcó producto disponible'],['10:28','Exportó inventario']]},
+    'Sistema': {rol:'Automatización',inicial:'S',estado:'Activo',sesiones:0,eventos:240,criticos:8,modulos:['Seguridad','Notificaciones','Inventario'],timeline:[['00:00','Revisión automática diaria'],['08:12','Detectó stock bajo'],['15:11','Detectó intentos fallidos'],['15:12','Creó notificación crítica']]}
+  };
+  const body = document.getElementById('bitacoraBody');
+  const buscar = document.getElementById('bitaBuscar');
+  const modSel = document.getElementById('bitaModulo');
+  const nivelSel = document.getElementById('bitaNivel');
+  const modal = document.getElementById('bitaModal');
+  const titulo = document.getElementById('bitaModalTitulo');
+  const desc = document.getElementById('bitaModalDesc');
+  const modalBody = document.getElementById('bitaModalBody');
+  const cerrar = document.getElementById('bitaCerrar');
+  const clsNivel = n => ({'Información':'nivel-info','Advertencia':'nivel-alerta','Error':'nivel-error','Crítico':'nivel-critico'}[n] || 'nivel-info');
+  function pintar(lista=eventos){
+    body.innerHTML = lista.map(ev => `
+      <tr class="bita-row" data-id="${ev.id}">
+        <td>${ev.id}</td><td>${ev.fecha}</td><td>${ev.hora}</td>
+        <td><button class="user-link" data-user="${ev.usuario}"><span>${ev.inicial}</span>${ev.usuario}</button></td>
+        <td>${ev.rol}</td><td>${ev.modulo}</td><td>${ev.accion}</td><td>${ev.registro}</td>
+        <td><span class="pill ${clsNivel(ev.nivel)}">${ev.nivel}</span></td>
+        <td><span class="pill ${ev.estado==='Completado'?'estado-ok':'estado-pend'}">${ev.estado}</span></td>
+      </tr>`).join('');
+  }
+  function detailCard(a,b){return `<div class="detail-card"><span>${a}</span><strong>${b}</strong></div>`;}
+  function abrirEvento(ev){
+    titulo.textContent = `${ev.id} · ${ev.accion}`;
+    desc.textContent = ev.desc;
+    modalBody.innerHTML = `
+      <div class="detail-grid">
+        ${detailCard('Usuario responsable', ev.usuario)}${detailCard('Rol', ev.rol)}${detailCard('Módulo', ev.modulo)}${detailCard('Registro afectado', ev.registro)}
+        ${detailCard('Nivel', ev.nivel)}${detailCard('Estado', ev.estado)}${detailCard('Fecha y hora', ev.fecha+' '+ev.hora)}${detailCard('Destino preparado', ev.destino)}
+      </div>
+      <div class="changes-grid">
+        <div class="change-box"><h4>Antes</h4><ul><li>Estado anterior: Pendiente</li><li>Registro sin observación final</li><li>Sin actualización del responsable</li></ul></div>
+        <div class="change-box"><h4>Después</h4><ul><li>Acción: ${ev.accion}</li><li>Motivo: ${ev.motivo}</li><li>Evento registrado en auditoría</li></ul></div>
+      </div>
+      <div class="change-box"><h4>Motivo / Observaciones</h4><ul><li>${ev.motivo}</li><li>IP, navegador y dispositivo se conectarán en la fase de base de datos.</li></ul></div>
+      <div class="change-box"><h4>Destino</h4><ul><li>Módulo: ${ev.modulo}</li><li>Vista: ${ev.destino}</li><li>Registro: ${ev.registro}</li><li>Acción futura: abrir registro automáticamente</li></ul><br><button class="bita-action-btn">Abrir registro</button></div>
+      <div class="change-box"><h4>Línea de tiempo del evento</h4><div class="timeline">
+        <div class="time-item"><b>${ev.hora}</b><span>Evento creado en la bitácora.</span></div>
+        <div class="time-item"><b>+ 01 min</b><span>Validación del sistema completada.</span></div>
+        <div class="time-item"><b>+ 02 min</b><span>Disponible para auditoría y reportes.</span></div>
+      </div></div>`;
+    modal.classList.add('visible');
+  }
+  function abrirUsuario(nombre){
+    const u = actividadUsuarios[nombre]; if(!u) return;
+    titulo.textContent = `Actividad de ${nombre}`;
+    desc.textContent = `Resumen completo de lo que ha hecho este ${u.rol.toLowerCase()} dentro del sistema.`;
+    modalBody.innerHTML = `
+      <div class="profile-head"><div class="avatar">${u.inicial}</div><div><h3 style="color:#fff;margin-bottom:6px;">${nombre}</h3><p class="section-desc">${u.rol} · Estado: ${u.estado}</p></div></div>
+      <div class="user-summary-grid">
+        ${detailCard('Sesiones', u.sesiones)}${detailCard('Eventos registrados', u.eventos)}${detailCard('Eventos críticos', u.criticos)}${detailCard('Módulos usados', u.modulos.length)}
+      </div>
+      <div class="change-box"><h4>Módulos donde tuvo actividad</h4><div class="module-bars">
+        ${u.modulos.map((m,i)=>`<div class="module-bar"><div><span>${m}</span><b>${[38,26,21,15][i]||10}%</b></div><span class="bar"><i style="--w:${[38,26,21,15][i]||10}%"></i></span></div>`).join('')}
+      </div></div>
+      <div class="change-box"><h4>Acciones realizadas</h4><ul><li>Inicios y cierres de sesión</li><li>Módulos visitados</li><li>Registros editados o revisados</li><li>Exportaciones realizadas</li><li>Cambios de estado o permisos cuando aplique</li></ul></div>
+      <div class="change-box"><h4>Línea de tiempo del usuario</h4><div class="timeline">
+        ${u.timeline.map(([h,t])=>`<div class="time-item"><b>${h}</b><span>${t}</span></div>`).join('')}
+      </div></div>
+      <div class="change-box"><h4>Filtros preparados</h4><ul><li>Hoy · Semana · Mes · Desde / Hasta</li><li>Por módulo</li><li>Por tipo de acción</li><li>Por nivel de riesgo</li></ul><br><button class="bita-action-btn">Ver historial completo</button></div>`;
+    modal.classList.add('visible');
+  }
+  function filtrar(){
+    const q=(buscar.value||'').toLowerCase();
+    const m=modSel.value; const n=nivelSel.value;
+    const lista=eventos.filter(ev => (m==='todos'||ev.modulo===m) && (n==='todos'||ev.nivel===n) && Object.values(ev).join(' ').toLowerCase().includes(q));
+    pintar(lista);
+  }
+  body.addEventListener('click', e => {
+    const user = e.target.closest('.user-link');
+    if(user){ e.stopPropagation(); abrirUsuario(user.dataset.user); return; }
+    const tr = e.target.closest('tr'); if(!tr) return;
+    const ev = eventos.find(x => x.id === tr.dataset.id); if(ev) abrirEvento(ev);
+  });
+  [buscar,modSel,nivelSel].forEach(el => el.addEventListener('input', filtrar));
+  document.querySelectorAll('.bita-btn').forEach(btn => btn.addEventListener('click', () => { const g=btn.parentElement; g.querySelectorAll('.bita-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }));
+  cerrar.addEventListener('click', () => modal.classList.remove('visible'));
+  modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('visible'); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') modal.classList.remove('visible'); });
+  pintar();
+})();
+</script>
